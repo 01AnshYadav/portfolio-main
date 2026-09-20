@@ -193,7 +193,7 @@ export const DedSecPhoneOS: React.FC<DedSecPhoneOSProps> = ({
           title="Open Root Interactive Shell"
         >
           <span className="term-prompt">&gt;_</span>
-          <span className="term-text">TERMINAL // RESUME ARCHIVES &amp; DOWNLOAD</span>
+          <span className="term-text">TERMINAL // RESUME ARCHIVES</span>
           <span className="term-status">[READY]</span>
         </button>
       </div>

@@ -35,7 +35,6 @@ export const TerminalApp: React.FC = () => {
             <div>  ▸ <b style={{ color: '#00ff66' }}>whoami</b>         - Operative identity and bio</div>
             <div>  ▸ <b style={{ color: '#00ff66' }}>missions</b>       - List all active project repos</div>
             <div>  ▸ <b style={{ color: '#00ff66' }}>certs</b>          - List verified security modules</div>
-            <div>  ▸ <b style={{ color: '#00ff66' }}>download</b>       - Download formal Resume PDF</div>
             <div>  ▸ <b style={{ color: '#00ff66' }}>clear</b>          - Clear shell screen</div>
           </div>
         );
@@ -47,7 +46,7 @@ export const TerminalApp: React.FC = () => {
           <div style={{ lineHeight: 1.45 }}>
             <div style={{ color: '#00ff66', fontWeight: 'bold' }}>=============================================</div>
             <div style={{ color: '#ffffff', fontWeight: 'bold' }}>ANSH YADAV // CYBERSECURITY & IT SYSTEMS EXPLORER</div>
-            <div style={{ color: 'var(--cyan-hi)' }}>B.Tech Computer Science (Freshman) - University of Lucknow</div>
+            <div style={{ color: 'var(--cyan-hi)' }}>B.Tech (Freshman) - University of Lucknow</div>
             <div style={{ color: 'var(--dim)' }}>Location: Lucknow, India / Remote | GitHub: @01AnshYadav</div>
             <div style={{ color: '#00ff66', fontWeight: 'bold' }}>=============================================</div>
             <div style={{ marginTop: '0.4cqw' }}>
@@ -59,9 +58,6 @@ export const TerminalApp: React.FC = () => {
               <div>• Mailing Client (Network Automation & SMTP)</div>
               <div>• cyberTRACK (Security Telemetry & Aggregation)</div>
               <div>• CTF Writeups (Offensive Security Research)</div>
-            </div>
-            <div style={{ marginTop: '0.4cqw', color: '#00ff66' }}>
-              [TIP: Type "download" or click the button above to get formal archive]
             </div>
           </div>
         );
@@ -96,15 +92,6 @@ export const TerminalApp: React.FC = () => {
         );
         break;
 
-      case 'download':
-        output = (
-          <div style={{ color: '#00ff66' }}>
-            [SIMULATION]: Initiating resume payload transfer... (Download ready)
-          </div>
-        );
-        triggerDownload();
-        break;
-
       case 'clear':
         setHistory([]);
         setInput('');
@@ -117,42 +104,6 @@ export const TerminalApp: React.FC = () => {
 
     setHistory((prev) => [...prev, { command: cmdText, output }]);
     setInput('');
-  };
-
-  const triggerDownload = () => {
-    // Generate and download formal plain-text resume file
-    const content = `ANSH YADAV - CYBERSECURITY & IT SYSTEMS EXPLORER
-University of Lucknow - B.Tech (Freshman Year)
-GitHub: https://github.com/01AnshYadav
-LinkedIn: https://www.linkedin.com/in/ansh-y-762689357/
-Discord: anshshare
-
-PROFILE:
-${OPERATIVE_PROFILE.bio}
-
-PROJECTS:
-1. Uni Manager - Full-Stack Campus Platform (https://github.com/01AnshYadav/uni-manager-)
-2. Mailing Client - Network Automation & SMTP (https://github.com/01AnshYadav/Mailing-client)
-3. cyberTRACK - Security Telemetry & Aggregation (https://github.com/01AnshYadav/cyberTRACK)
-4. CTF Writeups - Offensive Security Research (https://github.com/01AnshYadav/ctf-writeups)
-
-CREDENTIALS:
-- Fundamentals of Cybersecurity (Proov / projectstudy.in)
-  Checksum: d941228cb98dc576120ef399776724b6cf6a85636c1cd3c88eccd85a654ab0b2
-  Verify: https://projectstudy.in/verify/d941228cb98dc576120ef399776724b6cf6a85636c1cd3c88eccd85a654ab0b2
-
-ACTIVE FEEDS:
-- TryHackMe: https://tryhackme.com/p/ansh.yadav
-- LeetCode: https://leetcode.com/u/Ansh00/
-- GitHub: https://github.com/01AnshYadav`;
-
-    const blob = new Blob([content], { type: 'text/plain' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'Ansh_Yadav_Portfolio_Archive.txt';
-    a.click();
-    URL.revokeObjectURL(url);
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -176,7 +127,7 @@ ACTIVE FEEDS:
         animation: 'fadeIn 0.25s ease',
       }}
     >
-      {/* Top Bar with Quick Action Tags and PDF Button */}
+      {/* Top Bar with Quick Action Tags */}
       <div
         style={{
           display: 'flex',
@@ -188,7 +139,7 @@ ACTIVE FEEDS:
         }}
       >
         <div style={{ display: 'flex', gap: '0.5cqw', flexWrap: 'wrap' }}>
-          {['help', 'cat resume.txt', 'missions', 'certs', 'download'].map((cmd) => (
+          {['help', 'cat resume.txt', 'missions', 'certs'].map((cmd) => (
             <button
               key={cmd}
               type="button"
@@ -208,26 +159,6 @@ ACTIVE FEEDS:
             </button>
           ))}
         </div>
-
-        <button
-          type="button"
-          onClick={triggerDownload}
-          style={{
-            background: 'rgba(0, 255, 102, 0.15)',
-            border: '1px solid #00ff66',
-            color: '#00ff66',
-            fontFamily: 'var(--mono)',
-            fontSize: 'max(6.5px, 0.85cqw)',
-            padding: '0.2cqw 0.8cqw',
-            borderRadius: '0.3cqw',
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '0.4cqw',
-          }}
-        >
-          <span>⬇</span> [DOWNLOAD RESUME]
-        </button>
       </div>
 
       {/* Terminal History Log */}
@@ -258,7 +189,7 @@ ACTIVE FEEDS:
           type="text"
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          placeholder="type 'help', 'cat resume.txt' or 'download'..."
+          placeholder="type 'help' or 'cat resume.txt'..."
           autoFocus
           style={{
             flex: 1,
