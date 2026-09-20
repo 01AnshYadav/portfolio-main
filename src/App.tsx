@@ -3,7 +3,6 @@ import { CtosMap } from './components/CtosMap';
 import { HandPhoneStage } from './components/HandPhoneStage';
 import { FullScreenAppModal } from './components/phone/FullScreenAppModal';
 import { BootSequence } from './components/BootSequence';
-import { ScannerCursor } from './components/ScannerCursor';
 import type { AppId } from './components/phone/DedSecPhoneOS';
 import { WD2_STATS } from './config';
 
@@ -49,10 +48,7 @@ export const App: React.FC = () => {
 
   return (
     <div className="portfolio-app" style={{ position: 'relative', width: '100%', minHeight: '100%' }}>
-      {/* 1. Custom Technical Scanner Cursor (Desktop only) */}
-      <ScannerCursor />
-
-      {/* 2. Initial Terminal Boot Sequence & Wrong Profile Override (Prompt A) */}
+      {/* 1. Initial Terminal Boot Sequence & Wrong Profile Override (Prompt A) */}
       {!isBooted && <BootSequence onComplete={handleBootComplete} />}
 
       {/* 3. Background Interactive ctOS Network Map */}
