@@ -1,4 +1,4 @@
-/* Watch Dogs 2 Smartphone OS Styles (Exact Reference Match) */
+/* Watch Dogs 2 Smartphone OS Styles (6 Core Apps & Authentic HUD) */
 
 .wd2-phone-os {
   position: absolute;
@@ -99,14 +99,22 @@
 }
 
 /* 2. DEDSEC FOLLOWER & LEVEL HEADER */
-.wd2-follower-hud {
-  padding: 5px 10px 4px;
+.wd2-follower-hud-btn {
   background: rgba(0, 0, 0, 0.82);
+  border: none;
+  border-bottom: 1px solid rgba(255, 0, 128, 0.25);
+  padding: 5px 10px 4px;
   z-index: 10;
   display: flex;
   flex-direction: column;
   gap: 2px;
-  border-bottom: 1px solid rgba(255, 0, 128, 0.25);
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.15s ease;
+}
+
+.wd2-follower-hud-btn:hover {
+  background: rgba(20, 0, 12, 0.9);
 }
 
 .follower-bar-outer {
@@ -188,10 +196,10 @@
 
 /* 3. WEATHER WIDGET */
 .wd2-weather-card {
-  margin: 6px 10px 4px;
+  margin: 8px 12px 6px;
   padding: 8px 12px;
-  border-radius: 6px;
-  background: rgba(10, 15, 22, 0.65);
+  border-radius: 8px;
+  background: rgba(10, 15, 22, 0.68);
   backdrop-filter: blur(8px);
   border: 1px solid rgba(255, 255, 255, 0.1);
   display: flex;
@@ -302,7 +310,6 @@
   background-size: 6px 6px;
 }
 
-/* The two vibrant cyan laser beams shooting down */
 .laser-beam {
   position: absolute;
   width: 32px;
@@ -324,371 +331,155 @@
   transform: rotate(-6deg);
 }
 
-/* 5. 8-APP LAUNCHER GRID */
-.wd2-app-grid {
+/* 5. ONLY 6 APPS GRID */
+.wd2-six-apps-container {
   position: relative;
   z-index: 10;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 12px 16px 20px;
+}
+
+.wd2-six-apps-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(2, 1fr);
-  gap: 12px 6px;
-  padding: 8px 10px 4px;
+  gap: 22px 14px;
+  width: 100%;
+  max-width: 310px;
   justify-items: center;
 }
 
-.wd2-app-item {
+.wd2-six-app-card {
   background: none;
   border: none;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
+  gap: 6px;
   cursor: pointer;
-  padding: 2px;
-  width: 66px;
-  transition: transform 0.15s ease;
+  padding: 4px;
+  transition: transform 0.18s ease;
+  width: 82px;
 }
 
-.wd2-app-item:hover {
-  transform: translateY(-2px) scale(1.04);
+.wd2-six-app-card:hover {
+  transform: translateY(-4px) scale(1.06);
 }
 
-.app-icon {
-  width: 46px;
-  height: 46px;
-  border-radius: 11px;
-  position: relative;
+.app-icon-box {
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
   display: grid;
   place-items: center;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  position: relative;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  transition: all 0.2s ease;
   overflow: hidden;
 }
 
-.app-label {
-  font-size: 8.5px;
-  font-weight: 600;
+.wd2-six-app-card:hover .app-icon-box {
+  box-shadow: 0 8px 22px rgba(0, 255, 102, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+.app-title-label {
+  font-size: 10px;
+  font-weight: 700;
   color: #ffffff;
   text-align: center;
-  line-height: 1.1;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.95);
-  letter-spacing: 0.01em;
+  letter-spacing: 0.02em;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.95);
+  transition: color 0.15s;
 }
 
-.app-badge {
-  position: absolute;
-  top: -2px;
-  right: -2px;
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  background: #ff2a1a;
-  color: #ffffff;
-  font-size: 8px;
-  font-weight: bold;
-  display: grid;
-  place-items: center;
-  border: 1.5px solid #ffffff;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+.wd2-six-app-card:hover .app-title-label {
+  color: #00ff66;
 }
 
-/* APP 1: NUDLE MAPS */
-.nudle-maps-icon {
-  background: #ffffff;
+/* APP 1: BIO */
+.bio-icon {
+  background: linear-gradient(145deg, #101920 0%, #060a0e 100%);
+  border: 1.5px solid rgba(0, 255, 102, 0.6);
 }
 
-.map-roads {
-  position: absolute;
-  inset: 0;
-  background: 
-    linear-gradient(45deg, transparent 40%, #e2e8ea 40%, #e2e8ea 60%, transparent 60%),
-    linear-gradient(-35deg, #a8df9e 0%, #c4e9bc 35%, #88c6e8 35%, #88c6e8 100%);
+.bio-glyph svg {
+  filter: drop-shadow(0 0 6px rgba(0, 255, 102, 0.6));
 }
 
-.compass-arrow {
-  width: 0;
-  height: 0;
-  border-left: 6px solid transparent;
-  border-right: 6px solid transparent;
-  border-bottom: 14px solid #1a73e8;
-  position: relative;
-  z-index: 2;
-  transform: rotate(28deg);
-  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.3));
+/* APP 2: PROJECTS */
+.projects-icon {
+  background: linear-gradient(145deg, #0e1e28 0%, #061118 100%);
+  border: 1.5px solid rgba(58, 174, 196, 0.65);
 }
 
-/* APP 2: DEDSEC APP */
-.dedsec-app-icon {
-  background: #f0f3f5;
-  border: 1px solid #111;
+.projects-glyph svg {
+  filter: drop-shadow(0 0 6px rgba(58, 174, 196, 0.6));
 }
 
-.pixel-eyeball {
-  width: 28px;
-  height: 28px;
-  background-image: 
-    radial-gradient(circle at 50% 50%, #000 35%, transparent 36%),
-    radial-gradient(circle at 42% 42%, #fff 15%, transparent 16%),
-    radial-gradient(circle at 50% 50%, #444 65%, transparent 66%);
-  border: 2px solid #000;
-  border-radius: 50%;
-  box-shadow: inset 0 0 4px #000;
-  position: relative;
+/* APP 3: CERTIFICATES */
+.certs-icon {
+  background: linear-gradient(145deg, #221a08 0%, #110d04 100%);
+  border: 1.5px solid rgba(255, 170, 0, 0.6);
 }
 
-.pixel-eyeball::after {
-  content: "";
-  position: absolute;
-  right: -8px;
-  top: 6px;
-  width: 8px;
-  height: 12px;
-  border-top: 2px solid #000;
-  border-bottom: 2px solid #000;
+.certs-glyph svg {
+  filter: drop-shadow(0 0 6px rgba(255, 170, 0, 0.6));
 }
 
-/* APP 3: RESEARCH */
-.research-icon {
-  background: linear-gradient(145deg, #2b2e33 0%, #0c0e11 100%);
-  border: 1px solid #3c4046;
+/* APP 4: SKILLS (KEYCAP) */
+.skills-icon {
+  background: linear-gradient(145deg, #2a2e34 0%, #0c0e11 100%);
+  border: 1.5px solid #4a5058;
 }
 
 .keycap-shape {
-  width: 32px;
-  height: 30px;
+  width: 36px;
+  height: 34px;
   background: #181b1f;
   border-radius: 6px;
-  border-top: 1.5px solid #4a5058;
+  border-top: 2px solid #5a626c;
   display: grid;
   place-items: center;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.7);
 }
 
 .keycap-skull {
-  font-size: 14px;
-  color: #ffffff;
-  filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.4));
-}
-
-/* APP 4: CAR ON DEMAND */
-.car-demand-icon {
-  background: #080b0f;
-  border: 1px solid #1f2730;
-}
-
-.steering-gauge {
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  border: 3px solid #ffffff;
-  border-top-color: #00e5ff;
-  border-right-color: #00e5ff;
-  transform: rotate(-45deg);
-  box-shadow: 0 0 6px rgba(0, 229, 255, 0.6);
-}
-
-/* APP 5: APP SHOP */
-.app-shop-icon {
-  background: linear-gradient(135deg, #ff9900 0%, #e66000 100%);
-}
-
-.phone-screen-glyph {
-  width: 18px;
-  height: 28px;
-  border: 2px solid #ffffff;
-  border-radius: 4px;
-  display: grid;
-  place-items: center;
-  background: #000000;
-}
-
-.star-glyph {
-  color: #00e5ff;
-  font-size: 11px;
-}
-
-/* APP 6: MEDIA PLAYER */
-.media-player-icon {
-  background: #0d0f12;
-  border: 1px solid #222;
-}
-
-.cassette-tape {
-  width: 26px;
-  height: 16px;
-  background: #ff007f;
-  border-radius: 3px;
-  transform: rotate(-35deg);
-  box-shadow: 0 0 10px rgba(255, 0, 128, 0.6);
-  position: relative;
-}
-
-.cassette-tape::after {
-  content: "";
-  position: absolute;
-  left: 4px;
-  top: 4px;
-  right: 4px;
-  bottom: 4px;
-  background: #ffffff;
-  border-radius: 2px;
-}
-
-/* APP 7: LEADERBOARD */
-.leaderboard-icon {
-  background: #090c10;
-  border: 1px dashed rgba(255, 255, 255, 0.6);
-}
-
-.isometric-cube {
-  width: 20px;
-  height: 20px;
-  background: linear-gradient(135deg, #ffd700 0%, #ff007f 100%);
-  transform: rotate(45deg);
-  box-shadow: 0 0 8px rgba(255, 215, 0, 0.5);
-}
-
-/* APP 8: SCOUTX */
-.scoutx-icon {
-  background: #b5e61d;
-}
-
-.cross-x {
-  color: #000000;
-  font-size: 22px;
-  font-weight: 900;
-  line-height: 1;
-}
-
-/* 6. CAROUSEL PAGINATION */
-.wd2-pagination {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 7px;
-  margin: 4px 0;
-  z-index: 10;
-  color: rgba(255, 255, 255, 0.7);
-  font-size: 10px;
-}
-
-.page-arrow {
-  cursor: pointer;
-  opacity: 0.6;
-}
-
-.page-dot.active {
-  color: #ffffff;
-  text-shadow: 0 0 6px #ffffff;
-}
-
-/* 7. BOTTOM DOCK (4 APPS) */
-.wd2-dock-shelf {
-  position: relative;
-  z-index: 10;
-  margin: auto 8px 6px;
-  padding: 6px 8px;
-  border-radius: 12px;
-  background: rgba(4, 7, 10, 0.75);
-  backdrop-filter: blur(14px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  justify-items: center;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.7);
-}
-
-.wd2-dock-item {
-  background: none;
-  border: none;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 3px;
-  cursor: pointer;
-  padding: 2px;
-  width: 58px;
-  transition: transform 0.15s ease;
-}
-
-.wd2-dock-item:hover {
-  transform: translateY(-2px) scale(1.05);
-}
-
-.dock-icon {
-  width: 42px;
-  height: 42px;
-  border-radius: 10px;
-  display: grid;
-  place-items: center;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-  overflow: hidden;
-}
-
-.dock-label {
-  font-size: 8px;
-  font-weight: 600;
-  color: #ffffff;
-  text-align: center;
-  line-height: 1.1;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
-}
-
-.camera-icon {
-  background: linear-gradient(135deg, #1e88e5 0%, #0d47a1 100%);
-}
-
-.cam-lens {
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background: radial-gradient(circle at 35% 35%, #80d8ff 0%, #000000 65%);
-  border: 2px solid #ffffff;
-}
-
-.knowitall-icon {
-  background: #111418;
-  border: 1px solid #ffea00;
-}
-
-.bulb-glyph {
-  font-size: 20px;
-}
-
-.multiplayer-icon {
-  background: #ffffff;
-}
-
-.multiplayer-cards {
-  width: 22px;
-  height: 22px;
-  background: #ff6d00;
-  border-radius: 3px;
-  box-shadow: 3px -3px 0 #00b0ff, 6px -6px 0 #2979ff;
-}
-
-.options-icon {
-  background: #ffffff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: -4px;
-}
-
-.gear-cyan {
-  color: #00bcd4;
-  font-size: 18px;
-}
-
-.gear-green {
-  color: #00e676;
   font-size: 16px;
-  margin-left: -5px;
-  margin-top: 5px;
+  color: #ffffff;
+  filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.5));
 }
 
-/* 8. BOTTOM BEZEL & CLOSE ESC */
+/* APP 5: TERMINAL */
+.terminal-icon {
+  background: #020406;
+  border: 1.5px solid rgba(0, 255, 102, 0.55);
+}
+
+.prompt-symbol {
+  font-family: var(--mono);
+  font-size: 20px;
+  font-weight: 800;
+  color: #00ff66;
+  text-shadow: 0 0 8px rgba(0, 255, 102, 0.8);
+}
+
+/* APP 6: CONTACT */
+.contact-icon {
+  background: linear-gradient(145deg, #091a26 0%, #030c14 100%);
+  border: 1.5px solid rgba(0, 229, 255, 0.6);
+}
+
+.contact-glyph svg {
+  filter: drop-shadow(0 0 6px rgba(0, 229, 255, 0.7));
+}
+
+/* 6. BOTTOM BEZEL & CLOSE ESC */
 .wd2-bottom-bezel {
-  height: 32px;
+  height: 34px;
   background: #ffffff;
   display: flex;
   justify-content: space-between;

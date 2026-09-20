@@ -34,6 +34,89 @@ export const DedSecPhoneOS: React.FC<DedSecPhoneOSProps> = ({
     }
   };
 
+  const sixApps = [
+    {
+      id: 'WHOAMI' as AppId,
+      name: 'Bio',
+      iconClass: 'bio-icon',
+      iconElement: (
+        <div className="app-glyph bio-glyph">
+          <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#00ff66" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+            <circle cx="12" cy="7" r="4" />
+          </svg>
+        </div>
+      ),
+      tooltip: 'Operative Bio & Identity',
+    },
+    {
+      id: 'MISSIONS' as AppId,
+      name: 'Projects',
+      iconClass: 'projects-icon',
+      iconElement: (
+        <div className="app-glyph projects-glyph">
+          <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#3aaec4" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="16 18 22 12 16 6" />
+            <polyline points="8 6 2 12 8 18" />
+          </svg>
+        </div>
+      ),
+      tooltip: 'GitHub Projects & Repos',
+    },
+    {
+      id: 'LOADOUT' as AppId,
+      name: 'Certificates',
+      iconClass: 'certs-icon',
+      iconElement: (
+        <div className="app-glyph certs-glyph">
+          <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#ffaa00" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+            <path d="M9 12l2 2 4-4" stroke="#ffffff" />
+          </svg>
+        </div>
+      ),
+      tooltip: 'AWS & ctOS Security Modules',
+    },
+    {
+      id: 'LOADOUT' as AppId,
+      name: 'Skills',
+      iconClass: 'skills-icon',
+      iconElement: (
+        <div className="app-glyph skills-glyph">
+          <div className="keycap-shape">
+            <span className="keycap-skull">💀</span>
+          </div>
+        </div>
+      ),
+      tooltip: 'Technical Skill Tree & Arsenal',
+    },
+    {
+      id: 'TERMINAL' as AppId,
+      name: 'Terminal',
+      iconClass: 'terminal-icon',
+      iconElement: (
+        <div className="app-glyph terminal-glyph">
+          <span className="prompt-symbol">&gt;_</span>
+        </div>
+      ),
+      tooltip: 'Root Shell & Resume Download',
+    },
+    {
+      id: 'SIGNAL' as AppId,
+      name: 'Contact',
+      iconClass: 'contact-icon',
+      iconElement: (
+        <div className="app-glyph contact-glyph">
+          <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#00e5ff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+            <polyline points="22,6 12,13 2,6" />
+          </svg>
+        </div>
+      ),
+      tooltip: 'Encrypted Comms & Bypass',
+    },
+  ];
+
   return (
     <div className="wd2-phone-os" role="application" aria-label="Watch Dogs 2 Smartphone OS">
       {/* 1. TOP SYSTEM STATUS BAR */}
@@ -62,13 +145,18 @@ export const DedSecPhoneOS: React.FC<DedSecPhoneOSProps> = ({
         </div>
       </div>
 
-      {/* 2. DEDSEC FOLLOWER & LEVEL HEADER */}
-      <div className="wd2-follower-hud">
+      {/* 2. DEDSEC FOLLOWER & LEVEL HEADER (Clickable to view Leaderboard) */}
+      <button
+        type="button"
+        className="wd2-follower-hud-btn"
+        onClick={() => handleAppClick('FOLLOWERS')}
+        title="View Botnet Telemetry & Rankings"
+      >
         <div className="follower-bar-outer">
           <div className="follower-bar-inner">
             <span className="follower-heart-icon">♥</span>
             <span className="follower-numbers">
-              {WD2_STATS.followersCurrent} / {WD2_STATS.followersTarget}
+              {WD2_STATS.followersCurrent.toLocaleString()} / {WD2_STATS.followersTarget.toLocaleString()}
             </span>
           </div>
         </div>
@@ -84,7 +172,7 @@ export const DedSecPhoneOS: React.FC<DedSecPhoneOSProps> = ({
             <span className="wallet-icon">🗂</span>
           </div>
         </div>
-      </div>
+      </button>
 
       {/* 3. SAN FRANCISCO / LUCKNOW WEATHER WIDGET */}
       <div className="wd2-weather-card">
@@ -123,185 +211,27 @@ export const DedSecPhoneOS: React.FC<DedSecPhoneOSProps> = ({
         <div className="comic-halftone-pattern" />
       </div>
 
-      {/* 5. 8-APP LAUNCHER GRID */}
-      <div className="wd2-app-grid">
-        {/* App 1: Nudle Maps (Missions) */}
-        <button
-          type="button"
-          className="wd2-app-item"
-          onClick={() => handleAppClick('MISSIONS')}
-          title="Open Operations & Missions"
-        >
-          <div className="app-icon nudle-maps-icon">
-            <div className="map-roads" />
-            <div className="compass-arrow" />
-          </div>
-          <span className="app-label">Nudle Maps</span>
-        </button>
-
-        {/* App 2: DedSec App (WHOAMI) */}
-        <button
-          type="button"
-          className="wd2-app-item"
-          onClick={() => handleAppClick('WHOAMI')}
-          title="Open DedSec Profiler & Identity"
-        >
-          <div className="app-icon dedsec-app-icon">
-            <div className="pixel-eyeball" />
-          </div>
-          <span className="app-label">DedSec App</span>
-        </button>
-
-        {/* App 3: ./Research (Loadout) */}
-        <button
-          type="button"
-          className="wd2-app-item"
-          onClick={() => handleAppClick('LOADOUT')}
-          title="Open Skill Tree & ctOS Modules"
-        >
-          <div className="app-icon research-icon">
-            <div className="keycap-shape">
-              <span className="keycap-skull">💀</span>
-            </div>
-          </div>
-          <span className="app-label">./Research</span>
-        </button>
-
-        {/* App 4: Car on Demand (Signal) */}
-        <button
-          type="button"
-          className="wd2-app-item"
-          onClick={() => handleAppClick('SIGNAL')}
-          title="Open Comms & Defense Bypass"
-        >
-          <div className="app-icon car-demand-icon">
-            <div className="steering-gauge" />
-            <span className="app-badge">1</span>
-          </div>
-          <span className="app-label">Car on Demand</span>
-        </button>
-
-        {/* App 5: App Shop (Loadout/Certs) */}
-        <button
-          type="button"
-          className="wd2-app-item"
-          onClick={() => handleAppClick('LOADOUT')}
-          title="Open Security Modules Repository"
-        >
-          <div className="app-icon app-shop-icon">
-            <div className="phone-screen-glyph">
-              <span className="star-glyph">★</span>
-            </div>
-          </div>
-          <span className="app-label">App Shop</span>
-        </button>
-
-        {/* App 6: Media Player (Terminal) */}
-        <button
-          type="button"
-          className="wd2-app-item"
-          onClick={() => handleAppClick('TERMINAL')}
-          title="Open Root Shell & Media"
-        >
-          <div className="app-icon media-player-icon">
-            <div className="cassette-tape" />
-          </div>
-          <span className="app-label">Media Player</span>
-        </button>
-
-        {/* App 7: Leaderboard (Followers) */}
-        <button
-          type="button"
-          className="wd2-app-item"
-          onClick={() => handleAppClick('FOLLOWERS')}
-          title="Open Botnet Leaderboard"
-        >
-          <div className="app-icon leaderboard-icon">
-            <div className="isometric-cube" />
-          </div>
-          <span className="app-label">Leaderboard</span>
-        </button>
-
-        {/* App 8: ScoutX (Missions CTF) */}
-        <button
-          type="button"
-          className="wd2-app-item"
-          onClick={() => handleAppClick('MISSIONS')}
-          title="Open ScoutX Security Labs"
-        >
-          <div className="app-icon scoutx-icon">
-            <span className="cross-x">✖</span>
-            <span className="app-badge">1</span>
-          </div>
-          <span className="app-label">ScoutX</span>
-        </button>
+      {/* 5. ONLY 6 APPS GRID WITH REAL NAMES (BIO, PROJECTS, CERTIFICATES, SKILLS, TERMINAL, CONTACT) */}
+      <div className="wd2-six-apps-container">
+        <div className="wd2-six-apps-grid">
+          {sixApps.map((app, idx) => (
+            <button
+              key={`${app.id}-${idx}`}
+              type="button"
+              className="wd2-six-app-card"
+              onClick={() => handleAppClick(app.id)}
+              title={app.tooltip}
+            >
+              <div className={`app-icon-box ${app.iconClass}`}>
+                {app.iconElement}
+              </div>
+              <span className="app-title-label">{app.name}</span>
+            </button>
+          ))}
+        </div>
       </div>
 
-      {/* 6. CAROUSEL PAGINATION INDICATOR */}
-      <div className="wd2-pagination">
-        <span className="page-arrow">◀</span>
-        <span className="page-dot active">◉</span>
-        <span className="page-dot">○</span>
-        <span className="page-arrow">▶</span>
-      </div>
-
-      {/* 7. BOTTOM DOCK (4 APPS) */}
-      <div className="wd2-dock-shelf">
-        {/* Camera (Whoami) */}
-        <button
-          type="button"
-          className="wd2-dock-item"
-          onClick={() => handleAppClick('WHOAMI')}
-          title="ctOS Profiler Camera"
-        >
-          <div className="dock-icon camera-icon">
-            <span className="cam-lens" />
-          </div>
-          <span className="dock-label">Camera</span>
-        </button>
-
-        {/* Know-It-All (Whoami / Manifesto) */}
-        <button
-          type="button"
-          className="wd2-dock-item"
-          onClick={() => handleAppClick('WHOAMI')}
-          title="About & Manifesto"
-        >
-          <div className="dock-icon knowitall-icon">
-            <span className="bulb-glyph">💡</span>
-          </div>
-          <span className="dock-label">Know-It-All</span>
-        </button>
-
-        {/* Multiplayer (Followers) */}
-        <button
-          type="button"
-          className="wd2-dock-item"
-          onClick={() => handleAppClick('FOLLOWERS')}
-          title="Botnet Operatives & Crew"
-        >
-          <div className="dock-icon multiplayer-icon">
-            <div className="multiplayer-cards" />
-          </div>
-          <span className="dock-label">Multiplayer</span>
-        </button>
-
-        {/* Game Options (Terminal) */}
-        <button
-          type="button"
-          className="wd2-dock-item"
-          onClick={() => handleAppClick('TERMINAL')}
-          title="Terminal CLI & System Settings"
-        >
-          <div className="dock-icon options-icon">
-            <span className="gear-glyph gear-cyan">⚙</span>
-            <span className="gear-glyph gear-green">⚙</span>
-          </div>
-          <span className="dock-label">Game Options</span>
-        </button>
-      </div>
-
-      {/* 8. BOTTOM BEZEL & CLOSE ESC BUTTON */}
+      {/* 6. BOTTOM BEZEL & CLOSE ESC BUTTON */}
       <div className="wd2-bottom-bezel">
         <div className="dedsec-hex-home" title="DedSec Core">
           <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#606d75" strokeWidth="1.8">
