@@ -122,7 +122,7 @@ export const OPERATIVE_PROFILE = {
   skills: ['Linux & System Security', 'Network Protocols & Analysis', 'Web Security & Exploitation', 'Python & Bash Automation', 'CTF Challenge Solving'],
   discord: 'anshshare',
   github: 'https://github.com/01AnshYadav',
-  linkedin: 'https://www.linkedin.com/in/ansh-y-762689357/',
+  linkedin: 'https://www.linkedin.com/in/ansht0',
 };
 
 /**
