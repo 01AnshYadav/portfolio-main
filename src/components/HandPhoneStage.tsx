@@ -1,11 +1,6 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { SCROLL_CONFIG, ANIMATION_CONFIG } from '../config';
-import {
-  generateArcEntranceKeyframes,
-  generateArcExitKeyframes,
-  REDUCED_MOTION_ENTRANCE_KEYFRAMES,
-  REDUCED_MOTION_EXIT_KEYFRAMES,
-} from '../utils/arcKeyframes';
+import { getArcTransform } from '../utils/arcKeyframes';
 import { HandPhone } from './HandPhone';
 import { ScrollCue } from './ScrollCue';
 
@@ -14,152 +9,82 @@ interface HandPhoneStageProps {
   isDebug?: boolean;
 }
 
-type StageState = 'OFFSCREEN' | 'ENTERING' | 'SETTLED' | 'EXITING';
-
 export const HandPhoneStage: React.FC<HandPhoneStageProps> = ({
   onSettledChange,
   isDebug = false,
 }) => {
-  const [stageState, setStageState] = useState<StageState>('OFFSCREEN');
-  const stageStateRef = useRef<StageState>('OFFSCREEN');
-  const isAnimatingRef = useRef<boolean>(false);
+  const [isCueVisible, setIsCueVisible] = useState<boolean>(true);
   const phoneWrapperRef = useRef<HTMLDivElement | null>(null);
-  const activeAnimationRef = useRef<Animation | null>(null);
+  const targetProgressRef = useRef<number>(0);
+  const currentProgressRef = useRef<number>(0);
+  const isSettledRef = useRef<boolean>(false);
+  const animFrameIdRef = useRef<number>(0);
 
-  // Keep ref in sync with state
-  stageStateRef.current = stageState;
-
-  const { startPosition, endPosition, startRotation, endRotation, startScale, endScale } = ANIMATION_CONFIG.arc;
+  const { startPosition, startRotation, startScale } = ANIMATION_CONFIG.arc;
   const initialTransform = `translate3d(${startPosition.x}px, ${startPosition.y}px, ${startPosition.z}px) rotateX(${startRotation.rx}deg) rotateY(${startRotation.ry}deg) rotateZ(${startRotation.rz}deg) scale(${startScale})`;
-  const finalTransform = `translate3d(${endPosition.x}px, ${endPosition.y}px, ${endPosition.z}px) rotateX(${endRotation.rx}deg) rotateY(${endRotation.ry}deg) rotateZ(${endRotation.rz}deg) scale(${endScale})`;
 
-  const updateState = useCallback(
-    (newState: StageState) => {
-      setStageState(newState);
-      stageStateRef.current = newState;
-      if (onSettledChange) {
-        onSettledChange(newState === 'SETTLED');
-      }
-    },
-    [onSettledChange]
-  );
-
-  // Trigger entrance animation
-  const playEntrance = useCallback(() => {
-    const el = phoneWrapperRef.current;
-    if (!el || isAnimatingRef.current) return;
-
-    isAnimatingRef.current = true;
-    updateState('ENTERING');
-
-    const isRM = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const keyframes = isRM ? REDUCED_MOTION_ENTRANCE_KEYFRAMES : generateArcEntranceKeyframes();
-    const duration = isRM ? 400 : ANIMATION_CONFIG.durationEntranceMs;
-    const easing = isRM ? 'ease' : ANIMATION_CONFIG.easingEntrance;
-
-    if (activeAnimationRef.current) {
-      activeAnimationRef.current.cancel();
-    }
-
-    const anim = el.animate(keyframes as unknown as Keyframe[], {
-      duration,
-      easing,
-      fill: 'forwards',
-    });
-    activeAnimationRef.current = anim;
-
-    anim.onfinish = () => {
-      isAnimatingRef.current = false;
-      el.style.transform = finalTransform;
-      updateState('SETTLED');
-
-      // Check if user scrolled back up while animation was playing
-      const scrollY = window.scrollY || document.documentElement.scrollTop || window.pageYOffset || 0;
-      if (scrollY <= 30) {
-        playExit();
-      }
-    };
-  }, [updateState, finalTransform]);
-
-  // Trigger exit animation
-  const playExit = useCallback(() => {
-    const el = phoneWrapperRef.current;
-    if (!el || isAnimatingRef.current) return;
-
-    isAnimatingRef.current = true;
-    updateState('EXITING');
-
-    const isRM = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const keyframes = isRM ? REDUCED_MOTION_EXIT_KEYFRAMES : generateArcExitKeyframes();
-    const duration = isRM ? 350 : ANIMATION_CONFIG.durationExitMs;
-    const easing = isRM ? 'ease' : ANIMATION_CONFIG.easingExit;
-
-    if (activeAnimationRef.current) {
-      activeAnimationRef.current.cancel();
-    }
-
-    const anim = el.animate(keyframes as unknown as Keyframe[], {
-      duration,
-      easing,
-      fill: 'forwards',
-    });
-    activeAnimationRef.current = anim;
-
-    anim.onfinish = () => {
-      isAnimatingRef.current = false;
-      el.style.transform = initialTransform;
-      updateState('OFFSCREEN');
-
-      // Check if user scrolled back down while exit was playing
-      const scrollY = window.scrollY || document.documentElement.scrollTop || window.pageYOffset || 0;
-      if (scrollY > 30) {
-        playEntrance();
-      }
-    };
-  }, [updateState, playEntrance, initialTransform]);
-
-  // Scroll and wheel listener
+  // Continuous smooth scroll loop
   useEffect(() => {
-    const checkScrollState = () => {
+    const isRM = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const entranceDist = SCROLL_CONFIG.entranceDistancePx || 300;
+    const lerp = SCROLL_CONFIG.lerpFactor || 0.16;
+    let lastTime = performance.now();
+
+    const updateTargetFromScroll = () => {
       const scrollY = window.scrollY || document.documentElement.scrollTop || window.pageYOffset || 0;
-      const maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
-      const fraction = scrollY / maxScroll;
-      const isOverThreshold = scrollY > 40 || fraction >= SCROLL_CONFIG.threshold;
-
-      if (!isAnimatingRef.current) {
-        if (isOverThreshold && stageStateRef.current === 'OFFSCREEN') {
-          playEntrance();
-        } else if (!isOverThreshold && stageStateRef.current === 'SETTLED') {
-          playExit();
-        }
-      }
+      // Target progress from 0 (at top) to 1 (at entranceDist px down)
+      const target = Math.min(1, Math.max(0, scrollY / entranceDist));
+      targetProgressRef.current = target;
+      setIsCueVisible(target < 0.12);
     };
 
-    const handleWheel = (e: WheelEvent) => {
-      if (!isAnimatingRef.current) {
-        if (e.deltaY > 25 && stageStateRef.current === 'OFFSCREEN') {
-          playEntrance();
-        } else if (e.deltaY < -25 && stageStateRef.current === 'SETTLED' && (window.scrollY || 0) <= 40) {
-          playExit();
+    window.addEventListener('scroll', updateTargetFromScroll, { passive: true });
+    updateTargetFromScroll();
+
+    const loop = (now: number) => {
+      const dt = Math.min(50, now - lastTime);
+      lastTime = now;
+
+      const target = targetProgressRef.current;
+      const current = currentProgressRef.current;
+
+      // Smooth damped lerp toward target
+      const factor = isRM ? 1 : 1 - Math.pow(1 - lerp, dt / 16.667);
+      const next = current + (target - current) * factor;
+      currentProgressRef.current = next;
+
+      // Update phone transform along the quarter-circle arc
+      if (phoneWrapperRef.current) {
+        if (isRM) {
+          phoneWrapperRef.current.style.transform = `translate3d(0px, 35px, 0px) scale(1)`;
+          phoneWrapperRef.current.style.opacity = `${next.toFixed(3)}`;
+        } else {
+          phoneWrapperRef.current.style.transform = getArcTransform(next);
+          phoneWrapperRef.current.style.opacity = '1';
         }
       }
+
+      // Settled state for dimming ctOS HUD and Target panel
+      const settled = next >= 0.88;
+      if (settled !== isSettledRef.current) {
+        isSettledRef.current = settled;
+        if (onSettledChange) onSettledChange(settled);
+      }
+
+      animFrameIdRef.current = requestAnimationFrame(loop);
     };
 
-    window.addEventListener('scroll', checkScrollState, { passive: true });
-    window.addEventListener('wheel', handleWheel, { passive: true });
-
-    // Check on initial load
-    checkScrollState();
+    animFrameIdRef.current = requestAnimationFrame(loop);
 
     return () => {
-      window.removeEventListener('scroll', checkScrollState);
-      window.removeEventListener('wheel', handleWheel);
+      window.removeEventListener('scroll', updateTargetFromScroll);
+      cancelAnimationFrame(animFrameIdRef.current);
     };
-  }, [playEntrance, playExit]);
+  }, [onSettledChange]);
 
   return (
     <>
-      {/* Tall Scroll Spacer that enables 200vh page scrolling */}
+      {/* 200vh Scroll Spacer that gives natural, effortless scroll tracking */}
       <div
         className="scroll-spacer"
         style={{
@@ -171,7 +96,7 @@ export const HandPhoneStage: React.FC<HandPhoneStageProps> = ({
         aria-hidden="true"
       />
 
-      {/* Fixed Full-Viewport 3D Stage (always centered in viewport) */}
+      {/* Fixed Full-Viewport 3D Stage (always centered, perfectly responsive) */}
       <div
         className="fixed-viewport-stage"
         style={{
@@ -196,15 +121,15 @@ export const HandPhoneStage: React.FC<HandPhoneStageProps> = ({
           style={{
             transform: initialTransform,
             transformStyle: 'preserve-3d',
-            willChange: 'transform, filter',
+            willChange: 'transform',
             pointerEvents: isDebug ? 'auto' : 'none',
           }}
         >
           <HandPhone isDebug={isDebug} />
         </div>
 
-        {/* Scroll Cue (fades out as soon as entering starts) */}
-        <ScrollCue visible={stageState === 'OFFSCREEN'} />
+        {/* Scroll Cue (smoothly fades out as scroll starts) */}
+        <ScrollCue visible={isCueVisible} />
       </div>
     </>
   );

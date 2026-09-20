@@ -31,9 +31,7 @@ export interface PhoneScreenConfig {
 }
 
 /**
- * Landscape smartphone screen rectangle calibration.
- * Default values for a centered landscape smartphone held in hand.
- * Calibrate precisely in real-time by adding ?debug=1 to the URL.
+ * Landscape smartphone screen rectangle calibration matching ctos-map (1).html
  */
 export const PHONE_SCREEN: PhoneScreenConfig = {
   corners: [
@@ -49,12 +47,14 @@ export const PNG_ASPECT = PHONE_SCREEN.aspectRatio;
 export const PNG_PATH = '/hand-phone.png';
 
 export const SCROLL_CONFIG = {
-  // Trigger threshold: 8% down the 200vh scroll container
-  threshold: 0.08,
+  // Distance in pixels of scroll over which the entrance arc completes
+  entranceDistancePx: 300,
   // Container height in vh
   containerHeightVh: 200,
   // Opacity of ctOS HUD and panel when phone is settled
   hudDimOpacity: 0.2,
+  // Responsiveness lerp speed (0.10 to 0.25 - snappy and buttery smooth)
+  lerpFactor: 0.16,
 };
 
 export const ANIMATION_CONFIG = {
@@ -66,27 +66,26 @@ export const ANIMATION_CONFIG = {
   // Quarter-circle arc trajectory
   // Start: below the viewport, offset to the left/bottom to trace an upward arc
   arc: {
-    startPosition: { x: -320, y: 880, z: -180 } as Vector3D,
+    startPosition: { x: -280, y: 820, z: -160 } as Vector3D,
     endPosition: { x: 0, y: 35, z: 0 } as Vector3D, // Centered, slightly below middle
-    startRotation: { rx: 28, ry: -22, rz: 38 } as Rotation3D,
+    startRotation: { rx: 28, ry: -20, rz: 34 } as Rotation3D,
     endRotation: { rx: 0, ry: 0, rz: 0 } as Rotation3D,
     startScale: 0.72,
     endScale: 1.0,
 
     // Subtle overshoot & settle parameters
     overshoot: {
-      positionDelta: { x: 12, y: -24, z: 10 },
-      rotationDelta: { rx: -3.5, ry: 2, rz: -3 },
-      scaleDelta: 0.025,
-      atProgress: 0.78, // Overshoot occurs at 78% of the entrance duration
+      positionDelta: { x: 10, y: -20, z: 8 },
+      rotationDelta: { rx: -3, ry: 1.5, rz: -2.5 },
+      scaleDelta: 0.02,
+      atProgress: 0.82, // Overshoot occurs at 82% of the entrance
     },
-    // Intermediate point count for smooth Web Animations API / keyframe curve
     intermediateSteps: 10,
     motionBlurMaxPx: 2.0,
   },
 
   // Responsive max dimensions for hand + phone container
-  maxPhoneWidthPx: 820,
+  maxPhoneWidthPx: 860,
   viewportMarginPx: 24,
 };
 
