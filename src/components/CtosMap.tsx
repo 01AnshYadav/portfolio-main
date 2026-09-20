@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react';
+import type { AppId } from './phone/DedSecPhoneOS';
 import './CtosMap.css';
 
 interface TargetDef {
@@ -130,9 +131,10 @@ function fbm(x: number, y: number, s: number) {
 
 interface CtosMapProps {
   isPhoneSettled?: boolean;
+  onOpenApp?: (appId: AppId) => void;
 }
 
-export const CtosMap: React.FC<CtosMapProps> = ({ isPhoneSettled = false }) => {
+export const CtosMap: React.FC<CtosMapProps> = ({ isPhoneSettled = false, onOpenApp }) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const segsRef = useRef<HTMLSpanElement | null>(null);
   const dvRef = useRef<HTMLElement | null>(null);
@@ -829,6 +831,57 @@ export const CtosMap: React.FC<CtosMapProps> = ({ isPhoneSettled = false }) => {
     <>
       <canvas id="map" ref={canvasRef} role="img" aria-label="Interactive ctOS city network map. Use the target list to breach targets with keyboard." />
       <div className="fx" aria-hidden="true" />
+
+      {/* Top-Left ctOS Direct HUD Navigation */}
+      <nav
+        className={`ctos-hud-nav ${isPhoneSettled ? 'dimmed' : ''}`}
+        aria-label="ctOS Dossier Shortcuts"
+      >
+        <div className="hud-nav-badge">
+          <span className="hud-nav-led" aria-hidden="true" />
+          <span className="hud-nav-text">ctOS_LKO // ANSH YADAV</span>
+        </div>
+        <button
+          type="button"
+          className="hud-nav-btn"
+          onClick={() => onOpenApp?.('WHOAMI')}
+          title="Open Bio (pages/about.html)"
+        >
+          01 BIO
+        </button>
+        <button
+          type="button"
+          className="hud-nav-btn"
+          onClick={() => onOpenApp?.('MISSIONS')}
+          title="Open Projects (pages/projects.html)"
+        >
+          02 PROJECTS
+        </button>
+        <button
+          type="button"
+          className="hud-nav-btn"
+          onClick={() => onOpenApp?.('LOADOUT')}
+          title="Open Certs (pages/certs.html)"
+        >
+          03 CERTS
+        </button>
+        <button
+          type="button"
+          className="hud-nav-btn"
+          onClick={() => onOpenApp?.('LEARNING')}
+          title="Open Learning (pages/learning.html)"
+        >
+          04 LEARNING
+        </button>
+        <button
+          type="button"
+          className="hud-nav-btn"
+          onClick={() => onOpenApp?.('SIGNAL')}
+          title="Open Contact (pages/contact.html)"
+        >
+          05 CONTACT
+        </button>
+      </nav>
 
       <header className={`ctos ${isPhoneSettled ? 'dimmed' : ''}`} aria-label="ctOS network status">
         <div className="logo" aria-label="ctOS">

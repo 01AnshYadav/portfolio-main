@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ANSH YADAV // ctOS</title>
+<meta name="description" content="Ansh Yadav. B.Tech student at University of Lucknow. Cloud security, networking, CTFs.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-page="index">
+
+<div class="scanlines" aria-hidden="true"></div>
+
+<!-- boot overlay, fires once on load -->
+<div class="boot" id="boot" role="status" aria-live="polite">
+  <div class="boot-in">
+    <div class="l" id="bootlog"></div>
+    <div class="boot-bar"><i id="bootbar"></i></div>
+  </div>
+</div>
+
+<!-- breach overlay, fires when execute is pressed -->
+<div class="boot off" id="breach" role="status" aria-live="polite">
+  <div class="boot-in">
+    <div class="l" id="breachlog"></div>
+    <div class="boot-bar"><i id="breachbar"></i></div>
+    <div class="boot-pct" id="breachpct">[ 00% ] ACCESS</div>
+  </div>
+</div>
+
+<header class="bar-t">
+  <div><span class="led" aria-hidden="true"></span>ctOS_LKO // NODE 01</div>
+  <div class="mid">&gt;_ <span class="wt">~/root</span></div>
+  <div><span class="ac" id="clock">00:00:00</span></div>
+</header>
+
+<main class="shell full">
+  <div class="wrap center">
+    <div class="hero">
+      <p class="tag">[ PROFILE LOCATED ]</p>
+      <h1>Ansh<br>Yadav</h1>
+      <p class="role">IT and cybersecurity. Cloud security, networking, and CTFs. Currently in year one of a B.Tech at the University of Lucknow.</p>
+
+      <div class="meta">
+        <span class="chip">STATUS <b>ACTIVE</b></span>
+        <span class="chip">FOCUS <b>CLOUD / NET / CTF</b></span>
+        <span class="chip">LOC <b>LUCKNOW, IN</b></span>
+      </div>
+
+      <button class="exec glx" id="exec" type="button">
+        Execute <span class="k">[↵]</span>
+      </button>
+    </div>
+  </div>
+</main>
+
+<footer class="bar-b">
+  <div>ANSH YADAV // PORTFOLIO v2.0</div>
+  <div class="mid">UNIVERSITY OF LUCKNOW</div>
+  <div>AES-256 <span class="ac">[SYS_OK]</span></div>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>

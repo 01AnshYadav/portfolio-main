@@ -55,19 +55,20 @@ export const TerminalApp: React.FC = () => {
             </div>
             <div style={{ marginTop: '0.4cqw' }}>
               <b>[FEATURED PROJECTS]:</b>
-              <div>• AWS Password Manager (Zero-Trust Cloud Credential Vault)</div>
-              <div>• CyberSync (Low-Latency P2P Synchronization Protocol)</div>
-              <div>• CareerMEMORY (Linux Memory Forensics & Audit Tool)</div>
+              <div>• Uni Manager (Full-Stack Campus Platform)</div>
+              <div>• Mailing Client (Network Automation & SMTP)</div>
+              <div>• cyberTRACK (Security Telemetry & Aggregation)</div>
+              <div>• CTF Writeups (Offensive Security Research)</div>
             </div>
             <div style={{ marginTop: '0.4cqw', color: '#00ff66' }}>
-              [TIP: Type "download" or click the button above to get PDF]
+              [TIP: Type "download" or click the button above to get formal archive]
             </div>
           </div>
         );
         break;
 
       case 'whoami':
-        output = `${OPERATIVE_PROFILE.alias} - ${OPERATIVE_PROFILE.role} (${OPERATIVE_PROFILE.education})`;
+        output = `${OPERATIVE_PROFILE.operativeName} (@${OPERATIVE_PROFILE.alias}) - ${OPERATIVE_PROFILE.role} (${OPERATIVE_PROFILE.education})`;
         break;
 
       case 'missions':
@@ -98,7 +99,7 @@ export const TerminalApp: React.FC = () => {
       case 'download':
         output = (
           <div style={{ color: '#00ff66' }}>
-            [SIMULATION]: Initiating resume payload transfer... (PDF download ready)
+            [SIMULATION]: Initiating resume payload transfer... (Download ready)
           </div>
         );
         triggerDownload();
@@ -123,24 +124,33 @@ export const TerminalApp: React.FC = () => {
     const content = `ANSH YADAV - CYBERSECURITY & IT SYSTEMS EXPLORER
 University of Lucknow - B.Tech (Freshman Year)
 GitHub: https://github.com/01AnshYadav
+LinkedIn: https://www.linkedin.com/in/ansh-y-762689357/
+Discord: anshshare
 
 PROFILE:
 ${OPERATIVE_PROFILE.bio}
 
 PROJECTS:
-1. AWS Password Manager - Zero-Knowledge Cloud Security Architecture
-2. CyberSync - Real-Time Distributed Network Synchronization
-3. CareerMEMORY - Memory Forensics & Process Auditing Utility
-4. CTF & TryHackMe Writeups - Security Research & Vulnerability Documentation
+1. Uni Manager - Full-Stack Campus Platform (https://github.com/01AnshYadav/uni-manager-)
+2. Mailing Client - Network Automation & SMTP (https://github.com/01AnshYadav/Mailing-client)
+3. cyberTRACK - Security Telemetry & Aggregation (https://github.com/01AnshYadav/cyberTRACK)
+4. CTF Writeups - Offensive Security Research (https://github.com/01AnshYadav/ctf-writeups)
 
-TECHNICAL SKILLS:
-Networking (TCP/IP, Wireshark), Linux Hardening, AWS Security, Python & Bash scripting.`;
+CREDENTIALS:
+- Fundamentals of Cybersecurity (Proov / projectstudy.in)
+  Checksum: d941228cb98dc576120ef399776724b6cf6a85636c1cd3c88eccd85a654ab0b2
+  Verify: https://projectstudy.in/verify/d941228cb98dc576120ef399776724b6cf6a85636c1cd3c88eccd85a654ab0b2
+
+ACTIVE FEEDS:
+- TryHackMe: https://tryhackme.com/p/ansh.yadav
+- LeetCode: https://leetcode.com/u/Ansh00/
+- GitHub: https://github.com/01AnshYadav`;
 
     const blob = new Blob([content], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = 'Ansh_Yadav_Resume.txt';
+    a.download = 'Ansh_Yadav_Portfolio_Archive.txt';
     a.click();
     URL.revokeObjectURL(url);
   };

@@ -101,21 +101,21 @@
   letter-spacing: 0.05em;
 }
 
-/* 3. 4 CRISP CORE APP CARDS */
+/* 3. 6 CRISP CORE APP CARDS */
 .hub-apps-grid {
   flex: 1;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  grid-template-rows: repeat(2, 1fr);
-  gap: 10px;
-  padding: 12px;
+  grid-template-rows: repeat(3, 1fr);
+  gap: 8px;
+  padding: 8px 10px;
   z-index: 10;
 }
 
 .hub-app-card {
   background: #141820;
   border: 1px solid #202632;
-  padding: 12px;
+  padding: 8px 10px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -139,9 +139,9 @@
 }
 
 .card-tag {
-  font-size: 9.5px;
+  font-size: 9px;
   color: var(--dim);
-  letter-spacing: 0.06em;
+  letter-spacing: 0.05em;
 }
 
 .card-dot {
@@ -153,8 +153,8 @@
 .app-card-body {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  margin: 6px 0;
+  gap: 4px;
+  margin: 2px 0;
 }
 
 .app-icon-slot {
@@ -165,37 +165,40 @@
 .app-meta {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 1px;
 }
 
 .app-code {
-  font-size: 13px;
+  font-size: 11px;
   font-weight: 800;
   color: #ffffff;
   letter-spacing: 0.06em;
 }
 
 .app-label-text {
-  font-size: 10.5px;
+  font-size: 10px;
   color: #00ff66;
   font-weight: 700;
   letter-spacing: 0.04em;
 }
 
 .app-subtext {
-  font-size: 9.5px;
+  font-size: 8.5px;
   color: var(--dim);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .app-card-footer {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 9.5px;
+  font-size: 8.5px;
   color: var(--dim);
   border-top: 1px solid #202632;
-  padding-top: 6px;
-  margin-top: 4px;
+  padding-top: 4px;
+  margin-top: 2px;
 }
 
 .hub-app-card:hover .app-card-footer {

@@ -106,21 +106,27 @@ export const COLORS = {
 /**
  * Operative Profile Data
  */
+/**
+ * Operative Profile Data - Ansh Yadav
+ */
 export const OPERATIVE_PROFILE = {
   alias: '01AnshYadav',
-  operativeName: 'Marcus Holloway',
-  dedsecHandle: 'NullSec_Operative',
-  status: 'UNPROFILED OPERATIVE',
-  threatLevel: 'CRITICAL // TARGET OFF-GRID',
+  operativeName: 'Ansh Yadav',
+  dedsecHandle: 'ANSH_YADAV',
+  status: 'ACTIVE OPERATIVE',
+  threatLevel: 'UNPROFILED // OFF-GRID',
   education: 'Freshman Year B.Tech, University of Lucknow',
   role: 'Cybersecurity & IT Systems Explorer',
   location: 'Lucknow, India / Remote',
-  bio: 'ctOS classifies citizens into algorithms. I build systems that keep data where it belongs: in your hands. Currently in my freshman year of B.Tech at the University of Lucknow, focusing on cloud infrastructure, networking protocols, and system security.',
-  skills: ['Cloud Security (AWS)', 'Network Protocols & Packet Analysis', 'Linux Kernel Hardening', 'Cryptographic Vaults', 'Bash & Python Automation'],
+  bio: "My obsession with tech started when I was a kid, always surrounded by computers and curious about what was happening behind the screen. What started as simple curiosity slowly turned into a passion for understanding how systems work under the hood. I started exploring cybersecurity and solving CTFs this year, breaking things safely just to understand how they work. Along the way, I began building real-world software and experimenting with networks, Linux, and web security. I'm still learning, still breaking things, and still building, one system at a time.",
+  skills: ['Linux & System Security', 'Network Protocols & Analysis', 'Web Security & Exploitation', 'Python & Bash Automation', 'CTF Challenge Solving'],
+  discord: 'anshshare',
+  github: 'https://github.com/01AnshYadav',
+  linkedin: 'https://www.linkedin.com/in/ansh-y-762689357/',
 };
 
 /**
- * Mission Briefings
+ * Mission Briefings - Real Repositories
  */
 export interface Mission {
   id: string;
@@ -136,42 +142,42 @@ export interface Mission {
 export const MISSIONS_DATA: Mission[] = [
   {
     id: 'OP-01',
-    title: 'AWS Password Manager',
-    category: 'Cloud Security & Zero-Trust',
-    objective: 'Architect a zero-knowledge cloud credential vault securing credentials against server-side and physical compromise.',
-    method: 'AWS KMS envelope encryption, IAM least-privilege security policies, client-side cryptographic hashing, and serverless Lambda APIs.',
-    result: 'Resilient production-grade credential manager with client-side decryption and automated key rotation.',
-    tags: ['AWS KMS', 'Lambda', 'Zero-Trust', 'IAM', 'Python'],
-    repoUrlPlaceholder: 'https://github.com/01AnshYadav/aws-password-manager',
+    title: 'Uni Manager',
+    category: 'Full-Stack Campus Platform',
+    objective: 'A single place that pulls the scattered parts of campus life together.',
+    method: 'Unified hub aggregating announcements, study resources, campus events, timetable calendar, and student community updates.',
+    result: 'Active university portal streamlining daily academic life and student collaboration.',
+    tags: ['Announcements', 'Study resources', 'Events & calendar', 'Daily updates', 'Student community'],
+    repoUrlPlaceholder: 'https://github.com/01AnshYadav/uni-manager-',
   },
   {
     id: 'OP-02',
-    title: 'CyberSync',
-    category: 'Network Protocol & P2P Transport',
-    objective: 'Engineer real-time peer-to-peer data and state synchronization resilient across hostile, untrusted networks.',
-    method: 'Low-latency WebSocket streaming, cryptographic packet validation, distributed state handshakes, and packet loss conflict resolution.',
-    result: 'Low-overhead real-time state protocol with zero telemetry leakage and high fault tolerance.',
-    tags: ['WebSockets', 'Cryptography', 'P2P', 'Networking'],
-    repoUrlPlaceholder: 'https://github.com/01AnshYadav/cybersync',
+    title: 'Mailing Client',
+    category: 'Network Automation & SMTP',
+    objective: 'A Python script that sends emails with text messages and image attachments using Gmail SMTP server.',
+    method: 'Automated SMTP handshakes, secure SSL/TLS connection authentication, MIME multipart payload encoding, and attachments processing.',
+    result: 'Lightweight, dependable automated mailing tool for notifications and scheduled reports.',
+    tags: ['Python', 'SMTP', 'Automation', 'MIME', 'Email Protocols'],
+    repoUrlPlaceholder: 'https://github.com/01AnshYadav/Mailing-client',
   },
   {
     id: 'OP-03',
-    title: 'CareerMEMORY',
-    category: 'Systems Forensic & Memory Analysis',
-    objective: 'Develop an incident response forensic inspection utility to audit running process memory and detect anomalies.',
-    method: 'Linux memory buffer inspection, /proc forensic extraction, signature pattern matching, and execution timeline reconstruction.',
-    result: 'Lightweight standalone CLI forensics tool for rapid live process memory auditing.',
-    tags: ['Linux Memory', 'Forensics', 'C/C++', 'Process Auditing'],
-    repoUrlPlaceholder: 'https://github.com/01AnshYadav/careermemory',
+    title: 'cyberTRACK',
+    category: 'Security Telemetry & Aggregation',
+    objective: 'A personal cybersecurity progress platform that brings activity from different security and development platforms into one place.',
+    method: 'Unified dashboard pulling metrics and activity from TryHackMe, LeetCode, GitHub, and CTF platforms.',
+    result: 'Centralized security tracking platform visualizing skill growth, solves, and active streaks.',
+    tags: ['Dashboard', 'Aggregation', 'Security', 'Telemetry'],
+    repoUrlPlaceholder: 'https://github.com/01AnshYadav/cyberTRACK',
   },
   {
     id: 'OP-04',
-    title: 'CTF & TryHackMe Writeups',
+    title: 'CTF Writeups',
     category: 'Offensive Security Research',
-    objective: 'Document penetration testing methodology, privilege escalation chains, and defense evasion vectors.',
-    method: 'Comprehensive technical writeups detailing web exploits (SQLi, SSRF, IDOR), network pivoting, and binary reverse engineering.',
-    result: 'Public security writeup repository serving as a structured knowledge base for security researchers.',
-    tags: ['TryHackMe', 'CTF', 'Web Exploitation', 'Privilege Escalation'],
+    objective: 'Notes and solutions from CTF solving sessions.',
+    method: 'Detailed documentation of challenge analysis, exploit payloads, privilege escalation vectors, and reverse engineering solutions.',
+    result: 'Curated knowledge base covering web exploitation, cryptography, network analysis, and binary analysis.',
+    tags: ['CTF', 'Writeups', 'Exploitation', 'Web Security', 'Reverse Engineering'],
     repoUrlPlaceholder: 'https://github.com/01AnshYadav/ctf-writeups',
   },
 ];
@@ -181,16 +187,18 @@ export const MISSIONS_DATA: Mission[] = [
  */
 export const LOADOUT_DATA = {
   certifications: [
-    { name: 'AWS Certified Cloud Practitioner', id: 'AWS-CCP-9842', status: 'VERIFIED MODULE', issuer: 'Amazon Web Services', date: '2025' },
-    { name: 'CompTIA Security+ Equivalent Modules', id: 'SEC-PLUS-5519', status: 'VERIFIED MODULE', issuer: 'CompTIA', date: '2025' },
-    { name: 'Cisco Networking Fundamentals', id: 'CISCO-NET-2204', status: 'VERIFIED MODULE', issuer: 'Cisco Systems', date: '2024' },
-    { name: 'Linux System Administration & Hardening', id: 'LNX-SYS-7718', status: 'VERIFIED MODULE', issuer: 'DedSec Kernel Ops', date: '2025' },
+    {
+      name: 'Fundamentals of Cybersecurity',
+      id: 'd941228cb98dc576120ef399776724b6cf6a85636c1cd3c88eccd85a654ab0b2',
+      status: 'VERIFIED [SYS_OK]',
+      issuer: 'Proov (Registry: projectstudy.in)',
+      date: 'Verified',
+      verifyUrl: 'https://projectstudy.in/verify/d941228cb98dc576120ef399776724b6cf6a85636c1cd3c88eccd85a654ab0b2',
+    },
   ],
   skillNodes: [
-    { name: 'Networking & Protocols', level: '94%', tools: ['TCP/IP', 'Wireshark', 'ARP', 'DNS', 'Subnetting', 'Firewall Rules'] },
-    { name: 'Linux Systems & Kernel', level: '90%', tools: ['Ubuntu/Debian', 'Arch Linux', 'Bash', 'Systemd', 'ProcFS', 'Hardening'] },
-    { name: 'AWS Cloud Security', level: '86%', tools: ['IAM Policies', 'KMS Encryption', 'Lambda', 'VPC Routing', 'S3 Vaults'] },
-    { name: 'Offensive Security Tools', level: '88%', tools: ['Nmap', 'Burp Suite', 'Metasploit', 'Hashcat', 'John the Ripper'] },
-    { name: 'Automation & Scripting', level: '92%', tools: ['Python3', 'Bash Scripting', 'Git/GitHub', 'Socket Programming'] },
+    { name: 'Cloud Security / Networking / CTF', level: '95%', tools: ['Linux', 'Web Security', 'Networks', 'CTF Labs', 'TCP/IP'] },
+    { name: 'Active Practice Feeds', level: '90%', tools: ['TryHackMe (@ansh.yadav)', 'LeetCode (@Ansh00)', 'CTF Writeups'] },
+    { name: 'Scripting & Automation', level: '92%', tools: ['Python', 'SMTP Automation', 'Bash Shell', 'Git / GitHub'] },
   ],
 };

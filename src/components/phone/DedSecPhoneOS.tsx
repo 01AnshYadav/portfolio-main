@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './DedSecPhoneOS.css';
 
-export type AppId = 'HOME' | 'WHOAMI' | 'MISSIONS' | 'LOADOUT' | 'SIGNAL' | 'TERMINAL' | 'FOLLOWERS';
+export type AppId = 'HOME' | 'WHOAMI' | 'MISSIONS' | 'LOADOUT' | 'LEARNING' | 'SIGNAL' | 'TERMINAL' | 'FOLLOWERS';
 
 interface DedSecPhoneOSProps {
   onOpenApp?: (appId: AppId) => void;
@@ -37,56 +37,82 @@ export const DedSecPhoneOS: React.FC<DedSecPhoneOSProps> = ({
   const coreApps = [
     {
       id: 'WHOAMI' as AppId,
-      code: 'WHOAMI',
+      code: '01_ABOUT',
       label: 'BIO',
-      subtext: 'Operative Dossier',
+      subtext: 'Ansh Yadav // B.Tech',
       icon: (
-        <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#00ff66" strokeWidth="1.8">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#00ff66" strokeWidth="1.8">
           <circle cx="12" cy="7" r="4" />
           <path d="M5.5 21 C5.5 16 8.5 14 12 14 C15.5 14 18.5 16 18.5 21" />
         </svg>
       ),
-      tag: '[ID_01]',
+      tag: '[BIO_01]',
     },
     {
       id: 'MISSIONS' as AppId,
-      code: 'MISSIONS',
+      code: '02_PROJECTS',
       label: 'PROJECTS',
-      subtext: 'DedSec Ops & Briefs',
+      subtext: 'Uni Manager & Repos',
       icon: (
-        <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#00e5ff" strokeWidth="1.8">
-          <circle cx="12" cy="12" r="9" />
-          <line x1="12" y1="3" x2="12" y2="21" />
-          <line x1="3" y1="12" x2="21" y2="12" />
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#00e5ff" strokeWidth="1.8">
+          <rect x="3" y="3" width="18" height="18" rx="0" />
+          <path d="M8 9l4 3-4 3" />
+          <line x1="14" y1="15" x2="17" y2="15" />
         </svg>
       ),
-      tag: '[OPS_03]',
+      tag: '[OPS_02]',
     },
     {
       id: 'LOADOUT' as AppId,
-      code: 'LOADOUT',
-      label: 'CERTS // SKILLS',
-      subtext: 'Security Modules',
+      code: '03_CERTS',
+      label: 'CERTIFICATES',
+      subtext: 'Verified Credentials',
       icon: (
-        <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#00ff66" strokeWidth="1.8">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#00ff66" strokeWidth="1.8">
           <polygon points="12 2 20 7 20 17 12 22 4 17 4 7" />
-          <circle cx="12" cy="12" r="3" />
+          <polyline points="9 12 11 14 15 10" />
         </svg>
       ),
-      tag: '[MOD_04]',
+      tag: '[CRT_03]',
+    },
+    {
+      id: 'LEARNING' as AppId,
+      code: '04_LEARNING',
+      label: 'LEARNING',
+      subtext: 'TryHackMe & LeetCode',
+      icon: (
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#00e5ff" strokeWidth="1.8">
+          <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+          <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+        </svg>
+      ),
+      tag: '[LAB_04]',
     },
     {
       id: 'SIGNAL' as AppId,
-      code: 'SIGNAL',
+      code: '05_CONTACT',
       label: 'CONTACT',
-      subtext: 'Encrypted Comms',
+      subtext: 'Open Channels // DC',
       icon: (
-        <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#00e5ff" strokeWidth="1.8">
-          <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
-          <polyline points="22,6 12,13 2,6" />
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#00ff66" strokeWidth="1.8">
+          <rect x="3" y="5" width="18" height="14" />
+          <polyline points="3,7 12,13 21,7" />
         </svg>
       ),
-      tag: '[COM_256]',
+      tag: '[COM_05]',
+    },
+    {
+      id: 'TERMINAL' as AppId,
+      code: '06_TERMINAL',
+      label: 'TERMINAL',
+      subtext: 'ctOS Shell & CLI',
+      icon: (
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#00e5ff" strokeWidth="1.8">
+          <polyline points="4 17 10 11 4 5" />
+          <line x1="12" y1="19" x2="20" y2="19" />
+        </svg>
+      ),
+      tag: '[SH_06]',
     },
   ];
 

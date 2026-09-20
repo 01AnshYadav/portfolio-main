@@ -304,3 +304,73 @@ button:focus-visible {
   .logo, .list button.breach .dot { animation: none; }
   #tip { transition: none; }
 }
+
+/* ctOS Top-Left HUD Navigation */
+.ctos-hud-nav {
+  position: fixed;
+  top: calc(14px + env(safe-area-inset-top, 0px));
+  left: calc(16px + env(safe-area-inset-left, 0px));
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  transition: opacity 0.4s ease;
+}
+
+.ctos-hud-nav.dimmed {
+  opacity: 0.15;
+  pointer-events: none;
+}
+
+.hud-nav-badge {
+  background: #141820;
+  border: 1px solid #202632;
+  padding: 6px 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #00ff66;
+  font-weight: 700;
+}
+
+.hud-nav-led {
+  width: 6px;
+  height: 6px;
+  background: #00ff66;
+  animation: ledPulse 2s steps(1) infinite;
+}
+
+@keyframes ledPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.2; }
+}
+
+.hud-nav-btn {
+  background: #0b0d10;
+  border: 1px solid #202632;
+  color: #00e5ff;
+  padding: 6px 11px;
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.hud-nav-btn:hover {
+  background: #141820;
+  border-color: #00ff66;
+  color: #00ff66;
+  transform: translate(-1px, -1px);
+}
+
+@media (max-width: 900px) {
+  .ctos-hud-nav {
+    display: none;
+  }
+}
+

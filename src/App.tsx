@@ -52,7 +52,10 @@ export const App: React.FC = () => {
       {!isBooted && <BootSequence onComplete={handleBootComplete} />}
 
       {/* 3. Background Interactive ctOS Network Map */}
-      <CtosMap isPhoneSettled={isPhoneSettled} />
+      <CtosMap
+        isPhoneSettled={isPhoneSettled}
+        onOpenApp={(appId) => setFullScreenApp(appId)}
+      />
 
       {/* 4. Foreground Scroll Stage & DedSec Smartphone 3D Arc */}
       <HandPhoneStage
