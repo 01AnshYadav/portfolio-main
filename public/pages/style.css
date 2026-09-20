@@ -500,31 +500,7 @@ img{ max-width:100%; display:block; }
   100%{ transform: none }
 }
 
-/* ══ MOBILE: under 768px the rail goes, app grid takes over ═ */
-@media (max-width: 767px){
-  .rail{ display: none; }
-  .shell{ margin-left: 0; }
-  .wrap{ padding: 0 16px; }
 
-  .apps{ grid-template-columns: repeat(2,1fr); }
-  .apps > :last-child{ grid-column: 1 / -1; }
-  .app{ padding: 18px 14px; }
-
-  .about{ grid-template-columns: 1fr; gap: 24px; }
-  .avatar{ max-width: 190px; }
-
-  .kv{ grid-template-columns: 1fr; }
-  .kv dt{ padding-bottom: 0; border-bottom: 0; }
-  .kv dd{ padding-top: 2px; }
-
-  .bar-t .mid,.bar-b .mid{ display: none; }
-  .rec-t .go{ width: 100%; margin-left: 0; }
-}
-
-@media (max-width: 420px){
-  .apps{ grid-template-columns: 1fr; }
-  .apps > :last-child{ grid-column: auto; }
-}
 
 /* ══ CERTIFICATE IMAGE DISPLAY ═════════════════════════════ */
 .cert-image-panel {
@@ -577,4 +553,337 @@ img{ max-width:100%; display:block; }
 /* ══ REDUCED MOTION ════════════════════════════════════════ */
 @media (prefers-reduced-motion: reduce){
   *,*::before,*::after{ animation: none !important; transition: none !important; }
+}
+
+/* === MOBILE OPTIMISATION === */
+
+@media (max-width: 767px) {
+  /* ── 1. ROOT & SAFE AREAS ─────────────────────────────────── */
+  :root {
+    --bar: 48px;
+  }
+
+  html, body {
+    overflow-x: hidden;
+    max-width: 100vw;
+  }
+
+  /* ── 2. STATUS BARS & SAFE INSETS ─────────────────────────── */
+  .bar-t {
+    height: calc(var(--bar) + env(safe-area-inset-top, 0px));
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-left: max(14px, env(safe-area-inset-left, 14px));
+    padding-right: max(14px, env(safe-area-inset-right, 14px));
+    top: 0;
+  }
+
+  .bar-b {
+    height: calc(var(--bar) + env(safe-area-inset-bottom, 0px));
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    padding-left: max(14px, env(safe-area-inset-left, 14px));
+    padding-right: max(14px, env(safe-area-inset-right, 14px));
+    bottom: 0;
+  }
+
+  .bar-t .mid,
+  .bar-b .mid {
+    display: none;
+  }
+
+  .bar-t, .bar-b {
+    font-size: 11px;
+  }
+
+  /* ── 3. TOUCH TARGETS (MIN 44x44px) ────────────────────────── */
+  .back {
+    min-height: 44px;
+    min-width: 44px;
+    padding: 8px 14px;
+    font-size: 11px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .theme-toggle {
+    min-height: 44px;
+    min-width: 44px;
+    padding: 8px 12px;
+    font-size: 11px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .rec-t .go {
+    width: 100%;
+    margin-left: 0;
+    margin-top: 10px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+  }
+
+  .exec {
+    width: 100%;
+    min-height: 48px;
+    justify-content: center;
+    margin-top: 24px;
+  }
+
+  /* ── 4. LAYOUT SHELL & DVH UNITS ──────────────────────────── */
+  .rail {
+    display: none;
+  }
+
+  .shell {
+    margin-left: 0;
+    min-height: 100vh;
+    min-height: 100dvh;
+    padding-top: calc(var(--bar) + env(safe-area-inset-top, 0px) + 24px);
+    padding-bottom: calc(var(--bar) + env(safe-area-inset-bottom, 0px) + 32px);
+  }
+
+  .wrap {
+    padding: 0 16px;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* ── 5. TYPOGRAPHY SCALING (CLAMP & >=14px BODY) ─────────── */
+  .hero h1 {
+    font-size: clamp(2rem, 11vw, 3.2rem);
+    line-height: 1.02;
+  }
+
+  .head h1, .head h2 {
+    font-size: clamp(1.5rem, 6vw, 2.1rem);
+    line-height: 1.15;
+  }
+
+  .hero .role,
+  .prose p,
+  .rec p,
+  .copy p {
+    font-size: 14px;
+    line-height: 1.75;
+  }
+
+  .head .crumb,
+  .rec-t .ix,
+  .panel-h,
+  .tag-b,
+  .chip,
+  .avatar-cap,
+  .cert-hash {
+    font-size: 11px;
+  }
+
+  /* ── 6. CARDS, PANELS & KEY/VALUE STACKING ─────────────────── */
+  .about {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .avatar {
+    max-width: 200px;
+    margin: 0 auto;
+  }
+
+  .kv {
+    grid-template-columns: 1fr;
+  }
+
+  .kv dt {
+    padding: 8px 0 2px;
+    border-bottom: 0;
+  }
+
+  .kv dd {
+    padding: 2px 0 10px;
+    border-bottom: 1px dashed var(--bd);
+  }
+
+  .kv dd:last-of-type {
+    border-bottom: 0;
+  }
+
+  .path,
+  .cert-hash {
+    word-break: break-all;
+    overflow-wrap: anywhere;
+  }
+
+  /* ── 7. APP LAUNCHER GRID (.apps on buffer.html) ───────────── */
+  .apps {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+  }
+
+  .apps > :last-child {
+    grid-column: 1 / -1;
+  }
+
+  .app {
+    min-height: 64px;
+    padding: 16px 14px;
+    border: 1px solid var(--bd-hi);
+  }
+
+  /* ── 8. OVERLAYS (BOOT, BREACH & EGGS.JS HIGHER SPECIFICITY) ─ */
+  .boot {
+    padding: calc(var(--bar) + env(safe-area-inset-top, 0px) + 16px) 16px calc(var(--bar) + env(safe-area-inset-bottom, 0px) + 16px);
+  }
+
+  .boot-in {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .boot-in .l {
+    font-size: 11px;
+    line-height: 1.8;
+  }
+
+  body .ctos-chip {
+    bottom: calc(var(--bar) + env(safe-area-inset-bottom, 0px) + 10px) !important;
+    right: 12px !important;
+    max-width: calc(100vw - 24px) !important;
+    font-size: 11px !important;
+    min-height: 44px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+  }
+
+  body .ctos-toast {
+    bottom: calc(var(--bar) + env(safe-area-inset-bottom, 0px) + 10px) !important;
+    left: 12px !important;
+    right: 12px !important;
+    max-width: calc(100vw - 24px) !important;
+    font-size: 11px !important;
+  }
+
+  body .ctos-modal {
+    padding: calc(var(--bar) + env(safe-area-inset-top, 0px) + 12px) 12px calc(var(--bar) + env(safe-area-inset-bottom, 0px) + 12px) !important;
+  }
+
+  body .ctos-modal-card {
+    width: 100% !important;
+    max-width: 100% !important;
+    max-height: calc(100dvh - var(--bar) * 2 - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - 24px) !important;
+    overflow-y: auto !important;
+  }
+
+  body .ctos-modal-btn {
+    min-height: 44px !important;
+    padding: 10px 16px !important;
+  }
+
+  /* ── 9. IMAGES & CERTIFICATES ─────────────────────────────── */
+  .cert-img-link {
+    max-width: 100%;
+  }
+
+  .cert-image-body {
+    padding: 10px;
+  }
+}
+
+/* ══ NARROW SCREENS (<= 420px) ══════════════════════════════ */
+@media (max-width: 420px) {
+  /* Shorten top bar title to fit without collision */
+  .bar-t > div:first-child {
+    font-size: 10px;
+    letter-spacing: 0.1em;
+  }
+
+  /* Shorten bottom bar left text */
+  .bar-b > div:first-child {
+    font-size: 10px;
+    letter-spacing: 0.1em;
+  }
+
+  .hero .meta {
+    gap: 6px;
+  }
+
+  .chip {
+    font-size: 10.5px;
+    padding: 4px 8px;
+  }
+}
+
+/* ══ ULTRA-NARROW SCREENS (<= 360px) ════════════════════════ */
+@media (max-width: 360px) {
+  .apps {
+    grid-template-columns: 1fr;
+  }
+
+  .apps > :last-child {
+    grid-column: auto;
+  }
+
+  .wrap {
+    padding: 0 12px;
+  }
+
+  /* Abbreviate status bar strings on 320px-360px */
+  .bar-t > div:first-child span:not(.led) {
+    display: none;
+  }
+
+  .bar-t > div:first-child::after {
+    content: "ctOS";
+    font-weight: 700;
+  }
+
+  .bar-b > div:first-child {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 160px;
+  }
+}
+
+/* ══ TOUCH DEVICES: NEUTRALIZE STICKY HOVER & ADD :ACTIVE ─── */
+@media (hover: none) {
+  .glx:hover {
+    animation: none !important;
+    transform: none !important;
+  }
+
+  .rec:hover,
+  .copy:hover,
+  .app:hover,
+  .exec:hover,
+  .back:hover,
+  .theme-toggle:hover {
+    background: var(--panel) !important;
+    color: inherit !important;
+    transform: none !important;
+    box-shadow: var(--box-shadow) !important;
+    outline: none !important;
+  }
+
+  /* Crisp :active feedback */
+  .rec:active,
+  .copy:active,
+  .app:active {
+    background: var(--panel-2) !important;
+    outline: 1px solid var(--ac-bright) !important;
+    transform: scale(0.99) !important;
+  }
+
+  .exec:active,
+  .back:active,
+  .theme-toggle:active {
+    background: var(--ac-bright) !important;
+    color: #000000 !important;
+    border-color: var(--ac-bright) !important;
+    transform: scale(0.97) !important;
+  }
 }
