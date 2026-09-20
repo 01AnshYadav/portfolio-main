@@ -5,6 +5,7 @@ import { FullScreenAppModal } from './components/phone/FullScreenAppModal';
 import { BootSequence } from './components/BootSequence';
 import { BackgroundAudio } from './components/BackgroundAudio';
 import { EasterEggBox } from './components/EasterEggBox';
+import { CreditsModal } from './components/CreditsModal';
 import type { AppId } from './components/phone/DedSecPhoneOS';
 import { WD2_STATS } from './config';
 
@@ -67,6 +68,9 @@ export const App: React.FC = () => {
         total={8}
         isDimmed={isPhoneSettled}
       />
+
+      {/* Credits Option & Cinematic White Modal on Main Page */}
+      <CreditsModal isDimmed={isPhoneSettled} />
 
       {/* Background Audio filler: bg.mp3 starting from main page only on loop at low volume */}
       <BackgroundAudio isBooted={isBooted} isDimmed={isPhoneSettled} defaultVolume={0.08} />
