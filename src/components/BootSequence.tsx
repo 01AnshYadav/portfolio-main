@@ -1,129 +1,283 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './BootSequence.css';
 
 interface BootSequenceProps {
   onComplete: () => void;
 }
 
+const CODE_LINES = [
+  '##############################################',
+  '$script:Headers = @()',
+  '# add any additional requests created with format $JobNameBase_[rand]',
+  '$JobNameBase = "Debug32"',
+  '# the currently imported script held in memory',
+  '$script:ImportedScript = ""',
+  "# calculate the diff between the servers epoch and the agent's",
+  '$script:EpochDiff = $Epoch - [math]::abs([Math]::Floor([decimal](Get-Date(Get-Date).ToUniversalTime()-uformat "%s")))',
+  '# Command Helpers',
+  '##############################################',
+  '# set the delay/jitter',
+  'Function Set-Delay {',
+  '  param([int]$d, [double]$j=0.0)',
+  '  $script:AgentDelay = $d',
+  '  $script:AgentJitter = $j',
+  '  "agent interval set to $script:AgentDelay seconds with a jitter of $script:AgentJitter"',
+  '}',
+  '# get the delay/jitter',
+  'Function Get-Delay {',
+  '  "agent interval delay interval: $script:AgentDelay seconds with a jitter of $script:AgentJitter"',
+  '}',
+  '# set the killdate for the agent',
+  'Function Set-Killdate {',
+  '  param([string]$date)',
+  '  $script:KillDate = $date',
+  '  "agent killdate set to $script:KillDate"',
+  '}',
+  '# set the working hours for the agent',
+  'Function Set-WorkingHours {',
+  '  param([string]$hours)',
+  '  $script:WorkingHours = $hours',
+  '  "agent working hours set to $script:WorkingHours"',
+  '}',
+  '# Environment: Machine: IPAddress: 10.0.4.12',
+  'else {',
+  '  # otherwise check the groups',
+  '  $str += \' \' + ($whoami /groups) -join \' \' + ".Contains(\"High Mandatory Level\")";',
+  '}',
+  '$n = [System.Diagnostics.Process]::GetCurrentProcess();',
+  '$str += \' \' + $n.ProcessName + \' \' + $n.Id;',
+  '$str += \' \' + $PSVersionTable.PSVersion.Major',
+  'add additional callback servers',
+  'usr/thishere/thatthere/test_773.cgi',
+  'Foreach ($backup in $BackupServers) {',
+  '  $Servers = $Servers + $backup',
+  '}',
+];
+
 export const BootSequence: React.FC<BootSequenceProps> = ({ onComplete }) => {
-  const [step, setStep] = useState<number>(0);
+  // Phase:
+  // 0: Initial "execute?" prompt
+  // 1: "Y" answered, code cascading down
+  // 2: Window pop-up overlay (usr/thishere/thatthere/test_773.cgi)
+  // 3: Heavy black redaction marker bars strike across lines
+  // 4: Complete / Ready to enter ctOS
+  const [phase, setPhase] = useState<number>(0);
+  const [visibleCodeCount, setVisibleCodeCount] = useState<number>(0);
+  const [typedY, setTypedY] = useState<boolean>(false);
+  const completedRef = useRef<boolean>(false);
 
+  const handleFinish = () => {
+    if (completedRef.current) return;
+    completedRef.current = true;
+    onComplete();
+  };
+
+  // Keyboard navigation: Pressing Y, Enter, Space, or Escape
   useEffect(() => {
-    // Stage timings for fast typing ctOS sequence
-    const t1 = setTimeout(() => setStep(1), 400);  // ctOS system profile scan lines
-    const t2 = setTimeout(() => setStep(2), 1100); // initial wrong profile displayed
-    const t3 = setTimeout(() => setStep(3), 2000); // red strike-through & error override banner
-    const t4 = setTimeout(() => setStep(4), 2800); // DedSec green override text & execute button
-
-    return () => {
-      clearTimeout(t1);
-      clearTimeout(t2);
-      clearTimeout(t3);
-      clearTimeout(t4);
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        handleFinish();
+      } else if (e.key === 'y' || e.key === 'Y' || e.key === 'Enter') {
+        if (phase === 0) {
+          setTypedY(true);
+          setPhase(1);
+        } else if (phase >= 3) {
+          handleFinish();
+        }
+      }
     };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [phase]);
+
+  // Timeline progression
+  useEffect(() => {
+    // Auto-trigger Y if visitor doesn't type it after 1.2s
+    const t0 = setTimeout(() => {
+      setTypedY(true);
+      setPhase((prev) => (prev === 0 ? 1 : prev));
+    }, 1200);
+
+    return () => clearTimeout(t0);
   }, []);
 
-  return (
-    <div className="boot-terminal-overlay" role="dialog" aria-label="DedSec Boot Sequence">
-      {/* Background CRT Scanlines */}
-      <div className="boot-scanlines" />
+  // Code line streaming in phase >= 1
+  useEffect(() => {
+    if (phase >= 1 && visibleCodeCount < CODE_LINES.length) {
+      const timer = setTimeout(() => {
+        setVisibleCodeCount((prev) => Math.min(CODE_LINES.length, prev + 2));
+      }, 45);
+      return () => clearTimeout(timer);
+    }
+  }, [phase, visibleCodeCount]);
 
-      {/* Prominent Corner Skip Button */}
+  // Transition to window pop-up (phase 2)
+  useEffect(() => {
+    if (phase === 1 && visibleCodeCount >= 14) {
+      const tWindow = setTimeout(() => setPhase(2), 200);
+      return () => clearTimeout(tWindow);
+    }
+  }, [phase, visibleCodeCount]);
+
+  // Transition to redaction bars (phase 3)
+  useEffect(() => {
+    if (phase === 2) {
+      const tRedact = setTimeout(() => setPhase(3), 1100);
+      return () => clearTimeout(tRedact);
+    }
+  }, [phase]);
+
+  // Phase 4 auto-complete after cinematic sequence
+  useEffect(() => {
+    if (phase === 3) {
+      const tFinal = setTimeout(() => {
+        setPhase(4);
+      }, 1600);
+      return () => clearTimeout(tFinal);
+    }
+  }, [phase]);
+
+  return (
+    <div
+      className="watchdogs-cinematic-overlay"
+      role="dialog"
+      aria-label="ctOS Intro Sequence"
+    >
+      {/* Subtle CRT grain and vignette texture */}
+      <div className="cinematic-vignette" />
+
+      {/* Clean Top-Right Skip Button */}
       <button
         type="button"
-        className="boot-skip-btn"
-        onClick={onComplete}
-        title="Skip Boot Sequence"
+        className="cinematic-skip-btn"
+        onClick={handleFinish}
+        title="Skip intro to Network Map"
       >
         [ SKIP ]
       </button>
 
-      {/* Terminal Container */}
-      <div className="boot-terminal-box">
-        {/* Terminal Header */}
-        <div className="boot-header-bar">
-          <div className="boot-header-title">
-            <span className="dot-indicator" />
-            <span>ctOS 2.0 // SYSTEM BOOT & PROFILER INTERCEPT</span>
-          </div>
-          <div className="boot-sys-id">[PORT: 443 // RAW_TTY]</div>
+      {/* Main Content Area */}
+      <div className="cinematic-stage">
+        {/* Left Vertical Crosshairs Column */}
+        <div className="crosshair-gutter" aria-hidden="true">
+          {Array.from({ length: 24 }).map((_, i) => (
+            <div key={i} className="cross-item">
+              +
+            </div>
+          ))}
         </div>
 
-        {/* Boot Terminal Log Output */}
-        <div className="boot-log-stream">
-          <div className="log-line text-dim">&gt; Initializing ctOS subsystem kernel v11.4.0...</div>
-          <div className="log-line text-dim">&gt; Connecting to municipal telemetry node [SAN_FRANCISCO_BAY_RELAY]...</div>
+        {/* Dynamic Interactive Stream Column */}
+        <div className="stream-column">
+          {/* Top spacer crosses */}
+          <div className="stream-cross">+</div>
+          <div className="stream-cross">+</div>
 
-          {step >= 1 && (
-            <>
-              <div className="log-line text-cyan">&gt; SCANNING TARGET CITIZEN BIOMETRICS... OK</div>
-              <div className="log-line text-cyan">&gt; MATCH FOUND: CITIZEN_DATABASE_SECTOR_09</div>
-            </>
-          )}
+          {/* The Iconic "execute?" Prompt */}
+          <div className="prompt-block">
+            <div className="prompt-title">execute?</div>
+            {typedY && <div className="prompt-response">Y</div>}
+          </div>
 
-          {/* INITIAL WRONG PROFILE SUMMARY */}
-          {step >= 2 && (
-            <div className={`wrong-profile-card ${step >= 3 ? 'struck-out' : ''}`}>
-              <div className="profile-label">[ctOS PROFILED CITIZEN RECORD: #4092-A]</div>
-              <div className="profile-row">NAME: J. DOE // CIVILIAN REGISTRY</div>
-              <div className="profile-row">OCCUPATION: STANDARD CITIZEN // LEVEL 1 COMPLIANT</div>
-              <div className="profile-row">STATUS: MONITORED // RECORD VERIFIED</div>
-              <div className="profile-row">THREAT ASSESSMENT: NONE (0.01%)</div>
-              {step >= 3 && <div className="red-strike-bar" />}
+          {/* Cascading Script Code */}
+          {phase >= 1 && (
+            <div className="code-waterfall">
+              {CODE_LINES.slice(0, visibleCodeCount).map((line, idx) => {
+                const isRedacted =
+                  phase >= 3 &&
+                  (idx === 1 ||
+                    idx === 3 ||
+                    idx === 7 ||
+                    idx === 12 ||
+                    idx === 15 ||
+                    idx === 24 ||
+                    idx === 31 ||
+                    idx === 35 ||
+                    idx === 39);
+
+                return (
+                  <div key={idx} className="code-line-row">
+                    <span className="code-cross">+</span>
+                    <span className={`code-text ${isRedacted ? 'redacted' : ''}`}>
+                      {line}
+                      {isRedacted && <span className="redaction-bar" aria-hidden="true" />}
+                    </span>
+                  </div>
+                );
+              })}
             </div>
           )}
+        </div>
 
-          {/* GLITCHED ERROR OVERRIDE BANNER */}
-          {step >= 3 && (
-            <div className="glitch-error-banner">
-              <span className="error-bracket">[! ALERT]</span>
-              <span className="error-text">[ctOS PROFILER ERROR: PROFILE CORRUPTED / OVERRIDDEN BY DEDSEC]</span>
-            </div>
-          )}
-
-          {/* DEDSEC GREEN REPLACEMENT TEXT */}
-          {step >= 4 && (
-            <div className="dedsec-override-card">
-              <div className="dedsec-banner-head">[DEDSEC INJECTION SUCCESSFUL // ROOT AUTHORIZED]</div>
-              <div className="dedsec-field-group">
-                <div className="dedsec-field">
-                  <span className="field-key">Operative:</span>{' '}
-                  <span className="field-val">Marcus Holloway</span>
-                  <span className="field-handle"> [01AnshYadav]</span>
-                </div>
-                <div className="dedsec-field">
-                  <span className="field-key">Edu:</span>{' '}
-                  <span className="field-val">Freshman Year B.Tech, University of Lucknow</span>
-                </div>
-                <div className="dedsec-field">
-                  <span className="field-key">Focus:</span>{' '}
-                  <span className="field-val">Cloud Infrastructure, AWS & CTFs</span>
-                </div>
-                <div className="dedsec-field">
-                  <span className="field-key">Status:</span>{' '}
-                  <span className="field-alert">CRITICAL // TARGET OFF-GRID</span>
-                </div>
+        {/* Phase 2 & 3: Floating Wireframe Window (usr/thishere/thatthere/test_773.cgi) */}
+        {phase >= 2 && (
+          <div className={`wireframe-window ${phase >= 3 ? 'window-redacted' : ''}`}>
+            <div className="wireframe-titlebar">
+              <span className="wireframe-title">usr/thishere/thatthere/test_773.cgi</span>
+              <div className="wireframe-controls">
+                <span className="wireframe-close-box">&#9747;</span>
               </div>
             </div>
-          )}
-        </div>
 
-        {/* Action Button: EXECUTE_DEDSEC_OS */}
-        {step >= 4 && (
-          <div className="boot-action-bar">
+            <div className="wireframe-body">
+              <div className="wireframe-line"># get the delay/jitter</div>
+              <div className="wireframe-line">Function Get-Delay &#123;</div>
+              <div className="wireframe-line indent">
+                "agent interval delay interval: $script:AgentDelay seconds"
+              </div>
+              <div className="wireframe-line">&#125;</div>
+              <div className="wireframe-line"># set the killdate for the agent</div>
+              <div className="wireframe-line">Function Set-Killdate &#123;</div>
+              <div className="wireframe-line indent">param([string]$date)</div>
+              <div className="wireframe-line indent">$script:KillDate = $date</div>
+              <div className="wireframe-line indent">"agent killdate set to $script:KillDate"</div>
+              <div className="wireframe-line">&#125;</div>
+
+              {phase >= 3 && (
+                <>
+                  <div className="redaction-stamp">CLASSIFIED // 4506-1</div>
+                  <div className="wireframe-redaction-heavy top" />
+                  <div className="wireframe-redaction-heavy mid" />
+                  <div className="wireframe-redaction-heavy bot" />
+                </>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Scattered Background HUD Crosses (Right Margin) */}
+        <div className="scatter-crosses" aria-hidden="true">
+          <span style={{ top: '15%', right: '22%' }}>+</span>
+          <span style={{ top: '35%', right: '12%' }}>+</span>
+          <span style={{ top: '48%', right: '28%' }}>+</span>
+          <span style={{ top: '65%', right: '18%' }}>+</span>
+          <span style={{ top: '80%', right: '25%' }}>+</span>
+        </div>
+      </div>
+
+      {/* Bottom Subtitle / Manifesto Text */}
+      <footer className="cinematic-footer">
+        <p className="manifesto-subtitle">
+          {phase < 3
+            ? 'With threats to personal freedom rising, many are stepping forward.'
+            : 'Whistleblowers, Activists and Hackers have drawn their battle lines.'}
+        </p>
+
+        {/* Climax Button: Appears on Phase 4 */}
+        {phase >= 4 && (
+          <div className="enter-hub-bar">
             <button
               type="button"
-              className="execute-os-btn"
-              onClick={onComplete}
+              className="enter-city-btn"
+              onClick={handleFinish}
               autoFocus
             >
-              <span className="reticle-glyph">⌖</span>
-              <span>[ EXECUTE_DEDSEC_OS ]</span>
-              <span className="reticle-glyph">⌖</span>
+              <span>[ ACCESS ctOS NETWORK MAP ]</span>
+              <span className="enter-arrow">&gt;</span>
             </button>
           </div>
         )}
-      </div>
+      </footer>
     </div>
   );
 };
