@@ -1,35 +1,32 @@
-/* Watch Dogs 2 Full Screen Desktop Modal */
+/* Watch Dogs 2 Full Screen Desktop Modal - Anti-Vibe-Coding Strict Dark Slate HUD */
 
 .fullscreen-app-overlay {
   position: fixed;
   inset: 0;
   width: 100vw;
   height: 100vh;
-  background-color: #03060a;
+  background-color: #0b0d10;
   z-index: 1000;
   display: flex;
   flex-direction: column;
   color: var(--ink);
   font-family: var(--mono);
   overflow: hidden;
-  animation: wd2ModalEnter 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: wd2ModalEnter 0.2s steps(2) forwards;
 }
 
 @keyframes wd2ModalEnter {
   0% {
     opacity: 0;
-    transform: scale(0.97);
-    filter: brightness(1.6) contrast(1.4);
+    transform: translate(-1px, 1px);
   }
   50% {
     opacity: 0.9;
-    transform: scale(1.005);
-    filter: brightness(1.2);
+    transform: translate(1px, -1px);
   }
   100% {
     opacity: 1;
-    transform: scale(1);
-    filter: brightness(1) contrast(1);
+    transform: translate(0, 0);
   }
 }
 
@@ -38,28 +35,22 @@
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background: linear-gradient(
-    rgba(18, 24, 32, 0) 50%,
-    rgba(0, 0, 0, 0.45) 50%
-  ),
-  linear-gradient(
-    90deg,
-    rgba(255, 0, 128, 0.02),
-    rgba(0, 255, 102, 0.015),
-    rgba(58, 174, 196, 0.02)
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.3) 0px,
+    rgba(0, 0, 0, 0.3) 1px,
+    transparent 1px,
+    transparent 2px
   );
-  background-size: 100% 3px, 6px 100%;
   z-index: 5;
-  opacity: 0.65;
+  opacity: 0.7;
 }
 
 .fullscreen-grid-ambient {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background-image: 
-    radial-gradient(ellipse at 50% 30%, rgba(58, 174, 196, 0.08) 0%, transparent 60%),
-    radial-gradient(ellipse at 80% 80%, rgba(255, 0, 128, 0.05) 0%, transparent 50%);
+  background-color: #0b0d10;
   z-index: 1;
 }
 
@@ -70,89 +61,73 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 14px 28px;
-  background: rgba(6, 10, 14, 0.92);
-  border-bottom: 1.5px solid rgba(58, 174, 196, 0.35);
-  backdrop-filter: blur(12px);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.8);
+  padding: 12px 24px;
+  background: #141820;
+  border-bottom: 1px solid #202632;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.9);
 }
 
 .topbar-left {
   display: flex;
   align-items: center;
-  gap: 24px;
+  gap: 20px;
 }
 
 .fullscreen-return-btn {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
-  background: rgba(255, 69, 54, 0.12);
-  border: 1.5px solid #ff4536;
-  color: #ffffff;
-  padding: 8px 18px;
-  border-radius: 4px;
+  gap: 8px;
+  background: #0b0d10;
+  border: 1px solid #00ff66;
+  color: #00ff66;
+  padding: 6px 14px;
   font-family: var(--mono);
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.08em;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.15s ease;
 }
 
 .fullscreen-return-btn:hover {
-  background: #ff4536;
-  color: #000000;
-  box-shadow: 0 0 16px rgba(255, 69, 54, 0.6);
-  transform: translateX(-3px);
+  background: #00ff66;
+  color: #0b0d10;
+  transform: translate(-1px, -1px);
 }
 
 .fullscreen-return-btn .btn-glyph {
-  font-size: 14px;
-  color: #ff4536;
-  transition: color 0.2s;
-}
-
-.fullscreen-return-btn:hover .btn-glyph {
-  color: #000000;
+  font-size: 13px;
+  font-weight: 800;
 }
 
 .app-breadcrumb {
   display: flex;
   align-items: center;
   gap: 10px;
-  font-size: 14px;
-  letter-spacing: 0.1em;
-  color: var(--cyan-hi);
-  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  color: #00e5ff;
+  font-weight: 700;
 }
 
 .breadcrumb-dot {
-  width: 9px;
-  height: 9px;
-  border-radius: 50%;
+  width: 6px;
+  height: 6px;
   background: #00ff66;
-  box-shadow: 0 0 8px #00ff66;
-  animation: wd2DotBlink 1.8s infinite ease-in-out;
-}
-
-@keyframes wd2DotBlink {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.35; transform: scale(0.8); }
 }
 
 .topbar-right {
   display: flex;
   align-items: center;
-  gap: 24px;
+  gap: 20px;
 }
 
 .system-telemetry {
   display: flex;
   align-items: center;
-  gap: 12px;
-  font-size: 12px;
-  letter-spacing: 0.06em;
+  gap: 10px;
+  font-size: 11px;
+  letter-spacing: 0.05em;
 }
 
 .telemetry-item .dim-label {
@@ -161,41 +136,35 @@
 
 .val-green {
   color: #00ff66;
-  font-weight: 700;
+  font-weight: 800;
 }
 
 .val-cyan {
-  color: var(--cyan-hi);
-  font-weight: 700;
-}
-
-.val-pink {
-  color: #ff007f;
-  font-weight: 700;
+  color: #00e5ff;
+  font-weight: 800;
 }
 
 .telemetry-separator {
-  color: rgba(255, 255, 255, 0.2);
+  color: #202632;
 }
 
 .fullscreen-close-x {
-  background: none;
-  border: 1.5px solid rgba(213, 221, 226, 0.25);
-  color: var(--ink);
-  font-size: 16px;
-  width: 34px;
-  height: 34px;
-  border-radius: 4px;
+  background: #0b0d10;
+  border: 1px solid #202632;
+  color: var(--dim);
+  font-family: var(--mono);
+  font-size: 13px;
+  width: 30px;
+  height: 30px;
   cursor: pointer;
   display: grid;
   place-items: center;
-  transition: all 0.2s;
+  transition: all 0.15s;
 }
 
 .fullscreen-close-x:hover {
-  border-color: #ff4536;
-  color: #ff4536;
-  background: rgba(255, 69, 54, 0.1);
+  border-color: #ff3838;
+  color: #ff3838;
 }
 
 /* Main Content Area */
@@ -212,7 +181,7 @@
 
 .fullscreen-content-inner {
   width: 100%;
-  max-width: 1400px;
+  max-width: 1360px;
   height: 100%;
   min-height: calc(100vh - 140px);
   display: flex;
@@ -227,27 +196,27 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 8px 28px;
-  background: rgba(4, 7, 10, 0.95);
-  border-top: 1px solid rgba(58, 174, 196, 0.2);
+  padding: 8px 24px;
+  background: #0b0d10;
+  border-top: 1px solid #202632;
   font-size: 11px;
   color: var(--dim);
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
 }
 
 .ticker-left {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
 }
 
 .ticker-pulse {
   color: #00ff66;
-  font-weight: bold;
+  font-weight: 800;
 }
 
 .ticker-right {
-  color: rgba(213, 221, 226, 0.45);
+  color: var(--dim);
 }
 
 /* Responsive */

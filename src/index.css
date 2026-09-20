@@ -1,13 +1,13 @@
 :root {
-  --bg: #000000;
-  --ink: #d5dde2;
-  --dim: #8f9ba2;
-  --cyan: #3aaec4;
-  --cyan-hi: #63d0e4;
-  --red: #ff4536;
-  --panel: rgba(0, 0, 0, 0.76);
-  --mono: "Share Tech Mono", "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
-  --logo: "Archivo Black", "Arial Black", Impact, sans-serif;
+  --bg: #0b0d10;
+  --panel: #141820;
+  --border: #202632;
+  --ink: #e6edf3;
+  --dim: #7d8b99;
+  --green: #00ff66;
+  --cyan: #00e5ff;
+  --red: #ff3838;
+  --mono: "JetBrains Mono", "Share Tech Mono", ui-monospace, Menlo, Consolas, monospace;
   box-sizing: border-box;
   color-scheme: dark;
 }
@@ -44,6 +44,43 @@ body {
 }
 
 ::selection {
-  background: var(--cyan);
+  background: var(--green);
   color: #000000;
+}
+
+/* Subtle Technical Scanlines */
+.scanlines-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.25) 0px,
+    rgba(0, 0, 0, 0.25) 1px,
+    transparent 1px,
+    transparent 2px
+  );
+  z-index: 900;
+  opacity: 0.6;
+}
+
+/* 1-Frame Glitch Transition */
+@keyframes glitch1Frame {
+  0% { transform: translate(0, 0); }
+  25% { transform: translate(-2px, 1px); }
+  50% { transform: translate(2px, -1px); }
+  75% { transform: translate(-1px, -1px); }
+  100% { transform: translate(0, 0); }
+}
+
+.glitch-hover:hover {
+  animation: glitch1Frame 0.15s steps(2) 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
 }

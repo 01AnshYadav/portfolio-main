@@ -5,22 +5,20 @@ interface SignalAppProps {
 }
 
 export const SignalApp: React.FC<SignalAppProps> = ({ onTakeDownCtos }) => {
-  // Mini-game state: 3 security nodes must be connected/bypassed
-  const [nodes, setNodes] = useState<[boolean, boolean, boolean]>([false, false, false]);
-  const [unlocked, setUnlocked] = useState<boolean>(false);
-  const [broadcastSent, setBroadcastSent] = useState<boolean>(false);
+  const [isUnlocked, setIsUnlocked] = useState<boolean>(false);
+  const [isBypassing, setIsBypassing] = useState<boolean>(false);
+  const [takeDownExecuted, setTakeDownExecuted] = useState<boolean>(false);
 
-  const toggleNode = (idx: number) => {
-    const updated: [boolean, boolean, boolean] = [...nodes];
-    updated[idx] = !updated[idx];
-    setNodes(updated);
-    if (updated[0] && updated[1] && updated[2]) {
-      setTimeout(() => setUnlocked(true), 350);
-    }
+  const handleBypass = () => {
+    setIsBypassing(true);
+    setTimeout(() => {
+      setIsUnlocked(true);
+      setIsBypassing(false);
+    }, 450);
   };
 
   const handleTakeDown = () => {
-    setBroadcastSent(true);
+    setTakeDownExecuted(true);
     if (onTakeDownCtos) {
       onTakeDownCtos();
     }
@@ -28,218 +26,229 @@ export const SignalApp: React.FC<SignalAppProps> = ({ onTakeDownCtos }) => {
 
   return (
     <div
-      className="signal-app"
+      className="signal-app-container"
       style={{
         display: 'flex',
         flexDirection: 'column',
-        height: '100%',
-        animation: 'fadeIn 0.25s ease',
+        gap: '16px',
+        width: '100%',
+        color: '#e6edf3',
+        fontFamily: 'var(--mono)',
       }}
     >
-      {!unlocked ? (
-        /* 1. Hack Mini-Game / Access Lock */
+      {/* Top Protocol Header */}
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          backgroundColor: '#141820',
+          border: '1px solid #202632',
+          padding: '10px 16px',
+          fontSize: '11px',
+        }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <span style={{ color: '#00e5ff', fontWeight: 800 }}>[ENCRYPTED_COMMS // DISPATCH]</span>
+          <span style={{ color: 'var(--dim)' }}>CIPHER: AES-256-GCM</span>
+        </div>
+        <div style={{ color: isUnlocked ? '#00ff66' : '#ff3838' }}>
+          STATUS: {isUnlocked ? '[TUNNEL_ESTABLISHED]' : '[AIR_GAPPED_LOCKOUT]'}
+        </div>
+      </div>
+
+      {!isUnlocked ? (
+        /* 1. Encrypted Lockout State with Interactive Access Button */
         <div
           style={{
-            flex: 1,
+            backgroundColor: '#141820',
+            border: '1px solid #202632',
+            padding: '40px 24px',
             display: 'flex',
             flexDirection: 'column',
-            justifyContent: 'center',
             alignItems: 'center',
-            gap: '1.5cqw',
-            backgroundColor: 'rgba(10, 14, 18, 0.85)',
-            border: '0.12cqw solid rgba(255, 69, 54, 0.4)',
-            borderRadius: '1cqw',
-            padding: '2cqw',
+            justifyContent: 'center',
+            gap: '16px',
+            textAlign: 'center',
+            minHeight: '320px',
           }}
         >
-          <div style={{ textAlign: 'center' }}>
-            <div style={{ color: '#ff4536', fontSize: 'max(9px, 1.3cqw)', fontWeight: 'bold' }}>
-              [SECURITY LOCKOUT: ENCRYPTED DEDSEC CHANNEL]
-            </div>
-            <div style={{ color: 'var(--dim)', fontSize: 'max(7px, 0.95cqw)', marginTop: '0.4cqw' }}>
-              Align all three gateway relay nodes to bypass ctOS surveillance and access direct comms.
-            </div>
+          <div style={{ color: '#ff3838', fontSize: '13px', fontWeight: 800, letterSpacing: '0.08em' }}>
+            [SECURITY ENCRYPTION: INCOMING TRANSMISSION AIR-GAPPED]
           </div>
 
-          {/* 3 Interactive Circuit Nodes */}
-          <div style={{ display: 'flex', gap: '3cqw', alignItems: 'center' }}>
-            {[
-              { label: 'NODE ALPHA', desc: 'Port 443 Probe' },
-              { label: 'NODE BETA', desc: 'KMS Handshake' },
-              { label: 'NODE GAMMA', desc: 'VPN Tunnel' },
-            ].map((node, i) => (
-              <button
-                key={i}
-                type="button"
-                onClick={() => toggleNode(i)}
-                style={{
-                  width: '18cqw',
-                  padding: '1.2cqw 0.8cqw',
-                  backgroundColor: nodes[i] ? 'rgba(0, 255, 102, 0.15)' : 'rgba(255, 69, 54, 0.1)',
-                  border: '0.15cqw solid ' + (nodes[i] ? '#00ff66' : '#ff4536'),
-                  borderRadius: '0.8cqw',
-                  color: nodes[i] ? '#00ff66' : '#ff4536',
-                  cursor: 'pointer',
-                  fontFamily: 'var(--mono)',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  gap: '0.4cqw',
-                  transition: 'all 0.2s ease',
-                  boxShadow: nodes[i] ? '0 0 12px rgba(0, 255, 102, 0.3)' : 'none',
-                }}
-              >
-                <span style={{ fontSize: 'max(7.5px, 1.05cqw)', fontWeight: 'bold' }}>{node.label}</span>
-                <span style={{ fontSize: 'max(6px, 0.8cqw)', color: 'var(--ink)' }}>{node.desc}</span>
-                <span
-                  style={{
-                    fontSize: 'max(6px, 0.8cqw)',
-                    marginTop: '0.3cqw',
-                    color: nodes[i] ? '#00ff66' : '#ff4536',
-                  }}
-                >
-                  [{nodes[i] ? 'CONNECTED' : 'LOCKED'}]
-                </span>
-              </button>
-            ))}
-          </div>
+          <p style={{ maxWidth: '520px', fontSize: '12px', color: 'var(--dim)', lineHeight: 1.5, margin: 0 }}>
+            Direct comms channels require cryptographic handshake to prevent ctOS automated metadata logging. Click to execute the zero-trace tunnel bypass.
+          </p>
 
-          <div style={{ fontSize: 'max(6.5px, 0.85cqw)', color: 'var(--cyan-hi)', fontStyle: 'italic' }}>
-            Click each node to establish the encrypted bypass route.
-          </div>
+          <button
+            type="button"
+            onClick={handleBypass}
+            disabled={isBypassing}
+            style={{
+              background: '#0b0d10',
+              border: '1px solid ' + (isBypassing ? '#00e5ff' : '#00ff66'),
+              color: isBypassing ? '#00e5ff' : '#00ff66',
+              fontFamily: 'inherit',
+              fontSize: '13px',
+              fontWeight: 800,
+              letterSpacing: '0.1em',
+              padding: '12px 28px',
+              cursor: isBypassing ? 'wait' : 'pointer',
+              transition: 'all 0.15s ease',
+              marginTop: '8px',
+            }}
+          >
+            {isBypassing ? '[ EXECUTING_HANDSHAKE... ]' : '[ INITIATE_BYPASS_HANDSHAKE ]'}
+          </button>
         </div>
       ) : (
-        /* 2. Access Granted Screen */
+        /* 2. Unlocked Encrypted Contact View */
         <div
           style={{
-            flex: 1,
             display: 'flex',
             flexDirection: 'column',
-            justifyContent: 'space-between',
-            backgroundColor: 'rgba(8, 14, 18, 0.9)',
-            border: '0.15cqw solid #00ff66',
-            borderRadius: '1cqw',
-            padding: '1.5cqw 2cqw',
-            boxShadow: '0 0 20px rgba(0, 255, 102, 0.2)',
+            gap: '16px',
           }}
         >
-          {/* Header */}
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid rgba(0, 255, 102, 0.25)', paddingBottom: '0.6cqw' }}>
-            <span style={{ color: '#00ff66', fontWeight: 'bold', fontSize: 'max(9px, 1.3cqw)' }}>
-              [ACCESS GRANTED // ENCRYPTED COMMS CHANNEL]
-            </span>
-            <span style={{ color: 'var(--cyan-hi)', fontSize: 'max(7px, 0.9cqw)' }}>
-              CIPHER: AES-256-GCM
-            </span>
-          </div>
-
-          {/* Contact Links with Clean Placeholders */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.2cqw', margin: '1cqw 0' }}>
-            {/* LinkedIn Placeholder */}
+          {/* Contact Cards Grid: LinkedIn, GitHub, Email, PGP */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '12px' }}>
+            {/* 1. LinkedIn */}
             <div
               style={{
-                backgroundColor: 'rgba(58, 174, 196, 0.08)',
-                border: '0.12cqw solid rgba(58, 174, 196, 0.4)',
-                borderRadius: '0.6cqw',
-                padding: '0.8cqw 1.2cqw',
+                backgroundColor: '#141820',
+                border: '1px solid #202632',
+                padding: '16px',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '8px',
               }}
             >
-              <div style={{ color: 'var(--cyan-hi)', fontSize: 'max(7px, 0.9cqw)', fontWeight: 600 }}>
-                // LINKEDIN PROFILE
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <span style={{ color: '#00e5ff', fontSize: '11px', fontWeight: 700 }}>// LINKEDIN PROFILE</span>
+                <span style={{ color: 'var(--dim)', fontSize: '9px' }}>[NET_VERIFIED]</span>
               </div>
-              <div style={{ fontSize: 'max(7.5px, 1cqw)', color: '#ffffff', marginTop: '0.3cqw' }}>
+              <div style={{ fontSize: '13px', color: '#ffffff', fontWeight: 600 }}>
                 [LinkedIn Profile Placeholder]
               </div>
-              <div style={{ fontSize: 'max(6px, 0.8cqw)', color: 'var(--dim)', marginTop: '0.2cqw' }}>
-                (Link will be added in upcoming update)
+              <div style={{ fontSize: '10px', color: 'var(--dim)' }}>
+                Direct networking &amp; professional connection link.
               </div>
             </div>
 
-            {/* GitHub Placeholder */}
+            {/* 2. GitHub */}
             <div
               style={{
-                backgroundColor: 'rgba(58, 174, 196, 0.08)',
-                border: '0.12cqw solid rgba(58, 174, 196, 0.4)',
-                borderRadius: '0.6cqw',
-                padding: '0.8cqw 1.2cqw',
+                backgroundColor: '#141820',
+                border: '1px solid #202632',
+                padding: '16px',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '8px',
               }}
             >
-              <div style={{ color: 'var(--cyan-hi)', fontSize: 'max(7px, 0.9cqw)', fontWeight: 600 }}>
-                // GITHUB REPOSITORIES
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <span style={{ color: '#00ff66', fontSize: '11px', fontWeight: 700 }}>// GITHUB REPOSITORIES</span>
+                <span style={{ color: 'var(--dim)', fontSize: '9px' }}>[CODE_VAULT]</span>
               </div>
-              <div style={{ fontSize: 'max(7.5px, 1cqw)', color: '#ffffff', marginTop: '0.3cqw' }}>
+              <a
+                href="https://github.com/01AnshYadav"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ fontSize: '13px', color: '#00ff66', fontWeight: 600, textDecoration: 'none' }}
+              >
                 https://github.com/01AnshYadav
-              </div>
-              <div style={{ fontSize: 'max(6px, 0.8cqw)', color: 'var(--dim)', marginTop: '0.2cqw' }}>
-                Public Repos & Security Labs
+              </a>
+              <div style={{ fontSize: '10px', color: 'var(--dim)' }}>
+                Public repositories, scripts, and CTF security writeups.
               </div>
             </div>
 
-            {/* Email Channel */}
+            {/* 3. Email */}
             <div
               style={{
-                backgroundColor: 'rgba(0, 255, 102, 0.06)',
-                border: '0.12cqw solid rgba(0, 255, 102, 0.35)',
-                borderRadius: '0.6cqw',
-                padding: '0.8cqw 1.2cqw',
+                backgroundColor: '#141820',
+                border: '1px solid #202632',
+                padding: '16px',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '8px',
               }}
             >
-              <div style={{ color: '#00ff66', fontSize: 'max(7px, 0.9cqw)', fontWeight: 600 }}>
-                // ENCRYPTED DISPATCH EMAIL
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <span style={{ color: '#00e5ff', fontSize: '11px', fontWeight: 700 }}>// ENCRYPTED EMAIL</span>
+                <span style={{ color: 'var(--dim)', fontSize: '9px' }}>[DISPATCH_READY]</span>
               </div>
-              <div style={{ fontSize: 'max(7.5px, 1cqw)', color: '#ffffff', marginTop: '0.3cqw' }}>
+              <div style={{ fontSize: '13px', color: '#ffffff', fontWeight: 600 }}>
                 [Direct Email Placeholder]
               </div>
-              <div style={{ fontSize: 'max(6px, 0.8cqw)', color: 'var(--dim)', marginTop: '0.2cqw' }}>
-                Official Inquiry & Hackathon Comms
+              <div style={{ fontSize: '10px', color: 'var(--dim)' }}>
+                Direct communication for hackathon inquiries.
               </div>
             </div>
 
-            {/* PGP Public Key */}
+            {/* 4. PGP Key */}
             <div
               style={{
-                backgroundColor: 'rgba(0, 255, 102, 0.06)',
-                border: '0.12cqw solid rgba(0, 255, 102, 0.35)',
-                borderRadius: '0.6cqw',
-                padding: '0.8cqw 1.2cqw',
+                backgroundColor: '#141820',
+                border: '1px solid #202632',
+                padding: '16px',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '8px',
               }}
             >
-              <div style={{ color: '#00ff66', fontSize: 'max(7px, 0.9cqw)', fontWeight: 600 }}>
-                // PGP FINGERPRINT
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <span style={{ color: '#00ff66', fontSize: '11px', fontWeight: 700 }}>// PGP FINGERPRINT</span>
+                <span style={{ color: 'var(--dim)', fontSize: '9px' }}>[RSA_4096]</span>
               </div>
-              <div style={{ fontSize: 'max(6.5px, 0.85cqw)', color: 'var(--ink)', marginTop: '0.3cqw', letterSpacing: '0.05em' }}>
+              <div style={{ fontSize: '11px', color: '#ffffff', letterSpacing: '0.06em' }}>
                 4A9F 8B12 C034 DE56 991F 77BC 33A1 00EF
               </div>
-              <div style={{ fontSize: 'max(6px, 0.8cqw)', color: 'var(--dim)', marginTop: '0.2cqw' }}>
-                Subkey: RSA 4096 / Verified
+              <div style={{ fontSize: '10px', color: 'var(--dim)' }}>
+                Verified public key for encrypted payload verification.
               </div>
             </div>
           </div>
 
-          {/* "TAKE DOWN ctOS" Action */}
-          <div style={{ borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '0.8cqw', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <span style={{ fontSize: 'max(6.5px, 0.85cqw)', color: 'var(--dim)' }}>
-              OPERATIVE ACTION REQUIRED:
-            </span>
+          {/* Action: Take Down ctOS */}
+          <div
+            style={{
+              backgroundColor: '#141820',
+              border: '1px solid #202632',
+              padding: '14px 18px',
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              flexWrap: 'wrap',
+              gap: '12px',
+            }}
+          >
+            <div>
+              <div style={{ color: '#ffffff', fontSize: '13px', fontWeight: 700 }}>
+                DEDSEC MESH ACTION: ctOS 2.0 OVERRIDE
+              </div>
+              <div style={{ color: 'var(--dim)', fontSize: '11px', marginTop: '2px' }}>
+                Broadcast zero-day payload across regional city nodes.
+              </div>
+            </div>
+
             <button
               type="button"
               onClick={handleTakeDown}
-              disabled={broadcastSent}
+              disabled={takeDownExecuted}
               style={{
-                backgroundColor: broadcastSent ? 'rgba(0, 255, 102, 0.2)' : 'rgba(255, 69, 54, 0.2)',
-                border: '0.15cqw solid ' + (broadcastSent ? '#00ff66' : '#ff4536'),
-                color: broadcastSent ? '#00ff66' : '#ffffff',
-                fontFamily: 'var(--mono)',
-                fontSize: 'max(7.5px, 1.1cqw)',
-                fontWeight: 'bold',
-                padding: '0.5cqw 1.5cqw',
-                borderRadius: '0.4cqw',
-                cursor: broadcastSent ? 'default' : 'pointer',
-                letterSpacing: '0.08em',
-                transition: 'all 0.2s',
+                background: '#0b0d10',
+                border: '1px solid ' + (takeDownExecuted ? '#00ff66' : '#ff3838'),
+                color: takeDownExecuted ? '#00ff66' : '#ffffff',
+                fontFamily: 'inherit',
+                fontSize: '12px',
+                fontWeight: 800,
+                padding: '8px 18px',
+                cursor: takeDownExecuted ? 'default' : 'pointer',
               }}
             >
-              {broadcastSent ? '✓ ctOS OVERRIDE EXECUTED' : '⚡ [TAKE DOWN ctOS]'}
+              {takeDownExecuted ? '[ OVERRIDE_EXECUTED ]' : '[ EXECUTE_ctOS_TAKEDOWN ]'}
             </button>
           </div>
         </div>

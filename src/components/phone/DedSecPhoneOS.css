@@ -1,531 +1,309 @@
-/* Watch Dogs 2 Smartphone OS Styles (6 Core Apps & Authentic HUD) */
+/* DedSec Phone OS Hub - Anti-Vibe-Coding Strict Dark Slate HUD */
 
-.wd2-phone-os {
+.dedsec-phone-hub {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
-  background-color: #05080c;
-  color: #ffffff;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  overflow: hidden;
+  background-color: #0b0d10;
+  color: #e6edf3;
+  font-family: var(--mono);
+  overflow-y: auto;
+  overflow-x: hidden;
   display: flex;
   flex-direction: column;
   user-select: none;
   box-sizing: border-box;
+  border: 1px solid #202632;
 }
 
 /* 1. TOP SYSTEM STATUS BAR */
-.wd2-status-bar {
+.hub-status-bar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 4px 10px;
-  background: rgba(0, 0, 0, 0.7);
-  font-size: 10px;
-  color: #ffffff;
-  z-index: 10;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.new-content-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-}
-
-.plus-icon {
-  display: grid;
-  place-items: center;
-  width: 13px;
-  height: 13px;
-  border-radius: 50%;
-  background: #ff2a1a;
-  color: #ffffff;
+  padding: 8px 14px;
+  background: #0b0d10;
+  border-bottom: 1px solid #202632;
   font-size: 11px;
-  font-weight: bold;
-  line-height: 1;
+  letter-spacing: 0.08em;
+  z-index: 10;
 }
 
-.new-content-text {
-  font-size: 9.5px;
-  font-weight: 600;
-  letter-spacing: 0.02em;
-  color: #ffffff;
+.status-left .hub-tag {
+  color: #00ff66;
+  font-weight: 800;
 }
 
 .status-right {
   display: flex;
   align-items: center;
-  gap: 6px;
-  font-family: var(--mono);
+  gap: 10px;
 }
 
-.status-clock {
+.hub-time {
+  color: #ffffff;
   font-weight: 700;
-  font-size: 10.5px;
 }
 
-.status-battery {
-  display: inline-flex;
-  align-items: center;
+.hub-cipher {
+  color: var(--dim);
 }
 
-.battery-body {
-  width: 15px;
-  height: 8px;
-  border: 1px solid #ffffff;
-  border-radius: 1.5px;
-  padding: 1px;
-  position: relative;
+.hub-signal {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 10px;
 }
 
-.battery-body::after {
-  content: "";
-  position: absolute;
-  right: -2.5px;
-  top: 2px;
-  width: 1.5px;
-  height: 3px;
-  background: #ffffff;
-  border-radius: 0 1px 1px 0;
-}
-
-.battery-level {
-  display: block;
-  width: 75%;
-  height: 100%;
+.sig-bar {
+  width: 2px;
   background: #00ff66;
 }
 
-/* 2. DEDSEC FOLLOWER & LEVEL HEADER */
-.wd2-follower-hud-btn {
-  background: rgba(0, 0, 0, 0.82);
-  border: none;
-  border-bottom: 1px solid rgba(255, 0, 128, 0.25);
-  padding: 5px 10px 4px;
-  z-index: 10;
+/* 2. TELEMETRY HUD */
+.hub-telemetry-hud {
+  padding: 10px 14px;
+  background: #141820;
+  border-bottom: 1px solid #202632;
   display: flex;
   flex-direction: column;
-  gap: 2px;
-  cursor: pointer;
-  text-align: left;
-  transition: background 0.15s ease;
+  gap: 4px;
+  font-size: 11px;
+  z-index: 10;
 }
 
-.wd2-follower-hud-btn:hover {
-  background: rgba(20, 0, 12, 0.9);
-}
-
-.follower-bar-outer {
-  width: 100%;
-  height: 15px;
-  background: rgba(40, 5, 25, 0.85);
-  border-radius: 2px;
-  overflow: hidden;
-  border: 1px solid rgba(255, 0, 140, 0.5);
-  box-shadow: 0 0 8px rgba(255, 0, 128, 0.4);
-}
-
-.follower-bar-inner {
-  width: 97.4%;
-  height: 100%;
-  background: linear-gradient(90deg, #ff007f 0%, #e6007e 85%, #ff3399 100%);
-  display: flex;
-  align-items: center;
-  padding: 0 6px;
-  gap: 6px;
-}
-
-.follower-heart-icon {
-  font-size: 9px;
-  color: #ffffff;
-}
-
-.follower-numbers {
-  font-family: var(--mono);
-  font-size: 9.5px;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  color: #ffffff;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
-}
-
-.follower-meta-row {
+.telemetry-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-family: var(--mono);
-  font-size: 9.5px;
-  padding-top: 1px;
 }
 
-.level-tag {
-  color: #ff0099;
-  font-weight: 800;
+.dim-label {
+  color: var(--dim);
+  letter-spacing: 0.04em;
+}
+
+.val-cyan {
+  color: #00e5ff;
+  font-weight: 700;
+}
+
+.val-green {
+  color: #00ff66;
+  font-weight: 700;
+}
+
+.val-alert {
+  color: #00ff66;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+/* 3. 4 CRISP CORE APP CARDS */
+.hub-apps-grid {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 10px;
+  padding: 12px;
+  z-index: 10;
+}
+
+.hub-app-card {
+  background: #141820;
+  border: 1px solid #202632;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  text-align: left;
+  cursor: pointer;
+  color: inherit;
+  font-family: var(--mono);
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+  position: relative;
+}
+
+.hub-app-card:hover {
+  border-color: #00ff66;
+  background: #0e1218;
+}
+
+.app-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.card-tag {
+  font-size: 9.5px;
+  color: var(--dim);
   letter-spacing: 0.06em;
 }
 
-.research-money-group {
-  display: flex;
-  align-items: center;
-  gap: 8px;
+.card-dot {
+  width: 5px;
+  height: 5px;
+  background: #00ff66;
 }
 
-.research-points {
-  color: #ffffff;
-  font-weight: 700;
+.app-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 6px 0;
+}
+
+.app-icon-slot {
   display: flex;
   align-items: center;
+}
+
+.app-meta {
+  display: flex;
+  flex-direction: column;
   gap: 2px;
 }
 
-.research-points .skull-icon {
-  font-size: 9px;
+.app-code {
+  font-size: 13px;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: 0.06em;
 }
 
-.money-balance {
-  color: #ffffff;
+.app-label-text {
+  font-size: 10.5px;
+  color: #00ff66;
   font-weight: 700;
   letter-spacing: 0.04em;
 }
 
-.wallet-icon {
-  font-size: 9px;
+.app-subtext {
+  font-size: 9.5px;
+  color: var(--dim);
 }
 
-/* 3. WEATHER WIDGET */
-.wd2-weather-card {
-  margin: 8px 12px 6px;
-  padding: 8px 12px;
-  border-radius: 8px;
-  background: rgba(10, 15, 22, 0.68);
-  backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+.app-card-footer {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  z-index: 10;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
-}
-
-.weather-main {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.weather-moon-wrapper {
-  position: relative;
-  width: 36px;
-  height: 36px;
-}
-
-.moon-sphere {
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
-  background: radial-gradient(circle at 35% 35%, #ffffff 0%, #dcdfe5 45%, #8c939d 100%);
-  box-shadow: 0 0 10px rgba(255, 255, 255, 0.4), inset -3px -3px 6px rgba(0, 0, 0, 0.4);
-}
-
-.cloud-puff {
-  position: absolute;
-  bottom: -2px;
-  right: -4px;
-  width: 24px;
-  height: 12px;
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.75);
-  filter: blur(0.5px);
-}
-
-.weather-temp-info {
-  display: flex;
-  flex-direction: column;
-}
-
-.weather-temp {
-  font-size: 26px;
-  font-weight: 300;
-  line-height: 1;
-  letter-spacing: -0.03em;
-  color: #ffffff;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.7);
-}
-
-.weather-city {
   font-size: 9.5px;
-  font-weight: 700;
-  color: #ffffff;
-  margin-top: 1px;
+  color: var(--dim);
+  border-top: 1px solid #202632;
+  padding-top: 6px;
+  margin-top: 4px;
 }
 
-.weather-condition {
-  font-size: 8.5px;
-  color: #d2dbe0;
+.hub-app-card:hover .app-card-footer {
+  color: #00ff66;
 }
 
-.weather-forecast {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  font-size: 9.5px;
+.arrow-glyph {
+  font-weight: bold;
 }
 
-.forecast-row {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.forecast-day {
-  color: #cbd4db;
-  font-size: 9px;
-  width: 48px;
-}
-
-.forecast-temp {
-  font-weight: 700;
-  color: #ffffff;
-}
-
-/* 4. DEDSEC COMIC WALLPAPER WITH LASER BEAMS */
-.wd2-comic-wallpaper {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  z-index: 1;
-  overflow: hidden;
-  background: 
-    radial-gradient(ellipse at 50% 20%, rgba(58, 174, 196, 0.15) 0%, transparent 50%),
-    linear-gradient(175deg, #0a1117 0%, #030508 100%);
-}
-
-.comic-halftone-pattern {
-  position: absolute;
-  inset: 0;
-  opacity: 0.16;
-  background-image: radial-gradient(#3aaec4 1px, transparent 1px);
-  background-size: 6px 6px;
-}
-
-.laser-beam {
-  position: absolute;
-  width: 32px;
-  height: 120%;
-  top: -10%;
-  pointer-events: none;
-  background: linear-gradient(180deg, rgba(0, 255, 230, 0.55) 0%, rgba(58, 174, 196, 0.25) 50%, rgba(0, 255, 230, 0.02) 100%);
-  filter: blur(2px);
-  opacity: 0.65;
-}
-
-.beam-left {
-  left: 28%;
-  transform: rotate(5deg);
-}
-
-.beam-right {
-  right: 32%;
-  transform: rotate(-6deg);
-}
-
-/* 5. ONLY 6 APPS GRID */
-.wd2-six-apps-container {
-  position: relative;
+/* 4. TERMINAL STRIP */
+.hub-terminal-strip {
+  padding: 0 12px 10px;
   z-index: 10;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 12px 16px 20px;
 }
 
-.wd2-six-apps-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(2, 1fr);
-  gap: 22px 14px;
+.terminal-strip-btn {
   width: 100%;
-  max-width: 310px;
-  justify-items: center;
-}
-
-.wd2-six-app-card {
-  background: none;
-  border: none;
+  background: #141820;
+  border: 1px solid #202632;
+  color: #e6edf3;
+  padding: 8px 12px;
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
   align-items: center;
-  gap: 6px;
+  font-family: var(--mono);
+  font-size: 11px;
   cursor: pointer;
-  padding: 4px;
-  transition: transform 0.18s ease;
-  width: 82px;
+  transition: border-color 0.15s ease;
 }
 
-.wd2-six-app-card:hover {
-  transform: translateY(-4px) scale(1.06);
+.terminal-strip-btn:hover {
+  border-color: #00e5ff;
 }
 
-.app-icon-box {
-  width: 56px;
-  height: 56px;
-  border-radius: 14px;
-  display: grid;
-  place-items: center;
-  position: relative;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.25);
-  transition: all 0.2s ease;
-  overflow: hidden;
+.term-prompt {
+  color: #00ff66;
+  font-weight: 800;
+  margin-right: 6px;
 }
 
-.wd2-six-app-card:hover .app-icon-box {
-  box-shadow: 0 8px 22px rgba(0, 255, 102, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+.term-text {
+  flex: 1;
+  text-align: left;
+  letter-spacing: 0.04em;
 }
 
-.app-title-label {
+.term-status {
+  color: var(--dim);
+  font-size: 10px;
+}
+
+/* 5. BOTTOM BEZEL BAR */
+.hub-bottom-bezel {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 14px;
+  background: #0b0d10;
+  border-top: 1px solid #202632;
+  font-size: 10.5px;
+  color: var(--dim);
+  z-index: 10;
+}
+
+.hub-close-btn {
+  background: none;
+  border: 1px solid #202632;
+  color: var(--dim);
+  font-family: var(--mono);
   font-size: 10px;
   font-weight: 700;
-  color: #ffffff;
-  text-align: center;
-  letter-spacing: 0.02em;
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.95);
-  transition: color 0.15s;
-}
-
-.wd2-six-app-card:hover .app-title-label {
-  color: #00ff66;
-}
-
-/* APP 1: BIO */
-.bio-icon {
-  background: linear-gradient(145deg, #101920 0%, #060a0e 100%);
-  border: 1.5px solid rgba(0, 255, 102, 0.6);
-}
-
-.bio-glyph svg {
-  filter: drop-shadow(0 0 6px rgba(0, 255, 102, 0.6));
-}
-
-/* APP 2: PROJECTS */
-.projects-icon {
-  background: linear-gradient(145deg, #0e1e28 0%, #061118 100%);
-  border: 1.5px solid rgba(58, 174, 196, 0.65);
-}
-
-.projects-glyph svg {
-  filter: drop-shadow(0 0 6px rgba(58, 174, 196, 0.6));
-}
-
-/* APP 3: CERTIFICATES */
-.certs-icon {
-  background: linear-gradient(145deg, #221a08 0%, #110d04 100%);
-  border: 1.5px solid rgba(255, 170, 0, 0.6);
-}
-
-.certs-glyph svg {
-  filter: drop-shadow(0 0 6px rgba(255, 170, 0, 0.6));
-}
-
-/* APP 4: SKILLS (KEYCAP) */
-.skills-icon {
-  background: linear-gradient(145deg, #2a2e34 0%, #0c0e11 100%);
-  border: 1.5px solid #4a5058;
-}
-
-.keycap-shape {
-  width: 36px;
-  height: 34px;
-  background: #181b1f;
-  border-radius: 6px;
-  border-top: 2px solid #5a626c;
-  display: grid;
-  place-items: center;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.7);
-}
-
-.keycap-skull {
-  font-size: 16px;
-  color: #ffffff;
-  filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.5));
-}
-
-/* APP 5: TERMINAL */
-.terminal-icon {
-  background: #020406;
-  border: 1.5px solid rgba(0, 255, 102, 0.55);
-}
-
-.prompt-symbol {
-  font-family: var(--mono);
-  font-size: 20px;
-  font-weight: 800;
-  color: #00ff66;
-  text-shadow: 0 0 8px rgba(0, 255, 102, 0.8);
-}
-
-/* APP 6: CONTACT */
-.contact-icon {
-  background: linear-gradient(145deg, #091a26 0%, #030c14 100%);
-  border: 1.5px solid rgba(0, 229, 255, 0.6);
-}
-
-.contact-glyph svg {
-  filter: drop-shadow(0 0 6px rgba(0, 229, 255, 0.7));
-}
-
-/* 6. BOTTOM BEZEL & CLOSE ESC */
-.wd2-bottom-bezel {
-  height: 34px;
-  background: #ffffff;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 14px;
-  border-top: 1px solid #d0d7de;
-  z-index: 10;
-}
-
-.dedsec-hex-home {
-  display: grid;
-  place-items: center;
-  cursor: pointer;
-  margin-left: auto;
-  margin-right: auto;
-  padding-left: 45px;
-}
-
-.wd2-close-esc-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  background: #000000;
-  border: none;
-  padding: 4px 10px;
-  border-radius: 4px;
+  padding: 3px 8px;
   cursor: pointer;
   transition: all 0.15s ease;
 }
 
-.wd2-close-esc-btn:hover {
-  background: #ff2a1a;
-  transform: scale(1.04);
+.hub-close-btn:hover {
+  border-color: #ff3838;
+  color: #ff3838;
 }
 
-.close-text {
-  font-size: 9.5px;
-  font-weight: 700;
-  color: #ffffff;
-}
+/* MOBILE FALLBACK (Below 768px): Full-Width High-Contrast Grid */
+@media (max-width: 768px) {
+  .dedsec-phone-hub {
+    position: relative;
+    width: 100%;
+    height: auto;
+    min-height: 100vh;
+    border: none;
+  }
 
-.esc-key {
-  font-size: 8px;
-  background: rgba(255, 255, 255, 0.25);
-  color: #ffffff;
-  padding: 1px 3px;
-  border-radius: 2px;
-  font-family: var(--mono);
+  .hub-apps-grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    gap: 12px;
+    padding: 16px;
+  }
+
+  .hub-app-card {
+    padding: 16px;
+  }
+
+  .app-code {
+    font-size: 15px;
+  }
+
+  .app-label-text {
+    font-size: 12px;
+  }
 }

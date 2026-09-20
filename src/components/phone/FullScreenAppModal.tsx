@@ -65,10 +65,10 @@ export const FullScreenAppModal: React.FC<FullScreenAppModalProps> = ({
             type="button"
             className="fullscreen-return-btn"
             onClick={onClose}
-            title="Return to Smartphone (ESC)"
+            title="Return to DedSec Hub (ESC)"
           >
-            <span className="btn-glyph">◀</span>
-            <span className="btn-text">[ESC] RETURN TO PHONE</span>
+            <span className="btn-glyph">&lt;</span>
+            <span className="btn-text">[ &lt; RETURN_TO_HUB ]</span>
           </button>
 
           <div className="app-breadcrumb">
@@ -80,7 +80,7 @@ export const FullScreenAppModal: React.FC<FullScreenAppModalProps> = ({
         <div className="topbar-right">
           <div className="system-telemetry">
             <span className="telemetry-item">
-              <span className="dim-label">BOTNET:</span>{' '}
+              <span className="dim-label">FOLLOWERS:</span>{' '}
               <span className="val-green">{followerCount.toLocaleString()}</span>
             </span>
             <span className="telemetry-separator">//</span>
@@ -90,8 +90,8 @@ export const FullScreenAppModal: React.FC<FullScreenAppModalProps> = ({
             </span>
             <span className="telemetry-separator">//</span>
             <span className="telemetry-item">
-              <span className="dim-label">STATUS:</span>{' '}
-              <span className="val-pink">OPERATIVE SESSION</span>
+              <span className="dim-label">SESSION:</span>{' '}
+              <span className="val-green">[ROOT_ACTIVE]</span>
             </span>
           </div>
 

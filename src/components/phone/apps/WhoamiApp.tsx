@@ -55,14 +55,14 @@ export const WhoamiApp: React.FC = () => {
           alignItems: 'center',
           backgroundColor:
             glitchPhase === 'SCANNING'
-              ? 'rgba(255, 69, 54, 0.14)'
+              ? 'rgba(255, 56, 56, 0.14)'
               : glitchPhase === 'CORRUPTING'
-              ? 'rgba(255, 0, 128, 0.2)'
+              ? 'rgba(0, 229, 255, 0.14)'
               : 'rgba(0, 255, 102, 0.12)',
           borderLeft:
             '4px solid ' +
-            (glitchPhase === 'SCANNING' ? '#ff4536' : glitchPhase === 'CORRUPTING' ? '#ff007f' : '#00ff66'),
-          borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+            (glitchPhase === 'SCANNING' ? '#ff3838' : glitchPhase === 'CORRUPTING' ? '#00e5ff' : '#00ff66'),
+          borderBottom: '1px solid #202632',
           padding: '12px 20px',
           transition: 'all 0.3s ease',
         }}

@@ -108,13 +108,14 @@ export const COLORS = {
  */
 export const OPERATIVE_PROFILE = {
   alias: '01AnshYadav',
+  operativeName: 'Marcus Holloway',
   dedsecHandle: 'NullSec_Operative',
   status: 'UNPROFILED OPERATIVE',
   threatLevel: 'CRITICAL // TARGET OFF-GRID',
-  education: 'Freshman Year, B.Tech — University of Lucknow',
+  education: 'Freshman Year B.Tech, University of Lucknow',
   role: 'Cybersecurity & IT Systems Explorer',
   location: 'Lucknow, India / Remote',
-  bio: 'ctOS classifies citizens into algorithms. I build systems that keep data where it belongs — in your hands. Currently in my freshman year of B.Tech at the University of Lucknow, focusing on cloud infrastructure, networking protocols, and system security.',
+  bio: 'ctOS classifies citizens into algorithms. I build systems that keep data where it belongs: in your hands. Currently in my freshman year of B.Tech at the University of Lucknow, focusing on cloud infrastructure, networking protocols, and system security.',
   skills: ['Cloud Security (AWS)', 'Network Protocols & Packet Analysis', 'Linux Kernel Hardening', 'Cryptographic Vaults', 'Bash & Python Automation'],
 };
 

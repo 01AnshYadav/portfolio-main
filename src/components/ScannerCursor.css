@@ -1,0 +1,136 @@
+/* Watch Dogs 2 Scanner Cursor Styles */
+
+.scanner-cursor-container {
+  position: fixed;
+  pointer-events: none;
+  z-index: 99999;
+  transform: translate(-12px, -12px);
+  will-change: left, top;
+}
+
+/* Reticle crosshairs */
+.scanner-reticle {
+  position: relative;
+  width: 24px;
+  height: 24px;
+}
+
+.reticle-corner {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-color: #00ff66;
+  border-style: solid;
+  transition: all 0.15s ease;
+}
+
+.reticle-corner.tl {
+  top: 0;
+  left: 0;
+  border-width: 1.5px 0 0 1.5px;
+}
+
+.reticle-corner.tr {
+  top: 0;
+  right: 0;
+  border-width: 1.5px 1.5px 0 0;
+}
+
+.reticle-corner.br {
+  bottom: 0;
+  right: 0;
+  border-width: 0 1.5px 1.5px 0;
+}
+
+.reticle-corner.bl {
+  bottom: 0;
+  left: 0;
+  border-width: 0 0 1.5px 1.5px;
+}
+
+.reticle-center-dot {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 2px;
+  height: 2px;
+  background: #00ff66;
+  transform: translate(-50%, -50%);
+}
+
+/* Floating Data Card */
+.scanner-data-card {
+  position: absolute;
+  top: 24px;
+  left: 20px;
+  background: #141820;
+  border: 1px solid #202632;
+  padding: 6px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-family: var(--mono);
+  font-size: 10px;
+  line-height: 1.3;
+  min-width: 128px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.85);
+  transition: border-color 0.15s ease;
+}
+
+.scanner-cursor-container.target-locked .scanner-data-card {
+  border-color: #00ff66;
+  background: #0b0d10;
+}
+
+.scanner-cursor-container.target-locked .reticle-corner {
+  border-color: #00e5ff;
+  transform: scale(1.2);
+}
+
+.data-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+.header-row {
+  border-bottom: 1px solid #202632;
+  padding-bottom: 2px;
+  margin-bottom: 2px;
+}
+
+.data-node {
+  color: #00ff66;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.data-status {
+  font-size: 8.5px;
+  color: var(--dim);
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+.data-status.status-locked {
+  color: #00e5ff;
+}
+
+.dim-text {
+  color: var(--dim);
+  font-size: 8.5px;
+}
+
+.val-text {
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 9px;
+}
+
+/* Mobile: hide scanner cursor */
+@media (max-width: 768px) {
+  .scanner-cursor-container {
+    display: none !important;
+  }
+}

@@ -1,0 +1,261 @@
+/* Boot Sequence Styles - Anti-Vibe-Coding Strict Hud */
+
+.boot-terminal-overlay {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: #0b0d10;
+  color: #e6edf3;
+  font-family: var(--mono);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  z-index: 10000;
+  overflow: hidden;
+}
+
+.boot-scanlines {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.3) 0px,
+    rgba(0, 0, 0, 0.3) 1px,
+    transparent 1px,
+    transparent 2px
+  );
+  opacity: 0.75;
+  z-index: 2;
+}
+
+.boot-skip-btn {
+  position: absolute;
+  top: 20px;
+  right: 24px;
+  background: #141820;
+  border: 1px solid #202632;
+  color: var(--dim);
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  padding: 6px 14px;
+  cursor: pointer;
+  z-index: 20;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.boot-skip-btn:hover {
+  border-color: #00ff66;
+  color: #00ff66;
+}
+
+.boot-terminal-box {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  max-width: 760px;
+  background: #141820;
+  border: 1px solid #202632;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.9);
+  display: flex;
+  flex-direction: column;
+}
+
+.boot-header-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 16px;
+  background: #0b0d10;
+  border-bottom: 1px solid #202632;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+}
+
+.boot-header-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--cyan);
+  font-weight: 700;
+}
+
+.dot-indicator {
+  width: 7px;
+  height: 7px;
+  background: #00ff66;
+  border-radius: 0;
+}
+
+.boot-sys-id {
+  color: var(--dim);
+}
+
+.boot-log-stream {
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-size: 13px;
+  line-height: 1.5;
+  min-height: 280px;
+}
+
+.log-line {
+  letter-spacing: 0.04em;
+}
+
+.text-dim {
+  color: var(--dim);
+}
+
+.text-cyan {
+  color: var(--cyan);
+}
+
+/* Wrong Profile Summary */
+.wrong-profile-card {
+  position: relative;
+  background: #0b0d10;
+  border: 1px solid #202632;
+  padding: 14px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 8px 0;
+  transition: opacity 0.3s ease;
+}
+
+.wrong-profile-card.struck-out {
+  opacity: 0.45;
+  border-color: #ff3838;
+}
+
+.profile-label {
+  color: #ff3838;
+  font-weight: 700;
+  font-size: 11px;
+  margin-bottom: 4px;
+}
+
+.profile-row {
+  font-size: 12px;
+  color: #9aa7b2;
+}
+
+.red-strike-bar {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: #ff3838;
+  transform: translateY(-50%);
+}
+
+/* Glitched Error Override Banner */
+.glitch-error-banner {
+  background: rgba(255, 56, 56, 0.1);
+  border: 1px solid #ff3838;
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #ff3838;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  animation: glitch1Frame 0.2s steps(2) 2;
+}
+
+.error-bracket {
+  color: #ffffff;
+}
+
+/* DedSec Override Card */
+.dedsec-override-card {
+  background: #0b0d10;
+  border: 1px solid #00ff66;
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  animation: glitch1Frame 0.15s steps(2) 1;
+}
+
+.dedsec-banner-head {
+  font-size: 11px;
+  font-weight: 800;
+  color: #00ff66;
+  letter-spacing: 0.1em;
+  margin-bottom: 4px;
+}
+
+.dedsec-field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.dedsec-field {
+  font-size: 13px;
+}
+
+.field-key {
+  color: var(--dim);
+}
+
+.field-val {
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.field-handle {
+  color: #00ff66;
+}
+
+.field-alert {
+  color: #00ff66;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+/* Action Bar */
+.boot-action-bar {
+  padding: 16px 24px;
+  background: #0b0d10;
+  border-top: 1px solid #202632;
+  display: flex;
+  justify-content: center;
+}
+
+.execute-os-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  background: #141820;
+  border: 1px solid #00ff66;
+  color: #00ff66;
+  font-family: var(--mono);
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  padding: 10px 24px;
+  cursor: crosshair;
+  transition: all 0.15s ease;
+}
+
+.execute-os-btn:hover {
+  background: #00ff66;
+  color: #0b0d10;
+  border-color: #00ff66;
+  transform: translate(-1px, -1px);
+}
+
+.reticle-glyph {
+  font-size: 16px;
+}

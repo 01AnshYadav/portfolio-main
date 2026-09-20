@@ -1,231 +1,309 @@
 import React, { useState } from 'react';
-import { MISSIONS_DATA, type Mission } from '../../../config';
 
 interface MissionsAppProps {
   onFollowerBonus?: (amount: number, reason: string) => void;
 }
 
-export const MissionsApp: React.FC<MissionsAppProps> = ({ onFollowerBonus }) => {
-  const [selectedMission, setSelectedMission] = useState<Mission | null>(MISSIONS_DATA[0]);
-  const [inspectedIds, setInspectedIds] = useState<Set<string>>(new Set([MISSIONS_DATA[0].id]));
+interface OperationBriefing {
+  id: string;
+  opCode: string;
+  title: string;
+  category: string;
+  objective: string;
+  method: string;
+  result: string;
+  tags: string[];
+  repoUrl: string;
+}
 
-  const handleSelect = (m: Mission) => {
-    setSelectedMission(m);
-    if (!inspectedIds.has(m.id)) {
-      setInspectedIds(new Set([...inspectedIds, m.id]));
+const BRIEFINGS: OperationBriefing[] = [
+  {
+    id: 'op-aws',
+    opCode: 'OP_01',
+    title: 'AWS Password Manager',
+    category: 'Cloud Infrastructure & Zero-Trust Security',
+    objective: 'Engineer a zero-knowledge cloud credential vault securing secrets against server-side compromise and unauthorized physical extraction.',
+    method: 'Implemented AWS KMS envelope encryption, IAM least-privilege security boundaries, client-side cryptographic key derivation (PBKDF2), and serverless AWS Lambda validation APIs.',
+    result: 'Zero-exposure credential management pipeline with automated cryptographic key rotation and client-side encryption guarantees.',
+    tags: ['AWS KMS', 'IAM', 'Lambda', 'Zero-Trust', 'Python'],
+    repoUrl: 'https://github.com/01AnshYadav',
+  },
+  {
+    id: 'op-sync',
+    opCode: 'OP_02',
+    title: 'CyberSync',
+    category: 'Distributed Systems & Low-Latency Networking',
+    objective: 'Construct a resilient peer-to-peer data transport layer for real-time state synchronization over hostile or untrusted networks.',
+    method: 'Engineered custom low-latency WebSocket protocol pipelines, cryptographic packet integrity verification, distributed state vector clocks, and automated packet loss conflict resolution.',
+    result: 'High-throughput P2P protocol delivering sub-15ms cross-node synchronization with zero telemetry leakage.',
+    tags: ['WebSockets', 'Cryptography', 'P2P', 'Networking', 'Python'],
+    repoUrl: 'https://github.com/01AnshYadav',
+  },
+  {
+    id: 'op-mem',
+    opCode: 'OP_03',
+    title: 'CareerMEMORY',
+    category: 'Memory Forensics & Incident Response Tooling',
+    objective: 'Develop an automated incident response utility to audit active process memory, extract volatile artifacts, and detect code injection anomalies.',
+    method: 'Analyzed Linux virtual memory buffers (/proc/$PID/mem and maps), implemented raw memory signature scanning, heap/stack structure parsing, and automated timeline reconstruction.',
+    result: 'Lightweight standalone CLI forensics tool enabling instant live triage of hijacked or injected process spaces.',
+    tags: ['Linux Memory', 'Forensics', 'C/C++', 'Process Auditing', 'Bash'],
+    repoUrl: 'https://github.com/01AnshYadav',
+  },
+];
+
+export const MissionsApp: React.FC<MissionsAppProps> = ({ onFollowerBonus }) => {
+  const [expandedId, setExpandedId] = useState<string>(BRIEFINGS[0].id);
+  const [readOps, setReadOps] = useState<Set<string>>(new Set([BRIEFINGS[0].id]));
+
+  const toggleExpand = (id: string, title: string) => {
+    setExpandedId(expandedId === id ? '' : id);
+    if (!readOps.has(id)) {
+      setReadOps(new Set([...readOps, id]));
       if (onFollowerBonus) {
-        onFollowerBonus(1250, `Decrypted dossier for ${m.title}`);
+        onFollowerBonus(2500, `Decrypted dossier: ${title}`);
       }
     }
   };
 
   return (
     <div
-      className="missions-app"
+      className="missions-briefings-container"
       style={{
         display: 'flex',
-        gap: '1.8cqw',
-        height: '100%',
-        animation: 'fadeIn 0.25s ease',
+        flexDirection: 'column',
+        gap: '16px',
+        width: '100%',
+        color: '#e6edf3',
+        fontFamily: 'var(--mono)',
       }}
     >
-      {/* Left List of Missions */}
+      {/* Top Protocol Header */}
       <div
         style={{
-          width: '28cqw',
           display: 'flex',
-          flexDirection: 'column',
-          gap: '0.8cqw',
-          overflowY: 'auto',
-          flexShrink: 0,
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          backgroundColor: '#141820',
+          border: '1px solid #202632',
+          padding: '10px 16px',
+          fontSize: '11px',
         }}
       >
-        <div
-          style={{
-            fontSize: 'max(7px, 0.9cqw)',
-            color: 'var(--dim)',
-            letterSpacing: '0.1em',
-            paddingBottom: '0.3cqw',
-            borderBottom: '1px solid rgba(58, 174, 196, 0.2)',
-          }}
-        >
-          // ACTIVE DEDSEC OPS
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <span style={{ color: '#00ff66', fontWeight: 800 }}>[DEDSEC // OPERATIONS]</span>
+          <span style={{ color: 'var(--dim)' }}>ACTIVE BRIEFS: 3 + CTF REPO</span>
         </div>
-
-        {MISSIONS_DATA.map((m) => {
-          const isSelected = selectedMission?.id === m.id;
-          return (
-            <button
-              key={m.id}
-              onClick={() => handleSelect(m)}
-              style={{
-                background: isSelected ? 'rgba(0, 255, 102, 0.12)' : 'rgba(10, 15, 20, 0.75)',
-                border: '0.12cqw solid ' + (isSelected ? '#00ff66' : 'rgba(58, 174, 196, 0.3)'),
-                borderRadius: '0.6cqw',
-                padding: '0.8cqw 1cqw',
-                textAlign: 'left',
-                cursor: 'pointer',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '0.3cqw',
-                transition: 'all 0.15s ease',
-              }}
-            >
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <span style={{ fontSize: 'max(6px, 0.8cqw)', color: isSelected ? '#00ff66' : 'var(--cyan)' }}>
-                  {m.id}
-                </span>
-                <span
-                  style={{
-                    width: '0.6cqw',
-                    height: '0.6cqw',
-                    borderRadius: '50%',
-                    backgroundColor: isSelected ? '#00ff66' : 'var(--cyan-hi)',
-                  }}
-                />
-              </div>
-              <div
-                style={{
-                  fontSize: 'max(7.5px, 1.05cqw)',
-                  fontWeight: 600,
-                  color: isSelected ? '#ffffff' : 'var(--ink)',
-                }}
-              >
-                {m.title}
-              </div>
-              <div style={{ fontSize: 'max(6px, 0.8cqw)', color: 'var(--dim)' }}>
-                {m.category}
-              </div>
-            </button>
-          );
-        })}
+        <div style={{ color: '#00e5ff' }}>
+          <span>EXPAND CARD TO DECRYPT (+2,500 FOLLOWERS)</span>
+        </div>
       </div>
 
-      {/* Right Detailed Mission Briefing Card */}
-      {selectedMission && (
-        <div
-          style={{
-            flex: 1,
-            backgroundColor: 'rgba(8, 12, 16, 0.88)',
-            border: '0.15cqw solid rgba(58, 174, 196, 0.35)',
-            borderRadius: '1cqw',
-            padding: '1.2cqw 1.6cqw',
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'space-between',
-            overflowY: 'auto',
-          }}
-        >
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.8cqw' }}>
-            {/* Header */}
+      {/* 3 Dedicated Project Cards (Objective, Method, Result) */}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+        {BRIEFINGS.map((op) => {
+          const isExpanded = expandedId === op.id;
+          return (
             <div
+              key={op.id}
+              className="mission-card"
               style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                borderBottom: '1px solid rgba(0, 255, 102, 0.25)',
-                paddingBottom: '0.6cqw',
+                backgroundColor: '#141820',
+                border: '1px solid ' + (isExpanded ? '#00ff66' : '#202632'),
+                transition: 'border-color 0.15s ease',
               }}
             >
-              <div>
-                <span style={{ fontSize: 'max(10px, 1.5cqw)', fontWeight: 'bold', color: '#ffffff' }}>
-                  {selectedMission.title}
-                </span>
-                <span style={{ marginLeft: '1cqw', fontSize: 'max(7px, 0.9cqw)', color: '#00ff66' }}>
-                  [{selectedMission.id}]
-                </span>
-              </div>
-              <span
+              {/* Card Header Bar */}
+              <button
+                type="button"
+                onClick={() => toggleExpand(op.id, op.title)}
                 style={{
-                  fontSize: 'max(6.5px, 0.85cqw)',
-                  color: '#00ff66',
-                  backgroundColor: 'rgba(0, 255, 102, 0.12)',
-                  padding: '0.15cqw 0.6cqw',
-                  borderRadius: '0.3cqw',
-                  border: '0.1cqw solid #00ff66',
+                  width: '100%',
+                  background: 'none',
+                  border: 'none',
+                  padding: '14px 18px',
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  cursor: 'pointer',
+                  textAlign: 'left',
+                  color: 'inherit',
+                  fontFamily: 'inherit',
                 }}
               >
-                STATUS: DEPLOYED
-              </span>
-            </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+                  <span
+                    style={{
+                      color: isExpanded ? '#00ff66' : 'var(--cyan)',
+                      fontSize: '11px',
+                      fontWeight: 800,
+                      letterSpacing: '0.08em',
+                    }}
+                  >
+                    [{op.opCode}]
+                  </span>
+                  <div>
+                    <div style={{ fontSize: '15px', fontWeight: 700, color: '#ffffff' }}>
+                      {op.title}
+                    </div>
+                    <div style={{ fontSize: '11px', color: 'var(--dim)', marginTop: '2px' }}>
+                      {op.category}
+                    </div>
+                  </div>
+                </div>
 
-            {/* Objective */}
-            <div style={{ fontSize: 'max(7.5px, 1.05cqw)', lineHeight: 1.45 }}>
-              <div style={{ color: 'var(--cyan-hi)', fontWeight: 600, fontSize: 'max(7px, 0.9cqw)' }}>
-                // OBJECTIVE:
-              </div>
-              <div style={{ color: '#ffffff', marginTop: '0.2cqw' }}>{selectedMission.objective}</div>
-            </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                  <span
+                    style={{
+                      fontSize: '10px',
+                      color: isExpanded ? '#00ff66' : 'var(--dim)',
+                      border: '1px solid ' + (isExpanded ? '#00ff66' : '#202632'),
+                      padding: '2px 8px',
+                    }}
+                  >
+                    {isExpanded ? '[- COLLAPSE]' : '[+ DECRYPT_BRIEF]'}
+                  </span>
+                </div>
+              </button>
 
-            {/* Method */}
-            <div style={{ fontSize: 'max(7.5px, 1.05cqw)', lineHeight: 1.45 }}>
-              <div style={{ color: '#00ff66', fontWeight: 600, fontSize: 'max(7px, 0.9cqw)' }}>
-                // METHOD & ARCHITECTURE:
-              </div>
-              <div style={{ color: '#e0eaf0', marginTop: '0.2cqw' }}>{selectedMission.method}</div>
-            </div>
-
-            {/* Result */}
-            <div style={{ fontSize: 'max(7.5px, 1.05cqw)', lineHeight: 1.45 }}>
-              <div style={{ color: 'var(--ink)', fontWeight: 600, fontSize: 'max(7px, 0.9cqw)' }}>
-                // OPERATIONAL RESULT:
-              </div>
-              <div style={{ color: 'var(--dim)', marginTop: '0.2cqw' }}>{selectedMission.result}</div>
-            </div>
-
-            {/* Tags */}
-            <div style={{ display: 'flex', gap: '0.5cqw', flexWrap: 'wrap', marginTop: '0.3cqw' }}>
-              {selectedMission.tags.map((t, idx) => (
-                <span
-                  key={idx}
+              {/* Card Expanded Content: Objective, Method, Result */}
+              {isExpanded && (
+                <div
                   style={{
-                    fontSize: 'max(6px, 0.8cqw)',
-                    backgroundColor: 'rgba(58, 174, 196, 0.12)',
-                    color: 'var(--cyan)',
-                    padding: '0.1cqw 0.5cqw',
-                    borderRadius: '0.25cqw',
+                    padding: '0 18px 18px',
+                    borderTop: '1px solid #202632',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '12px',
+                    fontSize: '12px',
+                    lineHeight: 1.5,
                   }}
                 >
-                  #{t}
-                </span>
-              ))}
+                  <div style={{ marginTop: '12px' }}>
+                    <div style={{ color: '#00e5ff', fontWeight: 700, fontSize: '11px', marginBottom: '2px' }}>
+                      // OBJECTIVE:
+                    </div>
+                    <div style={{ color: '#e6edf3' }}>{op.objective}</div>
+                  </div>
+
+                  <div>
+                    <div style={{ color: '#00ff66', fontWeight: 700, fontSize: '11px', marginBottom: '2px' }}>
+                      // METHOD:
+                    </div>
+                    <div style={{ color: '#e6edf3' }}>{op.method}</div>
+                  </div>
+
+                  <div>
+                    <div style={{ color: '#ffffff', fontWeight: 700, fontSize: '11px', marginBottom: '2px' }}>
+                      // RESULT:
+                    </div>
+                    <div style={{ color: 'var(--dim)' }}>{op.result}</div>
+                  </div>
+
+                  {/* Tags and Repo Link */}
+                  <div
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      paddingTop: '8px',
+                      borderTop: '1px solid #202632',
+                      flexWrap: 'wrap',
+                      gap: '8px',
+                    }}
+                  >
+                    <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
+                      {op.tags.map((tag, idx) => (
+                        <span
+                          key={idx}
+                          style={{
+                            background: '#0b0d10',
+                            border: '1px solid #202632',
+                            color: 'var(--dim)',
+                            fontSize: '10px',
+                            padding: '2px 6px',
+                          }}
+                        >
+                          #{tag}
+                        </span>
+                      ))}
+                    </div>
+
+                    <a
+                      href={op.repoUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{
+                        background: '#0b0d10',
+                        border: '1px solid #00ff66',
+                        color: '#00ff66',
+                        fontSize: '11px',
+                        fontWeight: 700,
+                        padding: '4px 12px',
+                        textDecoration: 'none',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '6px',
+                      }}
+                    >
+                      <span>[ VIEW_GITHUB_REPOSITORY ]</span>
+                      <span>&gt;</span>
+                    </a>
+                  </div>
+                </div>
+              )}
+            </div>
+          );
+        })}
+
+        {/* DEDICATED CARD: CTF & TryHackMe Writeups Repo */}
+        <div
+          className="mission-card"
+          style={{
+            backgroundColor: '#141820',
+            border: '1px solid #00e5ff',
+            padding: '16px 18px',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            flexWrap: 'wrap',
+            gap: '12px',
+          }}
+        >
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span style={{ color: '#00e5ff', fontWeight: 800, fontSize: '11px' }}>[REPO_ARCHIVE]</span>
+              <span style={{ color: '#ffffff', fontSize: '15px', fontWeight: 700 }}>
+                CTF &amp; TryHackMe Writeups Repo
+              </span>
+            </div>
+            <div style={{ fontSize: '12px', color: 'var(--dim)', marginTop: '4px' }}>
+              Offensive security walkthroughs, privilege escalation methodologies, and room writeups.
             </div>
           </div>
 
-          {/* GitHub Action Button Placeholder */}
-          <div
+          <a
+            href="https://github.com/01AnshYadav"
+            target="_blank"
+            rel="noopener noreferrer"
             style={{
-              marginTop: '1cqw',
-              paddingTop: '0.8cqw',
-              borderTop: '1px solid rgba(213, 221, 226, 0.14)',
-              display: 'flex',
-              justifyContent: 'space-between',
+              background: '#0b0d10',
+              border: '1px solid #00e5ff',
+              color: '#00e5ff',
+              fontSize: '11px',
+              fontWeight: 700,
+              padding: '6px 16px',
+              textDecoration: 'none',
+              display: 'inline-flex',
               alignItems: 'center',
+              gap: '6px',
             }}
           >
-            <span style={{ fontSize: 'max(6px, 0.8cqw)', color: 'var(--dim)' }}>
-              REPOSITORY ACCESS:
-            </span>
-            <button
-              type="button"
-              style={{
-                backgroundColor: 'rgba(0, 255, 102, 0.1)',
-                border: '0.12cqw solid #00ff66',
-                color: '#00ff66',
-                fontFamily: 'var(--mono)',
-                fontSize: 'max(7px, 0.95cqw)',
-                padding: '0.4cqw 1cqw',
-                borderRadius: '0.4cqw',
-                cursor: 'pointer',
-                letterSpacing: '0.08em',
-              }}
-              onClick={() => alert(`Repository URL placeholder: ${selectedMission.repoUrlPlaceholder} (You can provide actual link later)`)}
-            >
-              [VIEW GITHUB REPO]
-            </button>
-          </div>
+            <span>[ ACCESS_CTF_WRITEUPS_ON_GITHUB ]</span>
+            <span>&gt;</span>
+          </a>
         </div>
-      )}
+      </div>
     </div>
   );
 };

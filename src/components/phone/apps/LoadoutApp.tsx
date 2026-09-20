@@ -1,165 +1,307 @@
 import React, { useState } from 'react';
-import { LOADOUT_DATA } from '../../../config';
+
+interface CertModule {
+  id: string;
+  name: string;
+  issuer: string;
+  status: string;
+  year: string;
+  cipher: string;
+}
+
+const CERT_MODULES: CertModule[] = [
+  {
+    id: 'AWS-CCP-9842',
+    name: 'AWS Certified Cloud Practitioner',
+    issuer: 'Amazon Web Services',
+    status: 'UNLOCKED // VERIFIED',
+    year: '2025',
+    cipher: 'SHA256:4FA912',
+  },
+  {
+    id: 'SEC-PLUS-5519',
+    name: 'CompTIA Security+ Modules',
+    issuer: 'CompTIA Academy',
+    status: 'UNLOCKED // VERIFIED',
+    year: '2025',
+    cipher: 'SHA256:7BC034',
+  },
+  {
+    id: 'CISCO-NET-2204',
+    name: 'Cisco Networking Fundamentals',
+    issuer: 'Cisco Networking Academy',
+    status: 'UNLOCKED // VERIFIED',
+    year: '2024',
+    cipher: 'SHA256:88DE56',
+  },
+  {
+    id: 'LNX-SYS-7718',
+    name: 'Linux System Hardening & Administration',
+    issuer: 'DedSec Kernel Operations',
+    status: 'UNLOCKED // VERIFIED',
+    year: '2025',
+    cipher: 'SHA256:991F77',
+  },
+];
+
+interface SkillNode {
+  category: string;
+  level: string;
+  status: string;
+  tools: string[];
+  description: string;
+}
+
+const SKILL_NODES: SkillNode[] = [
+  {
+    category: 'AWS',
+    level: '92%',
+    status: '[SYSTEM_OPTIMAL]',
+    tools: ['KMS Envelope Encryption', 'IAM Least-Privilege', 'Lambda Serverless', 'VPC Isolation', 'S3 Secure Vaults'],
+    description: 'Cloud security architecture, access control boundaries, cryptographic key vaults, and serverless defense APIs.',
+  },
+  {
+    category: 'Linux',
+    level: '95%',
+    status: '[KERNEL_ACTIVE]',
+    tools: ['Process Memory Forensics', 'Systemd Hardening', 'ProcFS Extraction', 'Bash Automation', 'Debian/Arch Kernel'],
+    description: 'Kernel parameter hardening, live process memory triage, system auditing, and shell script automation.',
+  },
+  {
+    category: 'Networking',
+    level: '94%',
+    status: '[LINK_ESTABLISHED]',
+    tools: ['TCP/IP Protocol Stack', 'Wireshark Packet Analysis', 'ARP & DNS Inspection', 'Subnetting', 'Firewall Rules'],
+    description: 'Low-level protocol inspection, packet capture analysis, network intrusion detection, and P2P synchronization.',
+  },
+  {
+    category: 'Python',
+    level: '90%',
+    status: '[PAYLOAD_COMPILED]',
+    tools: ['Socket Programming', 'Cryptographic Hashing', 'Automated Scanners', 'REST APIs', 'Exploit Prototyping'],
+    description: 'Automated offensive/defensive scripting, custom protocol parsers, cryptographic hashing, and security testing.',
+  },
+];
 
 export const LoadoutApp: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'CERTS' | 'SKILLS'>('SKILLS');
+  const [activeTab, setActiveTab] = useState<'CERTS' | 'SKILLS'>('CERTS');
   const [selectedSkill, setSelectedSkill] = useState<number>(0);
 
   return (
     <div
-      className="loadout-app"
+      className="loadout-app-container"
       style={{
         display: 'flex',
         flexDirection: 'column',
-        gap: '1cqw',
-        height: '100%',
-        animation: 'fadeIn 0.25s ease',
+        gap: '16px',
+        width: '100%',
+        color: '#e6edf3',
+        fontFamily: 'var(--mono)',
       }}
     >
-      {/* Tab Switcher */}
+      {/* Top Tab Switcher */}
       <div
         style={{
           display: 'flex',
-          gap: '1cqw',
-          borderBottom: '1px solid rgba(58, 174, 196, 0.2)',
-          paddingBottom: '0.5cqw',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          backgroundColor: '#141820',
+          border: '1px solid #202632',
+          padding: '8px 16px',
         }}
       >
-        <button
-          onClick={() => setActiveTab('SKILLS')}
-          style={{
-            background: activeTab === 'SKILLS' ? 'rgba(0, 255, 102, 0.15)' : 'none',
-            border: '0.12cqw solid ' + (activeTab === 'SKILLS' ? '#00ff66' : 'rgba(213, 221, 226, 0.2)'),
-            color: activeTab === 'SKILLS' ? '#00ff66' : 'var(--dim)',
-            fontFamily: 'var(--mono)',
-            fontSize: 'max(7.5px, 1cqw)',
-            padding: '0.3cqw 1cqw',
-            borderRadius: '0.3cqw',
-            cursor: 'pointer',
-          }}
-        >
-          // SKILL TREE MATRIX
-        </button>
-        <button
-          onClick={() => setActiveTab('CERTS')}
-          style={{
-            background: activeTab === 'CERTS' ? 'rgba(0, 255, 102, 0.15)' : 'none',
-            border: '0.12cqw solid ' + (activeTab === 'CERTS' ? '#00ff66' : 'rgba(213, 221, 226, 0.2)'),
-            color: activeTab === 'CERTS' ? '#00ff66' : 'var(--dim)',
-            fontFamily: 'var(--mono)',
-            fontSize: 'max(7.5px, 1cqw)',
-            padding: '0.3cqw 1cqw',
-            borderRadius: '0.3cqw',
-            cursor: 'pointer',
-          }}
-        >
-          // ctOS SECURITY MODULES
-        </button>
-      </div>
-
-      {/* Tab 1: Interactive Skill Tree Matrix */}
-      {activeTab === 'SKILLS' && (
-        <div style={{ display: 'flex', gap: '2cqw', flex: 1, overflow: 'hidden' }}>
-          {/* Skill Nodes Selector */}
-          <div
+        <div style={{ display: 'flex', gap: '8px' }}>
+          <button
+            type="button"
+            onClick={() => setActiveTab('CERTS')}
             style={{
-              width: '32cqw',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '0.7cqw',
-              overflowY: 'auto',
+              background: activeTab === 'CERTS' ? '#0b0d10' : 'transparent',
+              border: '1px solid ' + (activeTab === 'CERTS' ? '#00ff66' : '#202632'),
+              color: activeTab === 'CERTS' ? '#00ff66' : 'var(--dim)',
+              fontFamily: 'inherit',
+              fontSize: '12px',
+              fontWeight: 700,
+              padding: '6px 14px',
+              cursor: 'pointer',
             }}
           >
-            {LOADOUT_DATA.skillNodes.map((s, idx) => {
+            [ UNLOCKED_SECURITY_MODULES ]
+          </button>
+          <button
+            type="button"
+            onClick={() => setActiveTab('SKILLS')}
+            style={{
+              background: activeTab === 'SKILLS' ? '#0b0d10' : 'transparent',
+              border: '1px solid ' + (activeTab === 'SKILLS' ? '#00ff66' : '#202632'),
+              color: activeTab === 'SKILLS' ? '#00ff66' : 'var(--dim)',
+              fontFamily: 'inherit',
+              fontSize: '12px',
+              fontWeight: 700,
+              padding: '6px 14px',
+              cursor: 'pointer',
+            }}
+          >
+            [ SKILL_NODES_MATRIX ]
+          </button>
+        </div>
+
+        <div style={{ fontSize: '11px', color: 'var(--dim)' }}>
+          <span>STATUS: ALL 4 MODULES VERIFIED</span>
+        </div>
+      </div>
+
+      {/* VIEW 1: UNLOCKED SECURITY MODULES (CERTIFICATIONS) */}
+      {activeTab === 'CERTS' && (
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '12px' }}>
+          {CERT_MODULES.map((cert) => (
+            <div
+              key={cert.id}
+              style={{
+                backgroundColor: '#141820',
+                border: '1px solid #202632',
+                padding: '16px',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'space-between',
+                gap: '12px',
+                transition: 'border-color 0.15s ease',
+              }}
+            >
+              <div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <span style={{ color: '#00ff66', fontSize: '11px', fontWeight: 800 }}>[{cert.id}]</span>
+                  <span
+                    style={{
+                      fontSize: '9.5px',
+                      color: '#00ff66',
+                      border: '1px solid #00ff66',
+                      padding: '1px 6px',
+                    }}
+                  >
+                    {cert.status}
+                  </span>
+                </div>
+                <div style={{ fontSize: '14px', fontWeight: 700, color: '#ffffff', marginTop: '8px' }}>
+                  {cert.name}
+                </div>
+                <div style={{ fontSize: '11px', color: 'var(--dim)', marginTop: '2px' }}>
+                  ISSUER: {cert.issuer}
+                </div>
+              </div>
+
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  paddingTop: '8px',
+                  borderTop: '1px solid #202632',
+                  fontSize: '10px',
+                  color: 'var(--dim)',
+                }}
+              >
+                <span>CIPHER: {cert.cipher}</span>
+                <span>YEAR: {cert.year}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* VIEW 2: SKILL NODES (AWS, Linux, Networking, Python) */}
+      {activeTab === 'SKILLS' && (
+        <div style={{ display: 'grid', gridTemplateColumns: '260px 1fr', gap: '16px' }}>
+          {/* Left Node Selector */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            {SKILL_NODES.map((node, idx) => {
               const isSelected = selectedSkill === idx;
               return (
                 <button
-                  key={idx}
+                  key={node.category}
+                  type="button"
                   onClick={() => setSelectedSkill(idx)}
                   style={{
-                    background: isSelected ? 'rgba(0, 255, 102, 0.12)' : 'rgba(10, 15, 20, 0.8)',
-                    border: '0.12cqw solid ' + (isSelected ? '#00ff66' : 'rgba(58, 174, 196, 0.3)'),
-                    borderRadius: '0.6cqw',
-                    padding: '0.7cqw 1cqw',
+                    backgroundColor: isSelected ? '#0b0d10' : '#141820',
+                    border: '1px solid ' + (isSelected ? '#00ff66' : '#202632'),
+                    padding: '12px 16px',
                     textAlign: 'left',
                     cursor: 'pointer',
+                    color: 'inherit',
+                    fontFamily: 'inherit',
                     display: 'flex',
                     justifyContent: 'space-between',
                     alignItems: 'center',
+                    transition: 'border-color 0.15s ease',
                   }}
                 >
-                  <span style={{ fontSize: 'max(7px, 0.95cqw)', color: isSelected ? '#ffffff' : 'var(--ink)' }}>
-                    {s.name}
-                  </span>
-                  <span style={{ fontSize: 'max(6.5px, 0.85cqw)', color: '#00ff66' }}>
-                    {s.level}
+                  <div>
+                    <div style={{ color: isSelected ? '#00ff66' : '#ffffff', fontSize: '14px', fontWeight: 700 }}>
+                      {node.category}
+                    </div>
+                    <div style={{ fontSize: '10px', color: 'var(--dim)', marginTop: '2px' }}>
+                      {node.status}
+                    </div>
+                  </div>
+                  <span style={{ color: '#00e5ff', fontSize: '12px', fontWeight: 800 }}>
+                    {node.level}
                   </span>
                 </button>
               );
             })}
           </div>
 
-          {/* Skill Breakdown & Loadout Arsenal */}
+          {/* Right Selected Node Inspection Box */}
           <div
             style={{
-              flex: 1,
-              backgroundColor: 'rgba(10, 14, 18, 0.85)',
-              border: '0.12cqw solid rgba(58, 174, 196, 0.35)',
-              borderRadius: '0.8cqw',
-              padding: '1.2cqw',
+              backgroundColor: '#141820',
+              border: '1px solid #202632',
+              padding: '20px',
               display: 'flex',
               flexDirection: 'column',
-              gap: '1cqw',
+              gap: '14px',
             }}
           >
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <span style={{ fontSize: 'max(9px, 1.3cqw)', fontWeight: 'bold', color: '#00ff66' }}>
-                {LOADOUT_DATA.skillNodes[selectedSkill].name}
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
+              <span style={{ fontSize: '18px', fontWeight: 800, color: '#00ff66' }}>
+                // NODE: {SKILL_NODES[selectedSkill].category}
               </span>
-              <span style={{ fontSize: 'max(7px, 0.9cqw)', color: 'var(--cyan-hi)' }}>
-                PROFICIENCY: {LOADOUT_DATA.skillNodes[selectedSkill].level}
+              <span style={{ fontSize: '12px', color: '#00e5ff', fontWeight: 700 }}>
+                EFFICIENCY: {SKILL_NODES[selectedSkill].level}
               </span>
             </div>
 
-            {/* Proficiency progress bar */}
-            <div
-              style={{
-                width: '100%',
-                height: '0.8cqw',
-                backgroundColor: 'rgba(255, 255, 255, 0.08)',
-                borderRadius: '0.4cqw',
-                overflow: 'hidden',
-              }}
-            >
+            <p style={{ fontSize: '13px', color: '#d2dbe0', lineHeight: 1.5, margin: 0 }}>
+              {SKILL_NODES[selectedSkill].description}
+            </p>
+
+            {/* Proficiency Meter */}
+            <div style={{ width: '100%', height: '6px', background: '#0b0d10', border: '1px solid #202632' }}>
               <div
                 style={{
-                  width: LOADOUT_DATA.skillNodes[selectedSkill].level,
+                  width: SKILL_NODES[selectedSkill].level,
                   height: '100%',
                   backgroundColor: '#00ff66',
-                  boxShadow: '0 0 8px #00ff66',
                 }}
               />
             </div>
 
-            {/* Tools & Weaponry Loadout */}
-            <div style={{ marginTop: '0.5cqw' }}>
-              <div style={{ fontSize: 'max(6.5px, 0.85cqw)', color: 'var(--dim)', marginBottom: '0.6cqw' }}>
-                // EQUIPPED ARSENAL & PROTOCOLS:
+            {/* Equipped Tools */}
+            <div style={{ marginTop: '6px' }}>
+              <div style={{ fontSize: '11px', color: 'var(--dim)', marginBottom: '8px' }}>
+                // EQUIPPED ARSENAL &amp; PROTOCOLS:
               </div>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.6cqw' }}>
-                {LOADOUT_DATA.skillNodes[selectedSkill].tools.map((tool, i) => (
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '8px' }}>
+                {SKILL_NODES[selectedSkill].tools.map((tool, i) => (
                   <div
                     key={i}
                     style={{
-                      backgroundColor: 'rgba(58, 174, 196, 0.08)',
-                      border: '0.1cqw solid rgba(58, 174, 196, 0.3)',
-                      padding: '0.5cqw 0.8cqw',
-                      borderRadius: '0.4cqw',
-                      fontSize: 'max(6.5px, 0.9cqw)',
-                      color: 'var(--ink)',
+                      background: '#0b0d10',
+                      border: '1px solid #202632',
+                      padding: '8px 12px',
+                      fontSize: '11px',
                       display: 'flex',
                       alignItems: 'center',
-                      gap: '0.5cqw',
+                      gap: '6px',
                     }}
                   >
                     <span style={{ color: '#00ff66' }}>▸</span>
@@ -169,56 +311,6 @@ export const LoadoutApp: React.FC = () => {
               </div>
             </div>
           </div>
-        </div>
-      )}
-
-      {/* Tab 2: Certifications / ctOS Security Modules */}
-      {activeTab === 'CERTS' && (
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: '1fr 1fr',
-            gap: '1cqw',
-            overflowY: 'auto',
-          }}
-        >
-          {LOADOUT_DATA.certifications.map((c, idx) => (
-            <div
-              key={idx}
-              style={{
-                backgroundColor: 'rgba(8, 12, 16, 0.85)',
-                border: '0.12cqw solid rgba(0, 255, 102, 0.3)',
-                borderRadius: '0.8cqw',
-                padding: '1cqw 1.2cqw',
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'space-between',
-                gap: '0.4cqw',
-              }}
-            >
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <span style={{ fontSize: 'max(6px, 0.8cqw)', color: '#00ff66' }}>{c.id}</span>
-                <span
-                  style={{
-                    fontSize: 'max(5.5px, 0.75cqw)',
-                    backgroundColor: 'rgba(0, 255, 102, 0.15)',
-                    color: '#00ff66',
-                    padding: '0.1cqw 0.5cqw',
-                    borderRadius: '0.2cqw',
-                  }}
-                >
-                  {c.status}
-                </span>
-              </div>
-              <div style={{ fontSize: 'max(7.5px, 1.05cqw)', fontWeight: 'bold', color: '#ffffff' }}>
-                {c.name}
-              </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 'max(6px, 0.8cqw)', color: 'var(--dim)' }}>
-                <span>ISSUER: {c.issuer}</span>
-                <span>YEAR: {c.date}</span>
-              </div>
-            </div>
-          ))}
         </div>
       )}
     </div>
