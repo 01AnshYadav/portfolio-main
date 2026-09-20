@@ -14,6 +14,7 @@ export const HandPhoneStage: React.FC<HandPhoneStageProps> = ({
   isDebug = false,
 }) => {
   const [isCueVisible, setIsCueVisible] = useState<boolean>(true);
+  const [isSettled, setIsSettled] = useState<boolean>(false);
   const phoneWrapperRef = useRef<HTMLDivElement | null>(null);
   const targetProgressRef = useRef<number>(0);
   const currentProgressRef = useRef<number>(0);
@@ -64,10 +65,11 @@ export const HandPhoneStage: React.FC<HandPhoneStageProps> = ({
         }
       }
 
-      // Settled state for dimming ctOS HUD and Target panel
+      // Settled state for dimming ctOS HUD and Target panel & activating phone interactivity
       const settled = next >= 0.88;
       if (settled !== isSettledRef.current) {
         isSettledRef.current = settled;
+        setIsSettled(settled);
         if (onSettledChange) onSettledChange(settled);
       }
 
@@ -122,10 +124,10 @@ export const HandPhoneStage: React.FC<HandPhoneStageProps> = ({
             transform: initialTransform,
             transformStyle: 'preserve-3d',
             willChange: 'transform',
-            pointerEvents: isDebug ? 'auto' : 'none',
+            pointerEvents: isSettled || isDebug ? 'auto' : 'none',
           }}
         >
-          <HandPhone isDebug={isDebug} />
+          <HandPhone isDebug={isDebug} isSettled={isSettled} />
         </div>
 
         {/* Scroll Cue (smoothly fades out as scroll starts) */}

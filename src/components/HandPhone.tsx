@@ -2,32 +2,20 @@ import React, { useState, useEffect, useRef } from 'react';
 import { PNG_PATH, PNG_ASPECT, PHONE_SCREEN } from '../config';
 import { ScreenPlaceholder } from './ScreenPlaceholder';
 import { DebugOverlay } from './DebugOverlay';
+import { DedSecPhoneOS } from './phone/DedSecPhoneOS';
 import './HandPhone.css';
 
 interface HandPhoneProps {
   isDebug?: boolean;
+  isSettled?: boolean;
 }
 
-export const HandPhone: React.FC<HandPhoneProps> = ({ isDebug = false }) => {
+export const HandPhone: React.FC<HandPhoneProps> = ({ isDebug = false, isSettled = false }) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const wallCanvasRef = useRef<HTMLCanvasElement | null>(null);
   const [dimensions, setDimensions] = useState<{ width: number; height: number }>({ width: 0, height: 0 });
   const [imageLoaded, setImageLoaded] = useState<boolean>(false);
   const [imageError, setImageError] = useState<boolean>(false);
-  const [clockTime, setClockTime] = useState<string>('09:41');
-
-  // Clock timer matching ctos-map (1).html
-  useEffect(() => {
-    const updateClock = () => {
-      const d = new Date();
-      setClockTime(
-        String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0')
-      );
-    };
-    updateClock();
-    const interval = window.setInterval(updateClock, 10000);
-    return () => window.clearInterval(interval);
-  }, []);
 
   // Preload PNG
   useEffect(() => {
@@ -102,7 +90,7 @@ export const HandPhone: React.FC<HandPhoneProps> = ({ isDebug = false }) => {
         width: 'min(86vw, calc(78vh * 2.2), 1020px)',
         aspectRatio: `${PNG_ASPECT}`,
         userSelect: 'none',
-        pointerEvents: isDebug ? 'auto' : 'none',
+        pointerEvents: isSettled || isDebug ? 'auto' : 'none',
         willChange: 'transform',
       }}
     >
@@ -127,6 +115,7 @@ export const HandPhone: React.FC<HandPhoneProps> = ({ isDebug = false }) => {
           <ScreenPlaceholder
             containerWidth={dimensions.width}
             containerHeight={dimensions.height}
+            isSettled={isSettled}
           />
         </>
       ) : (
@@ -136,7 +125,12 @@ export const HandPhone: React.FC<HandPhoneProps> = ({ isDebug = false }) => {
           <i className="btn b2" />
           <i className="btn b3" />
           <div className="body">
-            <div className="screen">
+            <div
+              className="screen"
+              style={{
+                pointerEvents: isSettled ? 'auto' : 'none',
+              }}
+            >
               <canvas
                 ref={wallCanvasRef}
                 className="wall-canvas"
@@ -144,46 +138,7 @@ export const HandPhone: React.FC<HandPhoneProps> = ({ isDebug = false }) => {
                 height="450"
               />
               <div className="pcam" />
-              <div className="pstatus">
-                <span id="clock">{clockTime}</span>
-                <span className="r">
-                  <span>LTE</span>
-                  <i className="pbat" />
-                </span>
-              </div>
-
-              {/* Home App Slots from ctos-map (1).html */}
-              <div className="home" id="home">
-                <div className="slot" />
-                <div className="slot" />
-                <div className="slot" />
-                <div className="slot" />
-                <div className="slot" />
-                <div className="slot" />
-                <div className="slot" />
-                <div className="slot" />
-              </div>
-
-              {/* Centered ctOS Uplink Status Label */}
-              <div
-                style={{
-                  position: 'absolute',
-                  top: '4.5cqw',
-                  left: 0,
-                  right: 0,
-                  textAlign: 'center',
-                  fontFamily: 'var(--mono)',
-                  fontSize: 'max(10px, 1.3cqw)',
-                  letterSpacing: '0.15em',
-                  color: 'var(--cyan-hi)',
-                  zIndex: 4,
-                  pointerEvents: 'none',
-                }}
-              >
-                ctOS // LINK ESTABLISHED
-              </div>
-
-              <div className="pbar" />
+              <DedSecPhoneOS />
               <div className="glare" />
             </div>
           </div>
