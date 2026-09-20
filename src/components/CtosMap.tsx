@@ -151,15 +151,15 @@ export const CtosMap: React.FC<CtosMapProps> = ({ isPhoneSettled = false }) => {
     const ctx: CanvasRenderingContext2D = ctxNullable;
 
     const tip = tipRef.current!;
-    const tipH = tip.querySelector('.h') as HTMLElement;
-    const tipB = tip.querySelector('.b') as HTMLElement;
-    const segsEl = segsRef.current!;
-    const dvEl = dvRef.current!;
-    const acqEl = acqRef.current!;
-    const listEl = listRef.current!;
-    const dossierEl = dossierRef.current!;
-    const feedEl = feedRef.current!;
-    const resetBtn = resetBtnRef.current!;
+    const tipH = tip?.querySelector('.h') as HTMLElement;
+    const tipB = tip?.querySelector('.b') as HTMLElement;
+    const segsEl = segsRef.current;
+    const dvEl = dvRef.current;
+    const acqEl = acqRef.current;
+    const listEl = listRef.current;
+    const dossierEl = dossierRef.current;
+    const feedEl = feedRef.current;
+    const resetBtn = resetBtnRef.current;
 
     const PAD = 72, DUR = 1800, TAU = Math.PI * 2;
     const CYAN = '58,174,196', CYANHI = '99,208,228', RED = '255,69,54', INK = '226,232,236';
@@ -208,76 +208,81 @@ export const CtosMap: React.FC<CtosMapProps> = ({ isPhoneSettled = false }) => {
     let animationFrameId: number;
 
     function buildCity() {
-      const rng = mulberry32(7331), cs = 4;
-      const ww = W + PAD * 2, wh = H + PAD * 2;
-      city = document.createElement('canvas');
-      city.width = Math.ceil(ww * DPR);
-      city.height = Math.ceil(wh * DPR);
-      const c = city.getContext('2d')!;
-      c.scale(DPR, DPR);
-      const gw = Math.ceil(ww / cs), gh = Math.ceil(wh / cs);
+      try {
+        const rng = mulberry32(7331), cs = 4;
+        const ww = W + PAD * 2, wh = H + PAD * 2;
+        city = document.createElement('canvas');
+        city.width = Math.ceil(ww * DPR);
+        city.height = Math.ceil(wh * DPR);
+        const c = city.getContext('2d');
+        if (!c) return;
+        c.scale(DPR, DPR);
+        const gw = Math.ceil(ww / cs), gh = Math.ceil(wh / cs);
 
-      const vr: number[] = [], hr: number[] = [];
-      for (let x = rng() * 50; x < ww; x += 44 + rng() * 96) vr.push(x);
-      for (let y = rng() * 50; y < wh; y += 38 + rng() * 84) hr.push(y);
-      const vw = vr.map((_, i) => (i % 4 === 0 ? 4.4 : 2.2));
-      const hw = hr.map((_, i) => (i % 4 === 0 ? 4.4 : 2.2));
+        const vr: number[] = [], hr: number[] = [];
+        for (let x = rng() * 50; x < ww; x += 44 + rng() * 96) vr.push(x);
+        for (let y = rng() * 50; y < wh; y += 38 + rng() * 84) hr.push(y);
+        const vw = vr.map((_, i) => (i % 4 === 0 ? 4.4 : 2.2));
+        const hw = hr.map((_, i) => (i % 4 === 0 ? 4.4 : 2.2));
 
-      const colIdx = new Int16Array(gw), roadV = new Uint8Array(gw);
-      let k = 0;
-      for (let gx = 0; gx < gw; gx++) {
-        const x = gx * cs + cs / 2;
-        while (k < vr.length && vr[k] < x) k++;
-        colIdx[gx] = k;
-        roadV[gx] = ((k < vr.length && vr[k] - x < vw[k]) || (k > 0 && x - vr[k - 1] < vw[k - 1])) ? 1 : 0;
-      }
-      const rowIdx = new Int16Array(gh), roadH = new Uint8Array(gh);
-      k = 0;
-      for (let gy = 0; gy < gh; gy++) {
-        const y = gy * cs + cs / 2;
-        while (k < hr.length && hr[k] < y) k++;
-        rowIdx[gy] = k;
-        roadH[gy] = ((k < hr.length && hr[k] - y < hw[k]) || (k > 0 && y - hr[k - 1] < hw[k - 1])) ? 1 : 0;
-      }
-
-      const levels: string[] = [];
-      for (let i = 0; i < 10; i++) levels.push(`rgba(214,222,228,${(0.08 + i * 0.07).toFixed(3)})`);
-      const dx = 0.42, dy = 0.9, dl = Math.hypot(dx, dy), ax = dx / dl, ay = dy / dl, p0x = ww * 0.45, p0y = wh * 0.3;
-
-      for (let gy = 0; gy < gh; gy++) {
-        const y = gy * cs + cs / 2;
+        const colIdx = new Int16Array(gw), roadV = new Uint8Array(gw);
+        let k = 0;
         for (let gx = 0; gx < gw; gx++) {
           const x = gx * cs + cs / 2;
-          let a = 0;
-          const rv = roadV[gx] || roadH[gy];
-          const avenue = Math.abs((x - p0x) * ay - (y - p0y) * ax) < 2.6;
-          const rx = x / ww;
-          const riverC = wh * 0.46 + Math.sin(rx * 3.6 + 0.6) * wh * 0.09 + (rx - 0.3) * wh * 0.1;
-          const river = rx < 0.62 && Math.abs(y - riverC) < 7 + vnoise(x / 90, 3, 4) * 10;
-          const railC = wh * 0.31 + (rx - 0.5) * wh * 0.1;
-          const rail = rx > 0.22 && Math.abs(y - railC) < 9;
-          if (rail) { a = rng() < 0.85 ? 0.3 + rng() * 0.4 : 0; }
-          else if (avenue || river) { a = 0; }
-          else if (rv) { a = rng() < 0.035 ? 0.3 : 0; }
-          else {
-            const b = hash2(colIdx[gx], rowIdx[gy], 11);
-            const base = b < 0.14 ? 0.05 : 0.18 + b * 0.8;
-            const n = fbm(x / 260, y / 260, 5);
-            const voidZone = fbm(x / 380 + 9, y / 380, 90) < 0.33;
-            let v = base * (0.4 + rng() * 0.6) * (0.55 + n * 0.9);
-            if (voidZone) v *= 0.12;
-            a = v * 0.75;
-          }
-          if (a > 0.04) {
-            c.fillStyle = levels[Math.min(9, (a * 11) | 0)];
-            c.fillRect(gx * cs, gy * cs, cs - 1, cs - 1);
+          while (k < vr.length && vr[k] < x) k++;
+          colIdx[gx] = k;
+          roadV[gx] = ((k < vr.length && vr[k] - x < vw[k]) || (k > 0 && x - vr[k - 1] < vw[k - 1])) ? 1 : 0;
+        }
+        const rowIdx = new Int16Array(gh), roadH = new Uint8Array(gh);
+        k = 0;
+        for (let gy = 0; gy < gh; gy++) {
+          const y = gy * cs + cs / 2;
+          while (k < hr.length && hr[k] < y) k++;
+          rowIdx[gy] = k;
+          roadH[gy] = ((k < hr.length && hr[k] - y < hw[k]) || (k > 0 && y - hr[k - 1] < hw[k - 1])) ? 1 : 0;
+        }
+
+        const levels: string[] = [];
+        for (let i = 0; i < 10; i++) levels.push(`rgba(214,222,228,${(0.08 + i * 0.07).toFixed(3)})`);
+        const dx = 0.42, dy = 0.9, dl = Math.hypot(dx, dy), ax = dx / dl, ay = dy / dl, p0x = ww * 0.45, p0y = wh * 0.3;
+
+        for (let gy = 0; gy < gh; gy++) {
+          const y = gy * cs + cs / 2;
+          for (let gx = 0; gx < gw; gx++) {
+            const x = gx * cs + cs / 2;
+            let a = 0;
+            const rv = roadV[gx] || roadH[gy];
+            const avenue = Math.abs((x - p0x) * ay - (y - p0y) * ax) < 2.6;
+            const rx = x / ww;
+            const riverC = wh * 0.46 + Math.sin(rx * 3.6 + 0.6) * wh * 0.09 + (rx - 0.3) * wh * 0.1;
+            const river = rx < 0.62 && Math.abs(y - riverC) < 7 + vnoise(x / 90, 3, 4) * 10;
+            const railC = wh * 0.31 + (rx - 0.5) * wh * 0.1;
+            const rail = rx > 0.22 && Math.abs(y - railC) < 9;
+            if (rail) { a = rng() < 0.85 ? 0.3 + rng() * 0.4 : 0; }
+            else if (avenue || river) { a = 0; }
+            else if (rv) { a = rng() < 0.035 ? 0.3 : 0; }
+            else {
+              const b = hash2(colIdx[gx], rowIdx[gy], 11);
+              const base = b < 0.14 ? 0.05 : 0.18 + b * 0.8;
+              const n = fbm(x / 260, y / 260, 5);
+              const voidZone = fbm(x / 380 + 9, y / 380, 90) < 0.33;
+              let v = base * (0.4 + rng() * 0.6) * (0.55 + n * 0.9);
+              if (voidZone) v *= 0.12;
+              a = v * 0.75;
+            }
+            if (a > 0.04) {
+              c.fillStyle = levels[Math.min(9, (a * 11) | 0)];
+              c.fillRect(gx * cs, gy * cs, cs - 1, cs - 1);
+            }
           }
         }
+        c.fillStyle = 'rgba(255,255,255,.85)';
+        for (let i = 0; i < 150; i++) { c.fillRect(rng() * ww, rng() * wh, 3 + rng() * 6, 3 + rng() * 4); }
+        c.fillStyle = 'rgba(255,255,255,.92)';
+        for (let i = 0; i < 6; i++) { const s = 10 + rng() * 6; c.fillRect(rng() * ww, rng() * wh, s, s); }
+      } catch (e) {
+        console.warn("buildCity error:", e);
       }
-      c.fillStyle = 'rgba(255,255,255,.85)';
-      for (let i = 0; i < 150; i++) { c.fillRect(rng() * ww, rng() * wh, 3 + rng() * 6, 3 + rng() * 4); }
-      c.fillStyle = 'rgba(255,255,255,.92)';
-      for (let i = 0; i < 6; i++) { const s = 10 + rng() * 6; c.fillRect(rng() * ww, rng() * wh, s, s); }
     }
 
     function pointAt(e: EdgeItem, d: number, out: { x: number; y: number }) {
@@ -345,31 +350,42 @@ export const CtosMap: React.FC<CtosMapProps> = ({ isPhoneSettled = false }) => {
         const k = a < b ? `${a}-${b}` : `${b}-${a}`;
         if (seen.has(k)) return;
         seen.add(k);
-        addEdge([{ x: nodes[a].x, y: nodes[a].y }, { x: nodes[b].x, y: nodes[b].y }], 'w', a, b, alpha);
+        if (nodes[a] && nodes[b]) {
+          addEdge([{ x: nodes[a].x, y: nodes[a].y }, { x: nodes[b].x, y: nodes[b].y }], 'w', a, b, alpha);
+        }
       };
       nodes.forEach(n => {
         const ds = nodes.filter(o => o !== n).map(o => [o.i, Math.hypot(o.x - n.x, o.y - n.y)]).sort((p, q) => p[1] - q[1]);
-        link(n.i, ds[0][0], 1);
+        if (ds[0]) link(n.i, ds[0][0], 1);
         if (ds[1] && ds[1][1] < W * 0.28) link(n.i, ds[1][0], 0.8);
       });
       const hubs = nodes.filter(n => n.hub);
       hubs.forEach(h => {
-        for (let k = 0; k < 2; k++) link(h.i, hubs[(rng() * hubs.length) | 0].i, 0.9);
+        for (let k = 0; k < 2; k++) {
+          const randHub = hubs[(rng() * hubs.length) | 0];
+          if (randHub) link(h.i, randHub.i, 0.9);
+        }
       });
       targets.forEach(t => {
         let best: NodeItem | null = null, bd = 1e9;
         hubs.forEach(h => {
-          const d = Math.hypot(h.x - t.node!.x, h.y - t.node!.y);
-          if (d < bd) { bd = d; best = h; }
+          if (t.node) {
+            const d = Math.hypot(h.x - t.node.x, h.y - t.node.y);
+            if (d < bd) { bd = d; best = h; }
+          }
         });
-        if (best) link(t.node!.i, (best as NodeItem).i, 1);
+        if (best && t.node) link(t.node.i, (best as NodeItem).i, 1);
       });
       for (let k = 0; k < 9; k++) {
-        const h = hubs[(rng() * hubs.length) | 0], ang = rng() * TAU, L = Math.max(W, H);
-        addEdge([{ x: h.x, y: h.y }, { x: h.x + Math.cos(ang) * L, y: h.y + Math.sin(ang) * L }], 'w', h.i, -1, 0.7);
+        const h = hubs[(rng() * hubs.length) | 0];
+        if (h) {
+          const ang = rng() * TAU, L = Math.max(W, H);
+          addEdge([{ x: h.x, y: h.y }, { x: h.x + Math.cos(ang) * L, y: h.y + Math.sin(ang) * L }], 'w', h.i, -1, 0.7);
+        }
       }
       for (let k = 0, tries = 0; k < 16 && tries < 200; tries++) {
         const a = nodes[(rng() * nodes.length) | 0], b = nodes[(rng() * nodes.length) | 0];
+        if (!a || !b) continue;
         const d = Math.hypot(a.x - b.x, a.y - b.y);
         if (d < 140 || d > 520) continue;
         const pts = rng() < 0.5 ? [{ x: a.x, y: a.y }, { x: b.x, y: a.y }, { x: b.x, y: b.y }] : [{ x: a.x, y: a.y }, { x: a.x, y: b.y }, { x: b.x, y: b.y }];
@@ -377,14 +393,16 @@ export const CtosMap: React.FC<CtosMapProps> = ({ isPhoneSettled = false }) => {
       }
       [[0.27, 0.9, 0.23], [0.1, 0.64, 0.29], [0.48, 1, 0.70]].forEach(l => addEdge([{ x: l[0] * W, y: l[2] * H }, { x: l[1] * W, y: l[2] * H }], 'c', -1, -1, 1));
       [[0.28, 0.75, 0.43], [0.18, 1, 0.86], [0.3, 0.7, 0.34]].forEach(l => addEdge([{ x: l[2] * W, y: l[0] * H }, { x: l[2] * W, y: l[1] * H }], 'c', -1, -1, 1));
-      for (let i = 0; i < 46; i++) {
-        packets.push({ e: (rng() * edges.length) | 0, t: rng(), v: 60 + rng() * 110, dir: rng() < 0.5 ? 1 : -1, c: rng() < 0.4 ? CYANHI : INK });
+      if (edges.length > 0) {
+        for (let i = 0; i < 46; i++) {
+          packets.push({ e: (rng() * edges.length) | 0, t: rng(), v: 60 + rng() * 110, dir: rng() < 0.5 ? 1 : -1, c: rng() < 0.4 ? CYANHI : INK });
+        }
       }
     }
 
     function drawLens(cx: number, cy: number, ww: number, wh: number, now: number) {
       if (!city) return;
-      const R = Math.min(170, Math.max(110, W * 0.11)), mx = mouse.x, my = mouse.y;
+      const R = Math.max(1, Math.min(170, Math.max(110, W * 0.11))), mx = mouse.x, my = mouse.y;
       ctx.save();
       ctx.beginPath(); ctx.arc(mx, my, R, 0, TAU); ctx.clip();
       ctx.globalCompositeOperation = 'lighter';
@@ -428,10 +446,12 @@ export const CtosMap: React.FC<CtosMapProps> = ({ isPhoneSettled = false }) => {
         ctx.stroke();
       }
       for (const r of ripples) {
+        if (r.r <= 0) continue;
         ctx.strokeStyle = `rgba(${CYANHI},${0.5 * Math.max(0, 1 - r.r / 1100)})`; ctx.lineWidth = 1.2;
-        ctx.beginPath(); ctx.arc(r.x, r.y, r.r, 0, TAU); ctx.stroke();
+        ctx.beginPath(); ctx.arc(r.x, r.y, Math.max(0.1, r.r), 0, TAU); ctx.stroke();
       }
       for (const p of packets) {
+        if (!edges[p.e]) continue;
         const e = edges[p.e], d = p.t * e.len;
         pointAt(e, d, tmp); pointAt(e, Math.max(0, Math.min(e.len, d - p.dir * 16)), tmp2);
         ctx.strokeStyle = `rgba(${p.c},.5)`; ctx.lineWidth = 1.2;
@@ -459,6 +479,8 @@ export const CtosMap: React.FC<CtosMapProps> = ({ isPhoneSettled = false }) => {
         const pulse = RM ? 0 : Math.sin(now / 260 + tg.i * 1.7);
         let s = done ? 13 : (hov ? 21 : 17) + pulse * 1.3;
         if (br) s = 17 + (RM ? 0 : Math.sin(now / 60) * 2);
+        s = Math.max(6, s);
+
         if (hov && !done) {
           ctx.strokeStyle = `rgba(${RED},.22)`; ctx.lineWidth = 1;
           ctx.beginPath(); ctx.moveTo(-PAD, y); ctx.lineTo(W + PAD, y); ctx.moveTo(x, -PAD); ctx.lineTo(x, H + PAD); ctx.stroke();
@@ -478,11 +500,14 @@ export const CtosMap: React.FC<CtosMapProps> = ({ isPhoneSettled = false }) => {
         ctx.restore();
         if (br) {
           ctx.strokeStyle = `rgb(${CYANHI})`; ctx.lineWidth = 2;
-          ctx.beginPath(); ctx.arc(x, y, 30, -Math.PI / 2, -Math.PI / 2 + tg.p * TAU); ctx.stroke();
+          ctx.beginPath();
+          const pClamped = Math.max(0, Math.min(1, tg.p));
+          ctx.arc(x, y, 30, -Math.PI / 2, -Math.PI / 2 + pClamped * TAU);
+          ctx.stroke();
         }
         if (sel && !br) {
           ctx.strokeStyle = `rgba(${col},.55)`; ctx.lineWidth = 1; ctx.setLineDash([3, 4]);
-          ctx.beginPath(); ctx.arc(x, y, s + 11, 0, TAU); ctx.stroke(); ctx.setLineDash([]);
+          ctx.beginPath(); ctx.arc(x, y, Math.max(1, s + 11), 0, TAU); ctx.stroke(); ctx.setLineDash([]);
         }
         if (done || sel) {
           ctx.fillStyle = `rgb(${col})`; ctx.fillText(tg.id, x + s + 9, y + 4);
@@ -491,18 +516,22 @@ export const CtosMap: React.FC<CtosMapProps> = ({ isPhoneSettled = false }) => {
     }
 
     function applyGlitch(now: number) {
-      if (now > glitch.next) {
-        glitch.next = now + 45; glitch.slices = [];
-        const n = 3 + ((Math.random() * 4) | 0);
-        for (let i = 0; i < n; i++) glitch.slices.push({ y: Math.random() * H, h: 6 + Math.random() * 46, dx: (Math.random() - 0.5) * 70 });
+      try {
+        if (now > glitch.next) {
+          glitch.next = now + 45; glitch.slices = [];
+          const n = 3 + ((Math.random() * 4) | 0);
+          for (let i = 0; i < n; i++) glitch.slices.push({ y: Math.random() * H, h: 6 + Math.random() * 46, dx: (Math.random() - 0.5) * 70 });
+        }
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+        for (const s of glitch.slices) {
+          const y = Math.max(0, Math.floor(s.y * DPR)), h = Math.min(cv.height - y, Math.floor(s.h * DPR));
+          if (h <= 0 || cv.width <= 0) continue;
+          ctx.drawImage(cv, 0, y, cv.width, h, Math.round(s.dx * DPR), y, cv.width, h);
+        }
+        ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+      } catch {
+        // Ignore canvas glitch slice copy errors safely
       }
-      ctx.setTransform(1, 0, 0, 1, 0, 0);
-      for (const s of glitch.slices) {
-        const y = Math.max(0, Math.floor(s.y * DPR)), h = Math.min(cv.height - y, Math.floor(s.h * DPR));
-        if (h <= 0) continue;
-        ctx.drawImage(cv, 0, y, cv.width, h, Math.round(s.dx * DPR), y, cv.width, h);
-      }
-      ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
     }
 
     function draw(now: number) {
@@ -555,8 +584,19 @@ export const CtosMap: React.FC<CtosMapProps> = ({ isPhoneSettled = false }) => {
     }
 
     function say(msg: string) {
-      feed.push(msg); feed = feed.slice(-4);
-      feedEl.replaceChildren(...feed.map(s => { const d = document.createElement('div'); d.textContent = s; return d; }));
+      try {
+        feed.push(msg); feed = feed.slice(-4);
+        if (feedEl) {
+          feedEl.innerHTML = '';
+          feed.forEach(s => {
+            const d = document.createElement('div');
+            d.textContent = s;
+            feedEl.appendChild(d);
+          });
+        }
+      } catch {
+        // safe fallback
+      }
     }
 
     function glitchNow(now: number, ms: number) {
@@ -586,7 +626,7 @@ export const CtosMap: React.FC<CtosMapProps> = ({ isPhoneSettled = false }) => {
     function updateBreach(now: number) {
       for (const tg of targets) {
         if (tg.state !== 'breach') continue;
-        tg.p = Math.min(1, (now - tg.t0) / DUR);
+        tg.p = Math.min(1, Math.max(0, (now - tg.t0) / DUR));
         if (tg.p >= 0.35 && tg.stage < 1) { tg.stage = 1; say(`> weakness: ${tg.weak}`); }
         if (tg.p >= 0.7 && tg.stage < 2) { tg.stage = 2; say(`> ${tg.id}: access gained`); }
         if (tg.p >= 1) {
@@ -601,6 +641,7 @@ export const CtosMap: React.FC<CtosMapProps> = ({ isPhoneSettled = false }) => {
     }
 
     function placeTip() {
+      if (!tip) return;
       let x = mouse.x + 18, y = mouse.y + 20;
       if (x + tipW > W - 8) x = mouse.x - tipW - 14;
       if (y + tipHh > H - 8) y = mouse.y - tipHh - 14;
@@ -608,6 +649,7 @@ export const CtosMap: React.FC<CtosMapProps> = ({ isPhoneSettled = false }) => {
     }
 
     function updateTip(dt: number) {
+      if (!tip) return;
       if (!mouse.in) { tip.style.opacity = '0'; return; }
       let key = '', head = '', body = '', mode = 'fact';
       if (hoverT) {
@@ -625,24 +667,27 @@ export const CtosMap: React.FC<CtosMapProps> = ({ isPhoneSettled = false }) => {
       }
       if (key !== tipKey) {
         tipKey = key; tipFull = body; tipShown = (RM || mode === 'target') ? body.length : 0;
-        tipH.textContent = head; tipB.textContent = tipShown ? body : '';
+        if (tipH) tipH.textContent = head;
+        if (tipB) tipB.textContent = tipShown ? body : '';
         tip.classList.toggle('tgt', mode === 'target');
         tipW = tip.offsetWidth; tipHh = tip.offsetHeight;
       }
       if (tipShown < tipFull.length) {
         tipShown = Math.min(tipFull.length, tipShown + dt * 0.08);
-        tipB.textContent = tipFull.slice(0, tipShown | 0);
+        if (tipB) tipB.textContent = tipFull.slice(0, tipShown | 0);
         tipW = tip.offsetWidth; tipHh = tip.offsetHeight;
       }
       tip.style.opacity = '1'; placeTip();
     }
 
     function buildSegs() {
+      if (!segsEl) return;
       segsEl.innerHTML = '';
       for (let i = 0; i < 10; i++) segsEl.appendChild(document.createElement('i'));
     }
 
     function density(now: number) {
+      if (!dvEl || !segsEl) return;
       if (now - densT < 500) return; densT = now;
       const v = RM ? 62 : Math.round(Math.max(20, Math.min(99, 56 + 14 * Math.sin(now / 2600) + 6 * Math.sin(now / 700) + bump * 24)));
       dvEl.textContent = v + '%';
@@ -651,6 +696,7 @@ export const CtosMap: React.FC<CtosMapProps> = ({ isPhoneSettled = false }) => {
     }
 
     function buildList() {
+      if (!listEl) return;
       listEl.innerHTML = '';
       targets.forEach(t => {
         const b = document.createElement('button');
@@ -666,6 +712,7 @@ export const CtosMap: React.FC<CtosMapProps> = ({ isPhoneSettled = false }) => {
     }
 
     function renderDossier() {
+      if (!dossierEl) return;
       const t = selT;
       if (!t) {
         dossierEl.innerHTML = '<p>Move across the map to scan a sector. Click a red target to breach it, or click empty space to ping the network.</p>';
@@ -679,12 +726,15 @@ export const CtosMap: React.FC<CtosMapProps> = ({ isPhoneSettled = false }) => {
     }
 
     function renderAll() {
-      acqEl.textContent = acquired + '/' + targets.length;
-      [...listEl.children].forEach((b, i) => {
-        const t = targets[i];
-        b.className = (t.state === 'done' ? 'done' : t.state === 'breach' ? 'breach' : '') + (t === selT ? ' sel' : '');
-        b.setAttribute('aria-label', `${t.id}, ${t.kind}, ${t.state === 'idle' ? 'locked' : t.state === 'breach' ? 'breaching' : 'acquired'}`);
-      });
+      if (acqEl) acqEl.textContent = acquired + '/' + targets.length;
+      if (listEl) {
+        [...listEl.children].forEach((b, i) => {
+          const t = targets[i];
+          if (!t) return;
+          b.className = (t.state === 'done' ? 'done' : t.state === 'breach' ? 'breach' : '') + (t === selT ? ' sel' : '');
+          b.setAttribute('aria-label', `${t.id}, ${t.kind}, ${t.state === 'idle' ? 'locked' : t.state === 'breach' ? 'breaching' : 'acquired'}`);
+        });
+      }
       renderDossier();
     }
 
@@ -704,7 +754,7 @@ export const CtosMap: React.FC<CtosMapProps> = ({ isPhoneSettled = false }) => {
     cv.addEventListener('pointermove', onPointerMove);
     cv.addEventListener('pointerdown', onPointerDown);
     cv.addEventListener('pointerleave', onPointerLeave);
-    resetBtn.addEventListener('click', reset);
+    if (resetBtn) resetBtn.addEventListener('click', reset);
 
     function resize() {
       DPR = Math.min(2, window.devicePixelRatio || 1);
@@ -724,31 +774,37 @@ export const CtosMap: React.FC<CtosMapProps> = ({ isPhoneSettled = false }) => {
     window.addEventListener('resize', onResize);
 
     function frame(now: number) {
-      const dt = Math.min(64, now - last); last = now;
-      const k = RM ? 1 : 1 - Math.pow(0.002, dt / 1000);
-      par.x += (par.tx - par.x) * k; par.y += (par.ty - par.y) * k;
-      net.x = -par.x * 12; net.y = -par.y * 8;
-      if (mouse.in) pick();
-      updateBreach(now);
-      for (let i = ripples.length - 1; i >= 0; i--) {
-        ripples[i].r = (now - ripples[i].t0) * 0.85;
-        if (ripples[i].r > 1300) ripples.splice(i, 1);
-      }
-      if (!RM) {
-        for (const p of packets) {
-          p.t += p.dir * p.v * dt / 1000 / edges[p.e].len;
-          if (p.t > 1) p.t = 0; else if (p.t < 0) p.t = 1;
+      try {
+        const dt = Math.min(64, now - last); last = now;
+        const k = RM ? 1 : 1 - Math.pow(0.002, dt / 1000);
+        par.x += (par.tx - par.x) * k; par.y += (par.ty - par.y) * k;
+        net.x = -par.x * 12; net.y = -par.y * 8;
+        if (mouse.in) pick();
+        updateBreach(now);
+        for (let i = ripples.length - 1; i >= 0; i--) {
+          ripples[i].r = Math.max(0, (now - ripples[i].t0) * 0.85);
+          if (ripples[i].r > 1300) ripples.splice(i, 1);
         }
-        if (now > nextGlitch) { glitchNow(now, 140); nextGlitch = now + 3500 + Math.random() * 6000; }
+        if (!RM) {
+          for (const p of packets) {
+            if (!edges[p.e]) continue;
+            p.t += p.dir * p.v * dt / 1000 / edges[p.e].len;
+            if (p.t > 1) p.t = 0; else if (p.t < 0) p.t = 1;
+          }
+          if (now > nextGlitch) { glitchNow(now, 140); nextGlitch = now + 3500 + Math.random() * 6000; }
+        }
+        bump *= Math.pow(0.4, dt / 1000);
+        density(now);
+        updateTip(dt);
+        const moving = Math.abs(par.tx - par.x) > 0.001 || Math.abs(par.ty - par.y) > 0.001;
+        const busy = !RM || dirty || ripples.length > 0 || moving || targets.some(t => t.state === 'breach');
+        if (busy) draw(now);
+        dirty = false;
+      } catch (err) {
+        console.error("ctOS frame error:", err);
+      } finally {
+        animationFrameId = requestAnimationFrame(frame);
       }
-      bump *= Math.pow(0.4, dt / 1000);
-      density(now);
-      updateTip(dt);
-      const moving = Math.abs(par.tx - par.x) > 0.001 || Math.abs(par.ty - par.y) > 0.001;
-      const busy = !RM || dirty || ripples.length > 0 || moving || targets.some(t => t.state === 'breach');
-      if (busy) draw(now);
-      dirty = false;
-      animationFrameId = requestAnimationFrame(frame);
     }
 
     buildSegs(); buildList(); resize();
@@ -764,7 +820,7 @@ export const CtosMap: React.FC<CtosMapProps> = ({ isPhoneSettled = false }) => {
       cv.removeEventListener('pointermove', onPointerMove);
       cv.removeEventListener('pointerdown', onPointerDown);
       cv.removeEventListener('pointerleave', onPointerLeave);
-      resetBtn.removeEventListener('click', reset);
+      if (resetBtn) resetBtn.removeEventListener('click', reset);
       window.removeEventListener('resize', onResize);
     };
   }, []);

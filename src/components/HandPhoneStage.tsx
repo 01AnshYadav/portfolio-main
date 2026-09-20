@@ -29,6 +29,10 @@ export const HandPhoneStage: React.FC<HandPhoneStageProps> = ({
   // Keep ref in sync with state
   stageStateRef.current = stageState;
 
+  const { startPosition, endPosition, startRotation, endRotation, startScale, endScale } = ANIMATION_CONFIG.arc;
+  const initialTransform = `translate3d(${startPosition.x}px, ${startPosition.y}px, ${startPosition.z}px) rotateX(${startRotation.rx}deg) rotateY(${startRotation.ry}deg) rotateZ(${startRotation.rz}deg) scale(${startScale})`;
+  const finalTransform = `translate3d(${endPosition.x}px, ${endPosition.y}px, ${endPosition.z}px) rotateX(${endRotation.rx}deg) rotateY(${endRotation.ry}deg) rotateZ(${endRotation.rz}deg) scale(${endScale})`;
+
   const updateState = useCallback(
     (newState: StageState) => {
       setStageState(newState);
@@ -66,16 +70,16 @@ export const HandPhoneStage: React.FC<HandPhoneStageProps> = ({
 
     anim.onfinish = () => {
       isAnimatingRef.current = false;
+      el.style.transform = finalTransform;
       updateState('SETTLED');
 
       // Check if user scrolled back up while animation was playing
-      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-      const currentFraction = maxScroll > 0 ? window.scrollY / maxScroll : 0;
-      if (currentFraction < SCROLL_CONFIG.threshold) {
+      const scrollY = window.scrollY || document.documentElement.scrollTop || window.pageYOffset || 0;
+      if (scrollY <= 30) {
         playExit();
       }
     };
-  }, [updateState]);
+  }, [updateState, finalTransform]);
 
   // Trigger exit animation
   const playExit = useCallback(() => {
@@ -103,23 +107,24 @@ export const HandPhoneStage: React.FC<HandPhoneStageProps> = ({
 
     anim.onfinish = () => {
       isAnimatingRef.current = false;
+      el.style.transform = initialTransform;
       updateState('OFFSCREEN');
 
       // Check if user scrolled back down while exit was playing
-      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-      const currentFraction = maxScroll > 0 ? window.scrollY / maxScroll : 0;
-      if (currentFraction >= SCROLL_CONFIG.threshold) {
+      const scrollY = window.scrollY || document.documentElement.scrollTop || window.pageYOffset || 0;
+      if (scrollY > 30) {
         playEntrance();
       }
     };
-  }, [updateState, playEntrance]);
+  }, [updateState, playEntrance, initialTransform]);
 
-  // Scroll handler with trigger threshold and lock
+  // Scroll and wheel listener
   useEffect(() => {
-    const handleScroll = () => {
-      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-      const fraction = maxScroll > 0 ? window.scrollY / maxScroll : 0;
-      const isOverThreshold = fraction >= SCROLL_CONFIG.threshold;
+    const checkScrollState = () => {
+      const scrollY = window.scrollY || document.documentElement.scrollTop || window.pageYOffset || 0;
+      const maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+      const fraction = scrollY / maxScroll;
+      const isOverThreshold = scrollY > 40 || fraction >= SCROLL_CONFIG.threshold;
 
       if (!isAnimatingRef.current) {
         if (isOverThreshold && stageStateRef.current === 'OFFSCREEN') {
@@ -130,46 +135,58 @@ export const HandPhoneStage: React.FC<HandPhoneStageProps> = ({
       }
     };
 
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    // Check initial scroll on mount
-    handleScroll();
+    const handleWheel = (e: WheelEvent) => {
+      if (!isAnimatingRef.current) {
+        if (e.deltaY > 25 && stageStateRef.current === 'OFFSCREEN') {
+          playEntrance();
+        } else if (e.deltaY < -25 && stageStateRef.current === 'SETTLED' && (window.scrollY || 0) <= 40) {
+          playExit();
+        }
+      }
+    };
+
+    window.addEventListener('scroll', checkScrollState, { passive: true });
+    window.addEventListener('wheel', handleWheel, { passive: true });
+
+    // Check on initial load
+    checkScrollState();
 
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('scroll', checkScrollState);
+      window.removeEventListener('wheel', handleWheel);
     };
   }, [playEntrance, playExit]);
 
-  // Initial offscreen transform
-  const { startPosition, startRotation, startScale } = ANIMATION_CONFIG.arc;
-  const initialTransform = `translate3d(${startPosition.x}px, ${startPosition.y}px, ${startPosition.z}px) rotateX(${startRotation.rx}deg) rotateY(${startRotation.ry}deg) rotateZ(${startRotation.rz}deg) scale(${startScale})`;
-
   return (
-    <div
-      className="scroll-container"
-      style={{
-        position: 'relative',
-        width: '100%',
-        height: `${SCROLL_CONFIG.containerHeightVh}vh`,
-        pointerEvents: 'none', // Crucial: allow ctOS canvas full interaction
-        zIndex: 5,
-      }}
-    >
-      {/* Sticky Full-Viewport Stage */}
+    <>
+      {/* Tall Scroll Spacer that enables 200vh page scrolling */}
       <div
-        className="sticky-stage"
+        className="scroll-spacer"
         style={{
-          position: 'sticky',
-          top: 0,
-          left: 0,
+          width: '100%',
+          height: `${SCROLL_CONFIG.containerHeightVh}vh`,
+          pointerEvents: 'none',
+          visibility: 'hidden',
+        }}
+        aria-hidden="true"
+      />
+
+      {/* Fixed Full-Viewport 3D Stage (always centered in viewport) */}
+      <div
+        className="fixed-viewport-stage"
+        style={{
+          position: 'fixed',
+          inset: 0,
           width: '100vw',
           height: '100vh',
           overflow: 'hidden',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          perspective: '1200px',
+          perspective: '1400px',
           perspectiveOrigin: '50% 50%',
           pointerEvents: 'none',
+          zIndex: 5,
         }}
       >
         {/* Animated Hand + Phone 3D Wrapper */}
@@ -189,6 +206,6 @@ export const HandPhoneStage: React.FC<HandPhoneStageProps> = ({
         {/* Scroll Cue (fades out as soon as entering starts) */}
         <ScrollCue visible={stageState === 'OFFSCREEN'} />
       </div>
-    </div>
+    </>
   );
 };
