@@ -151,7 +151,7 @@ export const BootSequence: React.FC<BootSequenceProps> = ({ onComplete }) => {
         type="button"
         className="cinematic-skip-btn"
         onClick={handleFinish}
-        title="Skip intro to Network Map"
+        title="Skip intro to ctOS Portfolio"
       >
         [ SKIP ]
       </button>
@@ -273,7 +273,7 @@ export const BootSequence: React.FC<BootSequenceProps> = ({ onComplete }) => {
               autoFocus
             >
               <span className="enter-btn-bracket">[</span>
-              <span className="enter-btn-text">ACCESS ctOS NETWORK MAP</span>
+              <span className="enter-btn-text">ACCESS ctOS PORTFOLIO</span>
               <span className="enter-btn-bracket">]</span>
               <span className="enter-arrow">&gt;</span>
             </button>
