@@ -132,7 +132,7 @@ export const BootSequence: React.FC<BootSequenceProps> = ({ onComplete }) => {
     if (phase === 3) {
       const tFinal = setTimeout(() => {
         setPhase(4);
-      }, 1600);
+      }, 700);
       return () => clearTimeout(tFinal);
     }
   }, [phase]);
@@ -272,9 +272,14 @@ export const BootSequence: React.FC<BootSequenceProps> = ({ onComplete }) => {
               onClick={handleFinish}
               autoFocus
             >
-              <span>[ ACCESS ctOS NETWORK MAP ]</span>
+              <span className="enter-btn-bracket">[</span>
+              <span className="enter-btn-text">ACCESS ctOS NETWORK MAP</span>
+              <span className="enter-btn-bracket">]</span>
               <span className="enter-arrow">&gt;</span>
             </button>
+            <div className="enter-hint-text">
+              PRESS <kbd>ENTER ↵</kbd> OR CLICK TO INITIALIZE
+            </div>
           </div>
         )}
       </footer>
