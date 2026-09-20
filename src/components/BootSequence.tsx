@@ -64,12 +64,28 @@ export const BootSequence: React.FC<BootSequenceProps> = ({ onComplete }) => {
   const [phase, setPhase] = useState<number>(0);
   const [visibleCodeCount, setVisibleCodeCount] = useState<number>(0);
   const [typedY, setTypedY] = useState<boolean>(false);
+  const [isTransitioning, setIsTransitioning] = useState<boolean>(false);
+  const [isFadingOut, setIsFadingOut] = useState<boolean>(false);
   const completedRef = useRef<boolean>(false);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
 
   const handleFinish = () => {
     if (completedRef.current) return;
     completedRef.current = true;
     onComplete();
+  };
+
+  const startTransition = () => {
+    if (completedRef.current || isTransitioning) return;
+    setIsTransitioning(true);
+  };
+
+  const handleVideoEnded = () => {
+    if (isFadingOut || completedRef.current) return;
+    setIsFadingOut(true);
+    setTimeout(() => {
+      handleFinish();
+    }, 160);
   };
 
   // Keyboard navigation: Pressing Y, Enter, Space, or Escape
@@ -82,13 +98,40 @@ export const BootSequence: React.FC<BootSequenceProps> = ({ onComplete }) => {
           setTypedY(true);
           setPhase(1);
         } else if (phase >= 3) {
-          handleFinish();
+          if (!isTransitioning) {
+            startTransition();
+          } else {
+            handleFinish();
+          }
         }
       }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [phase]);
+  }, [phase, isTransitioning]);
+
+  // Video playback management during transition
+  useEffect(() => {
+    if (isTransitioning && videoRef.current) {
+      const vid = videoRef.current;
+      vid.currentTime = 0;
+      const p = vid.play();
+      if (p !== undefined) {
+        p.catch(() => {
+          // If browser policy requires muted autoplay, mute and resume
+          vid.muted = true;
+          vid.play().catch(() => {});
+        });
+      }
+
+      // Safety fallback: ensure we always transition even if onEnded is delayed
+      const fallbackTimer = setTimeout(() => {
+        handleVideoEnded();
+      }, 2500);
+
+      return () => clearTimeout(fallbackTimer);
+    }
+  }, [isTransitioning]);
 
   // Timeline progression
   useEffect(() => {
@@ -136,6 +179,37 @@ export const BootSequence: React.FC<BootSequenceProps> = ({ onComplete }) => {
       return () => clearTimeout(tFinal);
     }
   }, [phase]);
+
+  if (isTransitioning) {
+    return (
+      <div
+        className={`transition-video-overlay ${isFadingOut ? 'fade-out' : ''}`}
+        role="dialog"
+        aria-label="System Loading Transition"
+        onClick={handleFinish}
+      >
+        <video
+          ref={videoRef}
+          src={`${import.meta.env.BASE_URL}assets/transition.mp4`}
+          playsInline
+          autoPlay
+          className="transition-video-player"
+          onEnded={handleVideoEnded}
+        />
+        <button
+          type="button"
+          className="cinematic-skip-btn"
+          onClick={(e) => {
+            e.stopPropagation();
+            handleFinish();
+          }}
+          title="Skip to ctOS Portfolio"
+        >
+          [ SKIP ]
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div
@@ -269,7 +343,7 @@ export const BootSequence: React.FC<BootSequenceProps> = ({ onComplete }) => {
             <button
               type="button"
               className="enter-city-btn"
-              onClick={handleFinish}
+              onClick={startTransition}
               autoFocus
             >
               <span className="enter-btn-bracket">[</span>

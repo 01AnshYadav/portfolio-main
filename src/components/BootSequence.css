@@ -451,3 +451,41 @@
     letter-spacing: 0.14em;
   }
 }
+
+/* Transition Screen Video Overlay ("System Loading") */
+.transition-video-overlay {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: #000000;
+  z-index: 10001;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  animation: transitionVideoFadeIn 0.18s ease-out;
+  cursor: pointer;
+  user-select: none;
+}
+
+@keyframes transitionVideoFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.transition-video-overlay.fade-out {
+  opacity: 0;
+  transition: opacity 0.18s ease-out;
+  pointer-events: none;
+}
+
+.transition-video-player {
+  width: 100%;
+  height: 100%;
+  max-width: 100vw;
+  max-height: 100vh;
+  object-fit: contain;
+  background-color: #000000;
+  display: block;
+}
