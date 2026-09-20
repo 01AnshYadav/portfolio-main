@@ -340,14 +340,14 @@ button:focus-visible {
 .hero-identity-name {
   margin: 0;
   font-family: 'Antonio', 'Barlow Condensed', sans-serif;
-  font-size: clamp(38px, 5.2vw, 66px);
+  font-size: clamp(54px, 7.8vw, 98px);
   font-weight: 700;
-  line-height: 0.92;
-  letter-spacing: 0.02em;
+  line-height: 0.88;
+  letter-spacing: 0.015em;
   color: #ffffff;
   text-shadow:
-    0 2px 16px rgba(0, 0, 0, 0.9),
-    0 0 24px rgba(0, 229, 255, 0.2);
+    0 4px 24px rgba(0, 0, 0, 0.95),
+    0 0 35px rgba(0, 229, 255, 0.25);
   display: flex;
   align-items: baseline;
 }
@@ -355,31 +355,31 @@ button:focus-visible {
 .hero-identity-sub {
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin-top: 3px;
+  gap: 8px;
+  margin-top: 4px;
 }
 
 .hero-sub-text {
   font-family: 'Antonio', 'Barlow Condensed', sans-serif;
-  font-size: clamp(20px, 2.5vw, 30px);
+  font-size: clamp(14px, 1.4vw, 18px);
   font-weight: 700;
   line-height: 1;
-  letter-spacing: 0.03em;
+  letter-spacing: 0.06em;
   color: #00e5ff;
-  text-shadow: 0 0 12px rgba(0, 229, 255, 0.35);
+  text-shadow: 0 0 10px rgba(0, 229, 255, 0.4);
 }
 
 .hero-sub-divider {
   color: rgba(255, 255, 255, 0.3);
   font-family: var(--mono);
-  font-size: 14px;
+  font-size: 12px;
 }
 
 .hero-sub-institution {
   font-family: var(--mono);
-  font-size: clamp(10px, 1.1vw, 12px);
+  font-size: clamp(10px, 1vw, 12px);
   font-weight: 700;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.12em;
   color: #c0cad4;
   text-transform: uppercase;
 }
@@ -422,10 +422,10 @@ button:focus-visible {
     gap: 6px;
   }
   .hero-identity-name {
-    font-size: clamp(28px, 6.5vw, 42px);
+    font-size: clamp(34px, 8.5vw, 54px);
   }
   .hero-sub-text {
-    font-size: clamp(16px, 3.8vw, 22px);
+    font-size: 13px;
   }
   .hero-sub-institution,
   .hero-sub-divider {

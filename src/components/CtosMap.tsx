@@ -840,8 +840,8 @@ export const CtosMap: React.FC<CtosMapProps> = ({ isPhoneSettled = false, onOpen
         <div className="hero-identity-block">
           <h1 className="hero-identity-name">Ansh Yadav</h1>
           <div className="hero-identity-sub">
-            <span className="hero-sub-text">BTech. First Year</span>
-            <span className="hero-sub-divider">/</span>
+            <span className="hero-sub-text">BTech 1st Year</span>
+            <span className="hero-sub-divider">//</span>
             <span className="hero-sub-institution">University of Lucknow</span>
           </div>
         </div>
