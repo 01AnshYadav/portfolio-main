@@ -37,12 +37,12 @@ export interface PhoneScreenConfig {
  */
 export const PHONE_SCREEN: PhoneScreenConfig = {
   corners: [
-    [0.165, 0.145], // Top-Left [x, y]
-    [0.835, 0.145], // Top-Right [x, y]
-    [0.835, 0.855], // Bottom-Right [x, y]
-    [0.165, 0.855], // Bottom-Left [x, y]
+    [0.05, 0.06], // Top-Left [x, y]
+    [0.95, 0.06], // Top-Right [x, y]
+    [0.95, 0.94], // Bottom-Right [x, y]
+    [0.05, 0.94], // Bottom-Left [x, y]
   ],
-  aspectRatio: 16 / 9,
+  aspectRatio: 2.2 / 1,
 };
 
 export const PNG_ASPECT = PHONE_SCREEN.aspectRatio;
