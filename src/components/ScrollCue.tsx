@@ -44,14 +44,14 @@ export const ScrollCue: React.FC<ScrollCueProps> = ({ visible }) => {
       }}
       role="button"
       tabIndex={visible ? 0 : -1}
-      aria-label="Scroll up to open phone"
+      aria-label="Scroll down to open phone"
       aria-hidden={!visible}
       title="Click or scroll to engage DedSec Smartphone"
     >
       <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-        <span style={{ color: '#00e5ff', fontSize: '13px' }}>[▲]</span>
+        <span style={{ color: '#00e5ff', fontSize: '13px' }}>[▼]</span>
         <span style={{ color: '#ffffff', textShadow: '0 0 10px rgba(0, 229, 255, 0.5)' }}>
-          SCROLL UP
+          SCROLL DOWN
         </span>
       </div>
 
