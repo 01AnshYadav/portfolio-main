@@ -2,15 +2,20 @@ import React, { useState, useEffect, useRef } from 'react';
 import { PNG_PATH, PNG_ASPECT, PHONE_SCREEN } from '../config';
 import { ScreenPlaceholder } from './ScreenPlaceholder';
 import { DebugOverlay } from './DebugOverlay';
-import { DedSecPhoneOS } from './phone/DedSecPhoneOS';
+import { DedSecPhoneOS, type AppId } from './phone/DedSecPhoneOS';
 import './HandPhone.css';
 
 interface HandPhoneProps {
   isDebug?: boolean;
   isSettled?: boolean;
+  onOpenApp?: (appId: AppId) => void;
 }
 
-export const HandPhone: React.FC<HandPhoneProps> = ({ isDebug = false, isSettled = false }) => {
+export const HandPhone: React.FC<HandPhoneProps> = ({
+  isDebug = false,
+  isSettled = false,
+  onOpenApp,
+}) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const wallCanvasRef = useRef<HTMLCanvasElement | null>(null);
   const [dimensions, setDimensions] = useState<{ width: number; height: number }>({ width: 0, height: 0 });
@@ -87,7 +92,7 @@ export const HandPhone: React.FC<HandPhoneProps> = ({ isDebug = false, isSettled
       className="hand-phone-container"
       style={{
         position: 'relative',
-        width: 'min(86vw, calc(78vh * 2.2), 1020px)',
+        width: 'min(88vw, 375px)',
         aspectRatio: `${PNG_ASPECT}`,
         userSelect: 'none',
         pointerEvents: isSettled || isDebug ? 'auto' : 'none',
@@ -99,7 +104,7 @@ export const HandPhone: React.FC<HandPhoneProps> = ({ isDebug = false, isSettled
         <>
           <img
             src={PNG_PATH}
-            alt="Hand holding smartphone in landscape"
+            alt="Hand holding smartphone"
             draggable={false}
             style={{
               position: 'absolute',
@@ -116,29 +121,27 @@ export const HandPhone: React.FC<HandPhoneProps> = ({ isDebug = false, isSettled
             containerWidth={dimensions.width}
             containerHeight={dimensions.height}
             isSettled={isSettled}
+            onOpenApp={onOpenApp}
           />
         </>
       ) : (
-        /* The authentic ctOS Phone UI from ctos-map (1).html */
+        /* The authentic ctOS Phone UI matching Watch Dogs 2 reference */
         <div className="phone" id="phone" role="group" aria-label="Phone">
           <i className="btn b1" />
           <i className="btn b2" />
           <i className="btn b3" />
           <div className="body">
+            <i className="earpiece" />
             <div
               className="screen"
               style={{
                 pointerEvents: isSettled ? 'auto' : 'none',
               }}
             >
-              <canvas
-                ref={wallCanvasRef}
-                className="wall-canvas"
-                width="1000"
-                height="450"
+              <DedSecPhoneOS
+                onOpenApp={onOpenApp}
+                onClosePhone={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
               />
-              <div className="pcam" />
-              <DedSecPhoneOS />
               <div className="glare" />
             </div>
           </div>

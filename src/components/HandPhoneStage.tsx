@@ -3,15 +3,18 @@ import { SCROLL_CONFIG, ANIMATION_CONFIG } from '../config';
 import { getArcTransform } from '../utils/arcKeyframes';
 import { HandPhone } from './HandPhone';
 import { ScrollCue } from './ScrollCue';
+import type { AppId } from './phone/DedSecPhoneOS';
 
 interface HandPhoneStageProps {
   onSettledChange?: (isSettled: boolean) => void;
   isDebug?: boolean;
+  onOpenApp?: (appId: AppId) => void;
 }
 
 export const HandPhoneStage: React.FC<HandPhoneStageProps> = ({
   onSettledChange,
   isDebug = false,
+  onOpenApp,
 }) => {
   const [isCueVisible, setIsCueVisible] = useState<boolean>(true);
   const [isSettled, setIsSettled] = useState<boolean>(false);
@@ -127,7 +130,7 @@ export const HandPhoneStage: React.FC<HandPhoneStageProps> = ({
             pointerEvents: isSettled || isDebug ? 'auto' : 'none',
           }}
         >
-          <HandPhone isDebug={isDebug} isSettled={isSettled} />
+          <HandPhone isDebug={isDebug} isSettled={isSettled} onOpenApp={onOpenApp} />
         </div>
 
         {/* Scroll Cue (smoothly fades out as scroll starts) */}

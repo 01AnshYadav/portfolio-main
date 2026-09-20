@@ -1,175 +1,63 @@
-/* ctOS Phone UI Styles ported directly from ctos-map (1).html */
+/* Watch Dogs 2 Smartphone Frame Styles */
 
 .phone {
   position: relative;
-  width: min(86vw, calc(78vh * 2.2), 1020px);
-  aspect-ratio: 2.2 / 1;
-  container-type: inline-size;
+  width: min(88vw, 375px);
+  aspect-ratio: 9 / 18.5;
+  height: auto;
+  max-height: 86vh;
   will-change: transform;
 }
 
 .phone .btn {
   position: absolute;
-  top: -0.55cqw;
-  height: 0.75cqw;
-  width: 5.5cqw;
-  border-radius: 0.35cqw 0.35cqw 0 0;
+  border-radius: 2px;
   background: linear-gradient(#41474d, #15171a);
+  z-index: 2;
 }
 
-.phone .b1 { left: 60cqw; }
-.phone .b2 { left: 68cqw; }
-.phone .b3 { left: 82cqw; width: 7cqw; }
+.phone .b1 { left: -3px; top: 120px; width: 3px; height: 38px; }
+.phone .b2 { left: -3px; top: 170px; width: 3px; height: 38px; }
+.phone .b3 { right: -3px; top: 140px; width: 3px; height: 48px; }
 
 .phone .body {
   position: absolute;
   inset: 0;
-  border-radius: 4.6cqw;
-  padding: 1.1cqw;
-  background: linear-gradient(150deg, #31363b 0%, #0c0d0f 38%, #191c20 100%);
+  border-radius: 36px;
+  padding: 8px 8px 10px;
+  background: linear-gradient(155deg, #2b3036 0%, #0d0f12 40%, #171a1d 100%);
   box-shadow:
-    inset 0 0 0 0.16cqw #565d64,
-    inset 0 0 0 0.5cqw #08090a,
-    0 2.4cqw 7cqw rgba(0, 0, 0, 0.85),
-    0 0 9cqw rgba(58, 174, 196, 0.12);
+    inset 0 0 0 1.5px #50565e,
+    inset 0 0 0 3.5px #050607,
+    0 24px 60px rgba(0, 0, 0, 0.92),
+    0 0 60px rgba(58, 174, 196, 0.14);
 }
 
 .phone .screen {
   position: relative;
   width: 100%;
   height: 100%;
-  border-radius: 3.6cqw;
+  border-radius: 26px;
   overflow: hidden;
   background: #000;
 }
 
-.phone .wall-canvas {
+.phone .earpiece {
   position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  display: block;
+  top: 6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 44px;
+  height: 3px;
+  border-radius: 2px;
+  background: #14171a;
+  z-index: 25;
 }
 
 .glare {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background: linear-gradient(112deg, rgba(255, 255, 255, 0.09) 0%, rgba(255, 255, 255, 0.02) 32%, transparent 33%);
-  z-index: 3;
-}
-
-.pcam {
-  position: absolute;
-  left: 2.1cqw;
-  top: 50%;
-  width: 1.5cqw;
-  height: 1.5cqw;
-  margin-top: -0.75cqw;
-  border-radius: 50%;
-  background: radial-gradient(circle at 35% 35%, #2b3b55, #05070a 60%);
-  box-shadow: 0 0 0 0.3cqw #000;
-  z-index: 4;
-}
-
-.pstatus {
-  position: absolute;
-  left: 6cqw;
-  right: 4cqw;
-  top: 1.5cqw;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: max(9px, 1.45cqw);
-  color: var(--ink);
-  z-index: 4;
-  font-family: var(--mono);
-}
-
-.pstatus .r {
-  display: flex;
-  gap: 1cqw;
-  align-items: center;
-}
-
-.pbat {
-  display: inline-block;
-  width: 2.4cqw;
-  height: 1.1cqw;
-  border: 0.16cqw solid var(--ink);
-  border-radius: 0.3cqw;
-  position: relative;
-}
-
-.pbat::after {
-  content: "";
-  position: absolute;
-  inset: 0.15cqw;
-  right: 0.7cqw;
-  background: var(--ink);
-}
-
-.home {
-  position: absolute;
-  left: 9cqw;
-  right: 6cqw;
-  top: 7cqw;
-  bottom: 6cqw;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: repeat(2, 1fr);
-  gap: 3cqw;
-  align-content: center;
-  justify-items: center;
-  z-index: 4;
-}
-
-.slot {
-  width: 12cqw;
-  height: 12cqw;
-  border-radius: 2.6cqw;
-  border: 0.2cqw dashed rgba(213, 221, 226, 0.24);
-  background: rgba(255, 255, 255, 0.03);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.app {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1cqw;
-  background: none;
-  border: 0;
-  color: var(--ink);
-  font: inherit;
-  font-size: max(9px, 1.3cqw);
-  cursor: pointer;
-}
-
-.app .ico {
-  display: grid;
-  place-items: center;
-  width: 12cqw;
-  height: 12cqw;
-  border-radius: 2.6cqw;
-  background: rgba(0, 0, 0, 0.55);
-  border: 0.2cqw solid rgba(58, 174, 196, 0.6);
-}
-
-.app:hover .ico {
-  border-color: var(--cyan-hi);
-}
-
-.pbar {
-  position: absolute;
-  left: 50%;
-  bottom: 1.3cqw;
-  width: 14cqw;
-  height: 0.55cqw;
-  margin-left: -7cqw;
-  border-radius: 1cqw;
-  background: rgba(255, 255, 255, 0.5);
-  z-index: 4;
+  background: linear-gradient(118deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 28%, transparent 30%);
+  z-index: 20;
 }

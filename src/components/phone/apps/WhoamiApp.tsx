@@ -2,210 +2,422 @@ import React, { useState, useEffect } from 'react';
 import { OPERATIVE_PROFILE } from '../../../config';
 
 export const WhoamiApp: React.FC = () => {
-  const [glitchActive, setGlitchActive] = useState<boolean>(true);
+  const [glitchPhase, setGlitchPhase] = useState<'SCANNING' | 'CORRUPTING' | 'DEDSEC_OVERRIDE'>('SCANNING');
+  const [activeFrequency, setActiveFrequency] = useState<number[]>([45, 78, 62, 90, 34, 85, 95, 60, 42, 88, 70, 50]);
 
+  // Audio / frequency waveform animation effect
   useEffect(() => {
-    // Profiler glitch sequence: overrides ctOS after 1.1s
-    const timer = setTimeout(() => {
-      setGlitchActive(false);
-    }, 1100);
-    return () => clearTimeout(timer);
+    const timer1 = setTimeout(() => setGlitchPhase('CORRUPTING'), 900);
+    const timer2 = setTimeout(() => setGlitchPhase('DEDSEC_OVERRIDE'), 1800);
+
+    const freqInterval = setInterval(() => {
+      setActiveFrequency([
+        Math.floor(25 + Math.random() * 70),
+        Math.floor(30 + Math.random() * 65),
+        Math.floor(40 + Math.random() * 55),
+        Math.floor(50 + Math.random() * 45),
+        Math.floor(20 + Math.random() * 75),
+        Math.floor(60 + Math.random() * 38),
+        Math.floor(35 + Math.random() * 60),
+        Math.floor(70 + Math.random() * 28),
+        Math.floor(45 + Math.random() * 50),
+        Math.floor(30 + Math.random() * 68),
+        Math.floor(55 + Math.random() * 40),
+        Math.floor(38 + Math.random() * 58),
+      ]);
+    }, 180);
+
+    return () => {
+      clearTimeout(timer1);
+      clearTimeout(timer2);
+      clearInterval(freqInterval);
+    };
   }, []);
 
   return (
     <div
-      className="whoami-app"
+      className="whoami-app-container"
       style={{
         display: 'flex',
         flexDirection: 'column',
-        gap: '1.2cqw',
-        height: '100%',
-        animation: 'fadeIn 0.25s ease',
+        gap: '20px',
+        width: '100%',
+        color: '#e4edf2',
+        fontFamily: 'var(--mono)',
+        animation: 'fadeIn 0.3s ease',
       }}
     >
-      {/* 1. Header & Glitch Scan Banner */}
+      {/* 1. TOP ctOS 2.0 PROFILER HUD BANNER */}
       <div
         style={{
-          borderLeft: '0.4cqw solid ' + (glitchActive ? 'var(--red)' : '#00ff66'),
-          backgroundColor: glitchActive ? 'rgba(255, 69, 54, 0.12)' : 'rgba(0, 255, 102, 0.08)',
-          padding: '0.6cqw 1.2cqw',
-          fontSize: 'max(8px, 1.1cqw)',
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
+          backgroundColor:
+            glitchPhase === 'SCANNING'
+              ? 'rgba(255, 69, 54, 0.14)'
+              : glitchPhase === 'CORRUPTING'
+              ? 'rgba(255, 0, 128, 0.2)'
+              : 'rgba(0, 255, 102, 0.12)',
+          borderLeft:
+            '4px solid ' +
+            (glitchPhase === 'SCANNING' ? '#ff4536' : glitchPhase === 'CORRUPTING' ? '#ff007f' : '#00ff66'),
+          borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+          padding: '12px 20px',
           transition: 'all 0.3s ease',
         }}
       >
-        <span
-          className={glitchActive ? 'dedsec-glitch-text' : ''}
-          style={{
-            color: glitchActive ? '#ff4536' : '#00ff66',
-            fontWeight: 600,
-            letterSpacing: '0.06em',
-          }}
-        >
-          {glitchActive
-            ? '[ctOS PROFILER SCANNING: IDENTIFYING SUBJECT...]'
-            : '[ctOS PROFILER ERROR: PROFILE CORRUPTED / OVERRIDDEN BY DEDSEC]'}
-        </span>
-        <span style={{ fontSize: 'max(7px, 0.9cqw)', color: 'var(--dim)' }}>
-          {glitchActive ? 'LEVEL: LOW' : 'ENCRYPTION: 4096-BIT'}
-        </span>
-      </div>
-
-      {/* 2. Profile Card Layout */}
-      <div
-        style={{
-          display: 'flex',
-          gap: '2.5cqw',
-          backgroundColor: 'rgba(12, 16, 20, 0.85)',
-          border: '0.15cqw solid rgba(58, 174, 196, 0.3)',
-          borderRadius: '1.2cqw',
-          padding: '1.4cqw',
-        }}
-      >
-        {/* Avatar: Stylized Marcus Holloway / DedSec Cap & Visor Icon */}
-        <div
-          style={{
-            width: '15cqw',
-            height: '15cqw',
-            borderRadius: '1cqw',
-            border: '0.18cqw solid #00ff66',
-            backgroundColor: '#040608',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            position: 'relative',
-            overflow: 'hidden',
-            boxShadow: '0 0 1.5cqw rgba(0, 255, 102, 0.25)',
-            flexShrink: 0,
-          }}
-        >
-          {/* Marcus Holloway Hat & Mask SVG silhouette */}
-          <svg
-            viewBox="0 0 64 64"
-            style={{ width: '10cqw', height: '10cqw', fill: 'none' }}
-          >
-            {/* DedSec Cap Visor */}
-            <path
-              d="M14 26 C16 16, 48 16, 50 26 L56 30 L48 30 L46 26 L18 26 L16 30 L8 30 Z"
-              fill="#182026"
-              stroke="#00ff66"
-              strokeWidth="2"
-            />
-            {/* Sunglasses / Cyber Visor */}
-            <rect x="18" y="32" width="12" height="7" rx="2" fill="#00ff66" opacity="0.9" />
-            <rect x="34" y="32" width="12" height="7" rx="2" fill="#00ff66" opacity="0.9" />
-            <line x1="30" y1="35" x2="34" y2="35" stroke="#00ff66" strokeWidth="2" />
-            {/* Mask & Bandana */}
-            <polygon points="20,42 44,42 38,54 26,54" fill="#12171c" stroke="#3aaec4" strokeWidth="1.5" />
-            <line x1="28" y1="46" x2="36" y2="46" stroke="#00ff66" strokeWidth="1" />
-            <line x1="30" y1="50" x2="34" y2="50" stroke="#00ff66" strokeWidth="1" />
-          </svg>
-          <div
+        <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+          <span
             style={{
-              position: 'absolute',
-              bottom: 0,
-              width: '100%',
-              backgroundColor: 'rgba(0, 255, 102, 0.18)',
-              fontSize: 'max(6px, 0.8cqw)',
-              textAlign: 'center',
-              color: '#00ff66',
-              letterSpacing: '0.1em',
-              padding: '0.1cqw 0',
+              display: 'inline-block',
+              width: '10px',
+              height: '10px',
+              backgroundColor: glitchPhase === 'DEDSEC_OVERRIDE' ? '#00ff66' : '#ff4536',
+              boxShadow: '0 0 10px ' + (glitchPhase === 'DEDSEC_OVERRIDE' ? '#00ff66' : '#ff4536'),
+            }}
+          />
+          <span
+            style={{
+              fontSize: '13px',
+              fontWeight: 700,
+              letterSpacing: '0.12em',
+              color: glitchPhase === 'DEDSEC_OVERRIDE' ? '#00ff66' : '#ffffff',
             }}
           >
-            MARCUS.SYS
-          </div>
+            {glitchPhase === 'SCANNING' && '[ctOS 2.0 BIOMETRIC PROFILER // SCANNING TARGET IDENTITY]'}
+            {glitchPhase === 'CORRUPTING' && '[SECURITY INTERRUPT: UNKNOWN CIPHER OVERRIDE IN PROGRESS...]'}
+            {glitchPhase === 'DEDSEC_OVERRIDE' && '[ctOS PROFILER COMPROMISED // DEDSEC OPERATIVE PROFILE ACTIVE]'}
+          </span>
         </div>
 
-        {/* Operative Details */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5cqw', flex: 1 }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
-            <span style={{ fontSize: 'max(11px, 1.7cqw)', fontWeight: 'bold', color: '#ffffff' }}>
-              {OPERATIVE_PROFILE.alias}
-            </span>
-            <span
-              style={{
-                backgroundColor: 'rgba(0, 255, 102, 0.15)',
-                color: '#00ff66',
-                border: '0.1cqw solid #00ff66',
-                borderRadius: '0.3cqw',
-                fontSize: 'max(7px, 0.95cqw)',
-                padding: '0.1cqw 0.6cqw',
-                letterSpacing: '0.08em',
-              }}
-            >
-              {OPERATIVE_PROFILE.status}
-            </span>
-          </div>
-
-          <div style={{ fontSize: 'max(8px, 1.15cqw)', color: 'var(--ink)' }}>
-            <span style={{ color: 'var(--dim)' }}>ROLE: </span>
-            <span style={{ color: 'var(--cyan-hi)' }}>{OPERATIVE_PROFILE.role}</span>
-          </div>
-
-          <div style={{ fontSize: 'max(8px, 1.1cqw)', color: 'var(--ink)' }}>
-            <span style={{ color: 'var(--dim)' }}>EDUCATION: </span>
-            <span>{OPERATIVE_PROFILE.education}</span>
-          </div>
-
-          <div style={{ fontSize: 'max(8px, 1.1cqw)', color: 'var(--ink)' }}>
-            <span style={{ color: 'var(--dim)' }}>LOCATION: </span>
-            <span>{OPERATIVE_PROFILE.location}</span>
-          </div>
-
-          <div style={{ fontSize: 'max(7.5px, 0.95cqw)', color: '#ff4536', marginTop: '0.2cqw' }}>
-            THREAT LEVEL: <span style={{ color: '#ffffff' }}>CRITICAL // TARGET OFF-GRID</span>
-          </div>
+        <div style={{ display: 'flex', gap: '18px', fontSize: '11px', color: 'var(--dim)' }}>
+          <span>NODE: SF-LUCKNOW-GW04</span>
+          <span>CIPHER: AES-256-GCM</span>
+          <span style={{ color: glitchPhase === 'DEDSEC_OVERRIDE' ? '#00ff66' : '#ff4536' }}>
+            {glitchPhase === 'DEDSEC_OVERRIDE' ? 'DEFCON 1' : 'MONITORED'}
+          </span>
         </div>
       </div>
 
-      {/* 3. "Join the Crew" Bio Copy */}
+      {/* 2. MAIN DOSSIER & PROFILER GRID */}
       <div
         style={{
-          backgroundColor: 'rgba(5, 8, 12, 0.8)',
-          border: '0.12cqw solid rgba(0, 255, 102, 0.25)',
-          borderRadius: '1cqw',
-          padding: '1.2cqw',
-          fontSize: 'max(8px, 1.15cqw)',
-          lineHeight: '1.5',
-          color: 'var(--ink)',
+          display: 'grid',
+          gridTemplateColumns: '360px 1fr',
+          gap: '24px',
+          alignItems: 'start',
         }}
       >
+        {/* LEFT COLUMN: Biometric Wireframe Target Reticle */}
         <div
           style={{
-            fontSize: 'max(7px, 0.9cqw)',
-            color: '#00ff66',
-            letterSpacing: '0.12em',
-            marginBottom: '0.5cqw',
-            textTransform: 'uppercase',
+            backgroundColor: 'rgba(8, 12, 16, 0.94)',
+            border: '1px solid rgba(58, 174, 196, 0.4)',
+            borderRadius: '4px',
+            padding: '20px',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '16px',
+            position: 'relative',
+            boxShadow: '0 10px 30px rgba(0, 0, 0, 0.7)',
           }}
         >
-          // DEDSEC OPERATIVE MANIFESTO
-        </div>
-        <p style={{ fontStyle: 'italic', color: '#e6eff5' }}>
-          "{OPERATIVE_PROFILE.bio}"
-        </p>
+          {/* Target Scanner Box */}
+          <div
+            style={{
+              width: '100%',
+              aspectRatio: '1 / 1',
+              backgroundColor: '#020406',
+              border: '1px dashed rgba(58, 174, 196, 0.45)',
+              position: 'relative',
+              overflow: 'hidden',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            {/* Corner Target Brackets */}
+            <div style={{ position: 'absolute', top: 8, left: 8, width: 14, height: 14, borderTop: '2px solid #00ff66', borderLeft: '2px solid #00ff66' }} />
+            <div style={{ position: 'absolute', top: 8, right: 8, width: 14, height: 14, borderTop: '2px solid #00ff66', borderRight: '2px solid #00ff66' }} />
+            <div style={{ position: 'absolute', bottom: 8, left: 8, width: 14, height: 14, borderBottom: '2px solid #00ff66', borderLeft: '2px solid #00ff66' }} />
+            <div style={{ position: 'absolute', bottom: 8, right: 8, width: 14, height: 14, borderBottom: '2px solid #00ff66', borderRight: '2px solid #00ff66' }} />
 
-        {/* Technical Focus Chips */}
-        <div style={{ display: 'flex', gap: '0.6cqw', flexWrap: 'wrap', marginTop: '1cqw' }}>
-          {OPERATIVE_PROFILE.skills.map((skill, idx) => (
-            <span
-              key={idx}
+            {/* Target Reticle Crosshair */}
+            <div
               style={{
-                backgroundColor: 'rgba(58, 174, 196, 0.12)',
-                border: '0.1cqw solid rgba(58, 174, 196, 0.4)',
-                color: 'var(--cyan-hi)',
-                fontSize: 'max(6.5px, 0.9cqw)',
-                padding: '0.2cqw 0.8cqw',
-                borderRadius: '0.3cqw',
+                position: 'absolute',
+                inset: '20px',
+                border: '1px solid rgba(58, 174, 196, 0.25)',
+                borderRadius: '50%',
+                display: 'grid',
+                placeItems: 'center',
               }}
             >
-              {skill}
-            </span>
-          ))}
+              <div
+                style={{
+                  width: '60%',
+                  height: '60%',
+                  border: '1px dashed rgba(0, 255, 102, 0.35)',
+                  borderRadius: '50%',
+                }}
+              />
+            </div>
+
+            {/* ASCII / Monospace Skull Art */}
+            <pre
+              style={{
+                fontFamily: 'monospace',
+                fontSize: '10px',
+                lineHeight: '11px',
+                color: glitchPhase === 'DEDSEC_OVERRIDE' ? '#00ff66' : '#ff4536',
+                userSelect: 'none',
+                textAlign: 'center',
+                zIndex: 2,
+                textShadow: glitchPhase === 'DEDSEC_OVERRIDE' ? '0 0 8px rgba(0, 255, 102, 0.7)' : 'none',
+              }}
+            >
+{`     .---.
+    /     \\
+   | () () |
+    \\  ^  /
+     |||||
+    '-----'`}
+            </pre>
+
+            {/* Scanning Laser Line */}
+            <div
+              style={{
+                position: 'absolute',
+                left: 0,
+                right: 0,
+                height: '2px',
+                backgroundColor: '#00ff66',
+                boxShadow: '0 0 12px #00ff66',
+                animation: 'scannerLine 2.4s infinite ease-in-out',
+                zIndex: 3,
+              }}
+            />
+
+            {/* Overlay Status Tag */}
+            <div
+              style={{
+                position: 'absolute',
+                bottom: '10px',
+                left: '12px',
+                right: '12px',
+                display: 'flex',
+                justifyContent: 'space-between',
+                fontSize: '10px',
+                backgroundColor: 'rgba(0,0,0,0.85)',
+                padding: '4px 8px',
+                border: '1px solid rgba(0, 255, 102, 0.3)',
+                color: '#00ff66',
+              }}
+            >
+              <span>BIOMETRIC LOCK: 99.4%</span>
+              <span>LIVE</span>
+            </div>
+          </div>
+
+          {/* Quick Telemetry Indicators */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '11px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid rgba(255,255,255,0.06)', paddingBottom: '4px' }}>
+              <span style={{ color: 'var(--dim)' }}>ctOS THREAT ASSESSMENT:</span>
+              <span style={{ color: '#ff4536', fontWeight: 'bold' }}>EXTREME (CLASS 4)</span>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid rgba(255,255,255,0.06)', paddingBottom: '4px' }}>
+              <span style={{ color: 'var(--dim)' }}>SURVEILLANCE TAP:</span>
+              <span style={{ color: '#00ff66' }}>BYPASSED (OFF-GRID)</span>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid rgba(255,255,255,0.06)', paddingBottom: '4px' }}>
+              <span style={{ color: 'var(--dim)' }}>SYSTEM TAMPERING:</span>
+              <span style={{ color: 'var(--cyan-hi)' }}>DETECTED // REWRITING</span>
+            </div>
+          </div>
+
+          {/* Live Frequency / Signal Monitor */}
+          <div>
+            <div style={{ fontSize: '10px', color: 'var(--dim)', marginBottom: '6px', letterSpacing: '0.08em' }}>
+              // LIVE TELEMETRY FREQUENCY (MHZ):
+            </div>
+            <div style={{ display: 'flex', gap: '4px', alignItems: 'flex-end', height: '36px', backgroundColor: 'rgba(0,0,0,0.6)', padding: '4px', border: '1px solid rgba(58,174,196,0.2)' }}>
+              {activeFrequency.map((val, idx) => (
+                <div
+                  key={idx}
+                  style={{
+                    flex: 1,
+                    height: `${val}%`,
+                    backgroundColor: idx % 2 === 0 ? '#00ff66' : 'var(--cyan-hi)',
+                    transition: 'height 0.18s ease',
+                  }}
+                />
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* RIGHT COLUMN: Official ctOS Profile & DedSec Manifesto */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+          {/* Identity Dossier Table */}
+          <div
+            style={{
+              backgroundColor: 'rgba(6, 10, 14, 0.92)',
+              border: '1px solid rgba(58, 174, 196, 0.35)',
+              borderRadius: '4px',
+              padding: '24px',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '16px',
+            }}
+          >
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'baseline',
+                borderBottom: '1px solid rgba(0, 255, 102, 0.3)',
+                paddingBottom: '10px',
+              }}
+            >
+              <div>
+                <span style={{ fontSize: '26px', fontWeight: 800, color: '#ffffff', letterSpacing: '0.04em' }}>
+                  {OPERATIVE_PROFILE.alias}
+                </span>
+                <span style={{ marginLeft: '12px', fontSize: '13px', color: '#00ff66' }}>
+                  // {OPERATIVE_PROFILE.dedsecHandle}
+                </span>
+              </div>
+              <span
+                style={{
+                  backgroundColor: 'rgba(0, 255, 102, 0.12)',
+                  border: '1.5px solid #00ff66',
+                  color: '#00ff66',
+                  fontSize: '11px',
+                  fontWeight: 700,
+                  padding: '4px 12px',
+                  borderRadius: '3px',
+                  letterSpacing: '0.1em',
+                }}
+              >
+                {OPERATIVE_PROFILE.status}
+              </span>
+            </div>
+
+            {/* Structured ctOS Profiler Key-Value Grid */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px 28px', fontSize: '13px' }}>
+              <div>
+                <div style={{ color: 'var(--dim)', fontSize: '11px', marginBottom: '2px' }}>
+                  OPERATIVE FOCUS & ROLE:
+                </div>
+                <div style={{ color: 'var(--cyan-hi)', fontWeight: 600 }}>{OPERATIVE_PROFILE.role}</div>
+              </div>
+
+              <div>
+                <div style={{ color: 'var(--dim)', fontSize: '11px', marginBottom: '2px' }}>
+                  ACADEMIC AFFILIATION:
+                </div>
+                <div style={{ color: '#ffffff' }}>{OPERATIVE_PROFILE.education}</div>
+              </div>
+
+              <div>
+                <div style={{ color: 'var(--dim)', fontSize: '11px', marginBottom: '2px' }}>
+                  BASE OF OPERATIONS:
+                </div>
+                <div style={{ color: '#ffffff' }}>{OPERATIVE_PROFILE.location}</div>
+              </div>
+
+              <div>
+                <div style={{ color: 'var(--dim)', fontSize: '11px', marginBottom: '2px' }}>
+                  SECURITY CLEARANCE / DEFCON:
+                </div>
+                <div style={{ color: '#ff4536', fontWeight: 600 }}>CLASS 4 // RESTRICTED TARGET</div>
+              </div>
+            </div>
+          </div>
+
+          {/* DEDSEC UNDERGROUND MANIFESTO CARD */}
+          <div
+            style={{
+              backgroundColor: 'rgba(4, 7, 10, 0.94)',
+              border: '1px solid rgba(0, 255, 102, 0.35)',
+              borderRadius: '4px',
+              padding: '24px',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '14px',
+              boxShadow: '0 8px 24px rgba(0, 0, 0, 0.6)',
+            }}
+          >
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <span style={{ fontSize: '12px', color: '#00ff66', letterSpacing: '0.14em', fontWeight: 700 }}>
+                // DEDSEC OPERATIVE MANIFESTO
+              </span>
+              <span style={{ fontSize: '11px', color: 'var(--dim)' }}>
+                PAYLOAD ID: 0xDEADBEEF
+              </span>
+            </div>
+
+            <p
+              style={{
+                fontSize: '15px',
+                lineHeight: 1.6,
+                color: '#edf5fa',
+                margin: 0,
+                borderLeft: '3px solid #00ff66',
+                paddingLeft: '16px',
+                fontStyle: 'italic',
+              }}
+            >
+              "{OPERATIVE_PROFILE.bio}"
+            </p>
+
+            {/* Core Competencies Matrix */}
+            <div style={{ marginTop: '8px' }}>
+              <div style={{ fontSize: '11px', color: 'var(--dim)', marginBottom: '8px', letterSpacing: '0.08em' }}>
+                // VERIFIED OPERATIONAL ARSENAL:
+              </div>
+              <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                {OPERATIVE_PROFILE.skills.map((skill, idx) => (
+                  <div
+                    key={idx}
+                    style={{
+                      backgroundColor: 'rgba(58, 174, 196, 0.1)',
+                      border: '1px solid rgba(58, 174, 196, 0.4)',
+                      padding: '6px 14px',
+                      borderRadius: '3px',
+                      fontSize: '12px',
+                      color: 'var(--cyan-hi)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '8px',
+                    }}
+                  >
+                    <span style={{ color: '#00ff66' }}>▸</span>
+                    <span>{skill}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Cryptographic Footprint */}
+            <div
+              style={{
+                marginTop: '6px',
+                paddingTop: '12px',
+                borderTop: '1px solid rgba(255,255,255,0.08)',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                fontSize: '11px',
+                color: 'var(--dim)',
+              }}
+            >
+              <span>PGP FINGERPRINT: 4A9F 8B12 C034 DE56 991F 77BC 33A1 00EF</span>
+              <span style={{ color: '#00ff66' }}>[VERIFIED OPERATIVE]</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>

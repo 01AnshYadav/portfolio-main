@@ -35,11 +35,26 @@ export const PHONE_SCREEN: PhoneScreenConfig = {
     [0.95, 0.94], // Bottom-Right [x, y]
     [0.05, 0.94], // Bottom-Left [x, y]
   ],
-  aspectRatio: 2.2 / 1,
+  aspectRatio: 9 / 18.5,
 };
 
 export const PNG_ASPECT = PHONE_SCREEN.aspectRatio;
 export const PNG_PATH = '/hand-phone.png';
+
+export const WD2_STATS = {
+  followersCurrent: 2320950,
+  followersTarget: 2382000,
+  level: 14,
+  researchPoints: 8,
+  bankBalance: 312623,
+  weather: {
+    temp: '52°F',
+    location: 'San Francisco',
+    condition: 'Partly Cloudy',
+    today: '63°F',
+    tomorrow: '63°F',
+  },
+};
 
 export const SCROLL_CONFIG = {
   entranceDistancePx: 300,

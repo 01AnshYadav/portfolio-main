@@ -1,18 +1,20 @@
 import React from 'react';
 import { PHONE_SCREEN } from '../config';
 import { computeHomographyMatrix3d, getCornerClipPath } from '../utils/homography';
-import { DedSecPhoneOS } from './phone/DedSecPhoneOS';
+import { DedSecPhoneOS, type AppId } from './phone/DedSecPhoneOS';
 
 interface ScreenPlaceholderProps {
   containerWidth: number;
   containerHeight: number;
   isSettled?: boolean;
+  onOpenApp?: (appId: AppId) => void;
 }
 
 export const ScreenPlaceholder: React.FC<ScreenPlaceholderProps> = ({
   containerWidth,
   containerHeight,
   isSettled = false,
+  onOpenApp,
 }) => {
   if (!containerWidth || !containerHeight) return null;
 
@@ -61,7 +63,10 @@ export const ScreenPlaceholder: React.FC<ScreenPlaceholderProps> = ({
           containerType: 'inline-size',
         }}
       >
-        <DedSecPhoneOS />
+        <DedSecPhoneOS
+          onOpenApp={onOpenApp}
+          onClosePhone={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+        />
       </div>
     </div>
   );
