@@ -906,6 +906,14 @@ export const CtosMap: React.FC<CtosMapProps> = ({ isPhoneSettled = false, onOpen
           >
             05 CONTACT
           </button>
+          <button
+            type="button"
+            className="hud-nav-btn"
+            onClick={() => window.dispatchEvent(new CustomEvent('DEDSEC_OPEN_CREDITS'))}
+            title="Open Credits & Attributions"
+          >
+            06 CREDITS
+          </button>
         </nav>
       </header>
 
