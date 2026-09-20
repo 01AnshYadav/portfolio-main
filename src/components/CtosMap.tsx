@@ -132,9 +132,13 @@ function fbm(x: number, y: number, s: number) {
 interface CtosMapProps {
   isPhoneSettled?: boolean;
   onOpenApp?: (appId: AppId) => void;
+  onTargetsProgress?: (acquired: number, total: number) => void;
 }
 
-export const CtosMap: React.FC<CtosMapProps> = ({ isPhoneSettled = false, onOpenApp }) => {
+export const CtosMap: React.FC<CtosMapProps> = ({ isPhoneSettled = false, onOpenApp, onTargetsProgress }) => {
+  const progressCbRef = useRef(onTargetsProgress);
+  progressCbRef.current = onTargetsProgress;
+
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const segsRef = useRef<HTMLSpanElement | null>(null);
   const dvRef = useRef<HTMLElement | null>(null);
@@ -729,6 +733,7 @@ export const CtosMap: React.FC<CtosMapProps> = ({ isPhoneSettled = false, onOpen
 
     function renderAll() {
       if (acqEl) acqEl.textContent = acquired + '/' + targets.length;
+      progressCbRef.current?.(acquired, targets.length);
       if (listEl) {
         [...listEl.children].forEach((b, i) => {
           const t = targets[i];
@@ -757,6 +762,19 @@ export const CtosMap: React.FC<CtosMapProps> = ({ isPhoneSettled = false, onOpen
     cv.addEventListener('pointerdown', onPointerDown);
     cv.addEventListener('pointerleave', onPointerLeave);
     if (resetBtn) resetBtn.addEventListener('click', reset);
+
+    const handleBreachAll = () => {
+      targets.forEach(t => {
+        t.state = 'done';
+        t.p = 1;
+        t.stage = 2;
+      });
+      acquired = targets.length;
+      say('> OVERRIDE: All targets breached');
+      renderAll();
+      dirty = true;
+    };
+    window.addEventListener('DEDSEC_BREACH_ALL', handleBreachAll);
 
     function resize() {
       DPR = Math.min(2, window.devicePixelRatio || 1);
@@ -819,6 +837,7 @@ export const CtosMap: React.FC<CtosMapProps> = ({ isPhoneSettled = false, onOpen
     return () => {
       cancelAnimationFrame(animationFrameId);
       window.clearTimeout(rt);
+      window.removeEventListener('DEDSEC_BREACH_ALL', handleBreachAll);
       cv.removeEventListener('pointermove', onPointerMove);
       cv.removeEventListener('pointerdown', onPointerDown);
       cv.removeEventListener('pointerleave', onPointerLeave);

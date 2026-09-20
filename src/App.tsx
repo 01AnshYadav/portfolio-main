@@ -4,12 +4,14 @@ import { HandPhoneStage } from './components/HandPhoneStage';
 import { FullScreenAppModal } from './components/phone/FullScreenAppModal';
 import { BootSequence } from './components/BootSequence';
 import { BackgroundAudio } from './components/BackgroundAudio';
+import { EasterEggBox } from './components/EasterEggBox';
 import type { AppId } from './components/phone/DedSecPhoneOS';
 import { WD2_STATS } from './config';
 
 export const App: React.FC = () => {
   const [isPhoneSettled, setIsPhoneSettled] = useState<boolean>(false);
   const [isDebug, setIsDebug] = useState<boolean>(false);
+  const [breachCount, setBreachCount] = useState<number>(0);
   const [isBooted, setIsBooted] = useState<boolean>(() => {
     // Check if user already booted during this browser session
     try {
@@ -56,6 +58,14 @@ export const App: React.FC = () => {
       <CtosMap
         isPhoneSettled={isPhoneSettled}
         onOpenApp={(appId) => setFullScreenApp(appId)}
+        onTargetsProgress={(acquired) => setBreachCount(acquired)}
+      />
+
+      {/* Easter Egg Small Image Box on Middle-Right Edge (connected to ctOS hacking map) */}
+      <EasterEggBox
+        acquired={breachCount}
+        total={8}
+        isDimmed={isPhoneSettled}
       />
 
       {/* Background Audio filler: bg.mp3 starting from main page only on loop at low volume */}

@@ -1,0 +1,989 @@
+/* ══════════════════════════════════════════════════════════
+   ctOS Easter Egg Box - Connected to Interactive Hacking City Map
+   ══════════════════════════════════════════════════════════ */
+
+.ctos-easter-egg-box {
+  position: fixed;
+  right: calc(16px + env(safe-area-inset-right, 0px));
+  top: 50%;
+  transform: translateY(-50%);
+  width: 144px;
+  z-index: 25;
+  background: rgba(10, 14, 18, 0.92);
+  border: 1px solid rgba(213, 221, 226, 0.18);
+  border-right: 2px solid var(--dim, #7d8b99);
+  padding: 6px;
+  font-family: var(--mono, monospace);
+  user-select: none;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.6);
+  transition: all 0.25s ease;
+}
+
+.ctos-easter-egg-box.dimmed {
+  opacity: 0.3;
+}
+
+.ctos-easter-egg-box.dimmed:hover {
+  opacity: 1;
+}
+
+/* Locked state */
+.ctos-easter-egg-box.locked {
+  border-right-color: #ff3838;
+}
+
+.ctos-easter-egg-box.locked:hover {
+  border-color: rgba(255, 56, 56, 0.5);
+  box-shadow: 0 0 14px rgba(255, 56, 56, 0.2);
+}
+
+/* Unlocked state */
+.ctos-easter-egg-box.unlocked {
+  border-color: #00e5ff;
+  border-right: 3px solid #00ff66;
+  box-shadow: 0 0 16px rgba(0, 229, 255, 0.35);
+  cursor: pointer;
+  animation: easterPulse 3s ease-in-out infinite alternate;
+}
+
+.ctos-easter-egg-box.unlocked:hover {
+  transform: translateY(-50%) translateX(-3px) scale(1.02);
+  box-shadow: 0 0 24px rgba(0, 229, 255, 0.6), 0 0 8px rgba(0, 255, 102, 0.5);
+  border-color: #00ff66;
+}
+
+@keyframes easterPulse {
+  0% {
+    box-shadow: 0 0 12px rgba(0, 229, 255, 0.25);
+  }
+  100% {
+    box-shadow: 0 0 20px rgba(0, 229, 255, 0.5), 0 0 8px rgba(0, 255, 102, 0.4);
+  }
+}
+
+/* Header bar */
+.egg-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 5px;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  color: var(--dim, #7d8b99);
+  text-transform: uppercase;
+}
+
+.egg-tag {
+  color: #00e5ff;
+  font-weight: 700;
+}
+
+.ctos-easter-egg-box.locked .egg-tag {
+  color: #ff3838;
+}
+
+.ctos-easter-egg-box.unlocked .egg-tag {
+  color: #00ff66;
+}
+
+/* Image preview container */
+.egg-img-container {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #000;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.egg-thumb {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: all 0.3s ease;
+}
+
+.ctos-easter-egg-box.locked .egg-thumb {
+  filter: grayscale(100%) brightness(0.4) blur(1.5px);
+}
+
+.ctos-easter-egg-box.unlocked .egg-thumb {
+  filter: grayscale(0%) brightness(1);
+}
+
+/* Lock overlay */
+.egg-locked-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  background: rgba(0, 0, 0, 0.45);
+}
+
+.egg-lock-icon {
+  font-size: 14px;
+}
+
+.egg-count-badge {
+  font-size: 9px;
+  font-weight: 800;
+  color: #ff4736;
+  background: rgba(10, 14, 18, 0.85);
+  padding: 1px 4px;
+  letter-spacing: 0.08em;
+  border: 1px solid rgba(255, 71, 54, 0.4);
+}
+
+/* Unlocked banner */
+.egg-unlocked-banner {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 229, 255, 0.2);
+  color: #ffffff;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-shadow: 0 0 8px #00e5ff;
+}
+
+/* Progress bar */
+.egg-progress-bar {
+  width: 100%;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.1);
+  margin-top: 5px;
+  overflow: hidden;
+}
+
+.egg-progress-fill {
+  height: 100%;
+  background: #ff3838;
+  transition: width 0.35s ease;
+}
+
+.ctos-easter-egg-box.unlocked .egg-progress-fill {
+  background: #00ff66;
+  box-shadow: 0 0 6px #00ff66;
+}
+
+/* Status text */
+.egg-status-text {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 4px;
+  font-size: 8.5px;
+  letter-spacing: 0.08em;
+  color: var(--dim, #7d8b99);
+}
+
+.egg-status-text b {
+  color: #e2e8f0;
+}
+
+.ctos-easter-egg-box.unlocked .egg-status-text b {
+  color: #00ff66;
+}
+
+/* Dev test shortcut button */
+.egg-test-btn {
+  margin-top: 5px;
+  width: 100%;
+  background: transparent;
+  border: 1px dashed rgba(213, 221, 226, 0.25);
+  color: var(--dim, #7d8b99);
+  font-family: inherit;
+  font-size: 8px;
+  padding: 2px 4px;
+  cursor: pointer;
+  letter-spacing: 0.08em;
+  text-align: center;
+  transition: all 0.15s ease;
+}
+
+.egg-test-btn:hover {
+  border-color: #00e5ff;
+  color: #00e5ff;
+  background: rgba(0, 229, 255, 0.05);
+}
+
+
+/* ══════════════════════════════════════════════════════════
+   AUTHENTIC WATCH DOGS 2 EASTER EGG DOSSIER MODAL
+   ══════════════════════════════════════════════════════════ */
+
+.easter-egg-popup-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(12px, 2.5vw, 28px);
+  animation: eggModalFadeIn 0.25s ease-out;
+}
+
+@keyframes eggModalFadeIn {
+  from { opacity: 0; transform: scale(0.97); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.easter-egg-popup-dialog {
+  position: relative;
+  width: min(880px, 95vw);
+  max-height: min(90vh, 860px);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  font-family: var(--mono, 'Share Tech Mono', 'JetBrains Mono', monospace);
+  user-select: text;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.5);
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+/* Authentic White Cinematic Theme (Matches Screenshot) */
+.easter-egg-popup-dialog.cinematic-white {
+  background-color: #eaecef;
+  background-image: radial-gradient(ellipse at 50% 50%, #f7f8fa 0%, #e2e5e9 85%, #cbd1d8 100%);
+  color: #111111;
+  border: 1px solid #111111;
+  box-shadow: 0 0 45px rgba(0, 0, 0, 0.4), 0 14px 40px rgba(0, 0, 0, 0.3);
+}
+
+/* Optional Dark Terminal Theme */
+.easter-egg-popup-dialog.dark {
+  background-color: #080c10;
+  background-image: radial-gradient(ellipse at 50% 50%, #0d131a 0%, #080c10 85%, #040608 100%);
+  color: #e2e8f0;
+  border: 1px solid #00e5ff;
+  box-shadow: 0 0 32px rgba(0, 229, 255, 0.35);
+}
+
+/* Subtle CRT Scanlines */
+.egg-cinematic-vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.02) 0px,
+    rgba(0, 0, 0, 0.02) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  z-index: 1;
+}
+
+/* Topbar */
+.egg-popup-topbar {
+  position: relative;
+  z-index: 5;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 18px;
+  background: rgba(255, 255, 255, 0.85);
+  border-bottom: 1px solid #111111;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.easter-egg-popup-dialog.dark .egg-popup-topbar {
+  background: rgba(15, 21, 28, 0.9);
+  border-bottom-color: rgba(0, 229, 255, 0.3);
+}
+
+.egg-topbar-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.egg-topbar-tag {
+  background: #111111;
+  color: #ffffff;
+  padding: 2px 7px;
+  font-weight: 800;
+  font-size: 10px;
+}
+
+.easter-egg-popup-dialog.dark .egg-topbar-tag {
+  background: #00e5ff;
+  color: #000000;
+}
+
+.egg-topbar-crumb {
+  font-weight: 700;
+  color: #2b3540;
+}
+
+.easter-egg-popup-dialog.dark .egg-topbar-crumb {
+  color: #a0aec0;
+}
+
+.egg-topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.egg-theme-toggle {
+  background: transparent;
+  border: 1px solid #111111;
+  color: #111111;
+  font-family: inherit;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  padding: 4px 10px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.easter-egg-popup-dialog.dark .egg-theme-toggle {
+  border-color: #00e5ff;
+  color: #00e5ff;
+}
+
+.egg-theme-toggle:hover {
+  background: #111111;
+  color: #ffffff;
+}
+
+.easter-egg-popup-dialog.dark .egg-theme-toggle:hover {
+  background: #00e5ff;
+  color: #000000;
+}
+
+.egg-popup-close-btn {
+  background: #111111;
+  border: 1px solid #111111;
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  padding: 4px 12px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.2);
+}
+
+.easter-egg-popup-dialog.dark .egg-popup-close-btn {
+  background: #ff3838;
+  border-color: #ff3838;
+  color: #ffffff;
+}
+
+.egg-popup-close-btn:hover {
+  background: #ff0055;
+  border-color: #ff0055;
+  color: #ffffff;
+  transform: translate(-1px, -1px);
+}
+
+/* Scroll Area */
+.egg-modal-scroll-area {
+  position: relative;
+  z-index: 5;
+  flex: 1;
+  overflow-y: auto;
+  padding: clamp(16px, 2.5vw, 32px);
+  scrollbar-width: thin;
+  scrollbar-color: #111111 rgba(0, 0, 0, 0.05);
+}
+
+.easter-egg-popup-dialog.dark .egg-modal-scroll-area {
+  scrollbar-color: #00e5ff rgba(0, 0, 0, 0.3);
+}
+
+/* Layout: Crosshairs Column + Main Body */
+.egg-cinematic-layout {
+  display: flex;
+  gap: clamp(14px, 2.5vw, 32px);
+  align-items: flex-start;
+}
+
+/* Left vertical crosshair column matching the screenshot */
+.egg-crosshair-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  color: #111111;
+  font-size: 14px;
+  font-weight: bold;
+  opacity: 0.85;
+  user-select: none;
+  padding-top: 4px;
+  flex-shrink: 0;
+}
+
+.easter-egg-popup-dialog.dark .egg-crosshair-column {
+  color: #00e5ff;
+  opacity: 0.7;
+}
+
+.egg-crosshair-glyph {
+  line-height: 1;
+  display: block;
+}
+
+/* Main Content Body */
+.egg-stream-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  max-width: 760px;
+}
+
+/* Top "execute?" sequence */
+.egg-execute-prompt {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-bottom: 6px;
+}
+
+.egg-prompt-q {
+  font-size: clamp(24px, 3.2vw, 32px);
+  font-weight: 700;
+  color: #000000;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  font-family: 'Share Tech Mono', var(--mono, monospace);
+}
+
+.easter-egg-popup-dialog.dark .egg-prompt-q {
+  color: #ffffff;
+}
+
+.egg-prompt-ans {
+  font-size: clamp(20px, 2.8vw, 28px);
+  font-weight: 700;
+  color: #000000;
+  font-family: 'Share Tech Mono', var(--mono, monospace);
+}
+
+.easter-egg-popup-dialog.dark .egg-prompt-ans {
+  color: #00e5ff;
+}
+
+/* Operative Header: PFP + Identity */
+.egg-operative-header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid #111111;
+  box-shadow: 3px 3px 0px rgba(0, 0, 0, 0.12);
+  flex-wrap: wrap;
+}
+
+.easter-egg-popup-dialog.dark .egg-operative-header {
+  background: rgba(14, 20, 28, 0.7);
+  border-color: rgba(0, 229, 255, 0.4);
+  box-shadow: 0 0 16px rgba(0, 229, 255, 0.15);
+}
+
+/* PFP Frame */
+.egg-pfp-frame {
+  position: relative;
+  width: 108px;
+  height: 108px;
+  background: #000;
+  border: 2px solid #111111;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.easter-egg-popup-dialog.dark .egg-pfp-frame {
+  border-color: #00e5ff;
+}
+
+.egg-pfp-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.egg-pfp-corners .corner {
+  position: absolute;
+  color: #00e5ff;
+  font-size: 11px;
+  font-weight: bold;
+  line-height: 1;
+  pointer-events: none;
+}
+
+.egg-pfp-corners .tl { top: 4px; left: 4px; }
+.egg-pfp-corners .tr { top: 4px; right: 4px; }
+.egg-pfp-corners .bl { bottom: 4px; left: 4px; }
+.egg-pfp-corners .br { bottom: 4px; right: 4px; }
+
+.egg-pfp-badge {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.85);
+  color: #00e5ff;
+  font-size: 8px;
+  font-weight: 800;
+  text-align: center;
+  padding: 2px 0;
+  letter-spacing: 0.1em;
+}
+
+/* Titles */
+.egg-operative-titles {
+  flex: 1;
+  min-width: 220px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.egg-operative-flag {
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  color: #64748b;
+  text-transform: uppercase;
+}
+
+.easter-egg-popup-dialog.dark .egg-operative-flag {
+  color: #00e5ff;
+}
+
+.egg-operative-name {
+  font-size: clamp(22px, 3vw, 30px);
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  line-height: 1.1;
+  margin: 0;
+  color: #000000;
+}
+
+.easter-egg-popup-dialog.dark .egg-operative-name {
+  color: #ffffff;
+}
+
+.egg-operative-alias {
+  font-size: 13px;
+  font-weight: 600;
+  color: #334155;
+  letter-spacing: 0.05em;
+}
+
+.easter-egg-popup-dialog.dark .egg-operative-alias {
+  color: #cbd5e1;
+}
+
+.egg-operative-alias .highlight {
+  color: #000000;
+  font-weight: 800;
+  background: rgba(0, 229, 255, 0.25);
+  padding: 1px 4px;
+}
+
+.easter-egg-popup-dialog.dark .egg-operative-alias .highlight {
+  color: #00e5ff;
+  background: rgba(0, 229, 255, 0.15);
+}
+
+.egg-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 6px;
+  font-size: 9.5px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  color: #d90429;
+  background: rgba(217, 4, 41, 0.08);
+  border: 1px solid rgba(217, 4, 41, 0.3);
+  padding: 3px 8px;
+  width: fit-content;
+}
+
+.pulse-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #d90429;
+  animation: pulseDot 1.2s infinite ease-in-out;
+}
+
+@keyframes pulseDot {
+  0% { transform: scale(0.8); opacity: 0.5; }
+  50% { transform: scale(1.2); opacity: 1; }
+  100% { transform: scale(0.8); opacity: 0.5; }
+}
+
+/* Dossier Sections */
+.egg-dossier-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.egg-section-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.18);
+  padding-bottom: 4px;
+}
+
+.easter-egg-popup-dialog.dark .egg-section-header {
+  border-bottom-color: rgba(255, 255, 255, 0.12);
+}
+
+.egg-sec-glyph {
+  font-weight: 800;
+  color: #000000;
+  font-size: 13px;
+}
+
+.easter-egg-popup-dialog.dark .egg-sec-glyph {
+  color: #00e5ff;
+}
+
+.egg-section-title {
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  color: #000000;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.easter-egg-popup-dialog.dark .egg-section-title {
+  color: #ffffff;
+}
+
+/* Credentials Grid */
+.egg-credentials-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 8px 16px;
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  padding: 12px 14px;
+}
+
+.easter-egg-popup-dialog.dark .egg-credentials-grid {
+  background: rgba(14, 20, 28, 0.6);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.egg-cred-row {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.egg-cred-key {
+  font-weight: 700;
+  color: #475569;
+  min-width: 68px;
+  letter-spacing: 0.04em;
+}
+
+.easter-egg-popup-dialog.dark .egg-cred-key {
+  color: #94a3b8;
+}
+
+.egg-cred-val {
+  font-weight: 600;
+  color: #0b0d10;
+}
+
+.easter-egg-popup-dialog.dark .egg-cred-val {
+  color: #f1f5f9;
+}
+
+.egg-cred-val.highlight {
+  color: #000000;
+  font-weight: 800;
+}
+
+.easter-egg-popup-dialog.dark .egg-cred-val.highlight {
+  color: #00e5ff;
+}
+
+.egg-cred-row.egg-cred-flagged {
+  grid-column: 1 / -1;
+  background: rgba(217, 4, 41, 0.06);
+  padding: 4px 8px;
+  border-left: 3px solid #d90429;
+}
+
+.egg-cred-val.flagged {
+  color: #d90429;
+  font-weight: 800;
+}
+
+/* Motive Body */
+.egg-motive-body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: #1e293b;
+}
+
+.easter-egg-popup-dialog.dark .egg-motive-body {
+  color: #cbd5e1;
+}
+
+.egg-motive-body p {
+  margin: 0;
+}
+
+/* Toolkit Tags */
+.egg-toolkit-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.egg-tool-tag {
+  background: #ffffff;
+  border: 1px solid #111111;
+  color: #111111;
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  padding: 5px 12px;
+  box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.12);
+  transition: all 0.15s ease;
+}
+
+.easter-egg-popup-dialog.dark .egg-tool-tag {
+  background: rgba(0, 229, 255, 0.08);
+  border-color: #00e5ff;
+  color: #00e5ff;
+  box-shadow: 0 0 8px rgba(0, 229, 255, 0.15);
+}
+
+.egg-tool-tag:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0px rgba(0, 0, 0, 0.2);
+  background: #000000;
+  color: #ffffff;
+}
+
+.easter-egg-popup-dialog.dark .egg-tool-tag:hover {
+  background: #00e5ff;
+  color: #000000;
+}
+
+/* Affiliation / DedSec Section */
+.egg-affiliation-card {
+  background: rgba(255, 255, 255, 0.75);
+  border: 1px solid #111111;
+  padding: 16px;
+  box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.12);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.easter-egg-popup-dialog.dark .egg-affiliation-card {
+  background: rgba(14, 20, 28, 0.75);
+  border-color: rgba(0, 229, 255, 0.3);
+  box-shadow: 0 0 12px rgba(0, 229, 255, 0.1);
+}
+
+.egg-affil-header {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  border-bottom: 1px dashed rgba(0, 0, 0, 0.2);
+  padding-bottom: 12px;
+}
+
+.easter-egg-popup-dialog.dark .egg-affil-header {
+  border-bottom-color: rgba(255, 255, 255, 0.15);
+}
+
+.egg-affil-tagline {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.egg-affil-name {
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  color: #000000;
+}
+
+.easter-egg-popup-dialog.dark .egg-affil-name {
+  color: #00e5ff;
+}
+
+.egg-affil-cell {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  background: #111111;
+  color: #ffffff;
+  padding: 2px 6px;
+}
+
+.easter-egg-popup-dialog.dark .egg-affil-cell {
+  background: rgba(0, 229, 255, 0.2);
+  color: #00e5ff;
+  border: 1px solid rgba(0, 229, 255, 0.4);
+}
+
+.egg-affil-desc {
+  font-size: 12.5px;
+  color: #1e293b;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.easter-egg-popup-dialog.dark .egg-affil-desc {
+  color: #cbd5e1;
+}
+
+.egg-affil-details {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+.egg-affil-item {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  background: rgba(255, 255, 255, 0.5);
+  border-left: 2px solid #111111;
+  padding: 6px 10px;
+}
+
+.easter-egg-popup-dialog.dark .egg-affil-item {
+  background: rgba(20, 28, 38, 0.5);
+  border-left-color: #00e5ff;
+}
+
+.egg-item-label {
+  margin: 0;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  color: #475569;
+  text-transform: uppercase;
+}
+
+.easter-egg-popup-dialog.dark .egg-item-label {
+  color: #00e5ff;
+}
+
+.egg-item-text {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.5;
+  color: #0b0d10;
+  font-weight: 600;
+}
+
+.easter-egg-popup-dialog.dark .egg-item-text {
+  color: #f1f5f9;
+}
+
+.egg-affil-item.egg-affil-belief {
+  border-left-color: #00a846;
+  background: rgba(0, 255, 102, 0.08);
+}
+
+.easter-egg-popup-dialog.dark .egg-affil-item.egg-affil-belief {
+  background: rgba(0, 255, 102, 0.08);
+  border-left-color: #00ff66;
+}
+
+.egg-affil-item.egg-affil-belief .egg-item-label {
+  color: #007a33;
+}
+
+.easter-egg-popup-dialog.dark .egg-affil-item.egg-affil-belief .egg-item-label {
+  color: #00ff66;
+}
+
+.egg-affil-item.egg-affil-belief .egg-item-text {
+  color: #044b20;
+  font-weight: 700;
+}
+
+.easter-egg-popup-dialog.dark .egg-affil-item.egg-affil-belief .egg-item-text {
+  color: #a7f3d0;
+}
+
+/* Bottom Subtitle matching screenshot */
+.egg-cinematic-subtitle {
+  margin-top: 14px;
+  text-align: center;
+  padding-top: 12px;
+  border-top: 1px dashed rgba(0, 0, 0, 0.2);
+}
+
+.easter-egg-popup-dialog.dark .egg-cinematic-subtitle {
+  border-top-color: rgba(255, 255, 255, 0.15);
+}
+
+.egg-cinematic-subtitle p {
+  margin: 0;
+  font-size: clamp(12px, 1.4vw, 14.5px);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: #111111;
+  font-family: inherit;
+  line-height: 1.5;
+  opacity: 0.9;
+}
+
+.easter-egg-popup-dialog.dark .egg-cinematic-subtitle p {
+  color: #cbd5e1;
+}
+
+/* Responsive queries */
+@media (max-width: 680px) {
+  .ctos-easter-egg-box {
+    width: 118px;
+    right: 8px;
+  }
+  .egg-operative-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .egg-crosshair-column {
+    display: none;
+  }
+}
