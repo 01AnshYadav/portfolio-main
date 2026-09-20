@@ -3,6 +3,7 @@ import { CtosMap } from './components/CtosMap';
 import { HandPhoneStage } from './components/HandPhoneStage';
 import { FullScreenAppModal } from './components/phone/FullScreenAppModal';
 import { BootSequence } from './components/BootSequence';
+import { BackgroundAudio } from './components/BackgroundAudio';
 import type { AppId } from './components/phone/DedSecPhoneOS';
 import { WD2_STATS } from './config';
 
@@ -56,6 +57,9 @@ export const App: React.FC = () => {
         isPhoneSettled={isPhoneSettled}
         onOpenApp={(appId) => setFullScreenApp(appId)}
       />
+
+      {/* Background Audio filler: bg.mp3 starting from main page only on loop at low volume */}
+      <BackgroundAudio isBooted={isBooted} isDimmed={isPhoneSettled} defaultVolume={0.08} />
 
       {/* 4. Foreground Scroll Stage & DedSec Smartphone 3D Arc */}
       <HandPhoneStage
