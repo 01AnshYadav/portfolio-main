@@ -832,56 +832,63 @@ export const CtosMap: React.FC<CtosMapProps> = ({ isPhoneSettled = false, onOpen
       <canvas id="map" ref={canvasRef} role="img" aria-label="Interactive ctOS city network map. Use the target list to breach targets with keyboard." />
       <div className="fx" aria-hidden="true" />
 
-      {/* Top-Left ctOS Direct HUD Navigation */}
-      <nav
-        className={`ctos-hud-nav ${isPhoneSettled ? 'dimmed' : ''}`}
-        aria-label="ctOS Dossier Shortcuts"
+      {/* Top-Left Main Page Hero Identity & Direct HUD Navigation */}
+      <header
+        className={`ctos-hero-header ${isPhoneSettled ? 'dimmed' : ''}`}
+        aria-label="Operative Identity and Dossier Shortcuts"
       >
-        <div className="hud-nav-badge">
-          <span className="hud-nav-led" aria-hidden="true" />
-          <span className="hud-nav-text">ctOS_LKO // ANSH YADAV</span>
+        <div className="hero-identity-block">
+          <h1 className="hero-identity-name">Ansh Yadav</h1>
+          <div className="hero-identity-sub">
+            <span className="hero-sub-text">BTech. First Year</span>
+            <span className="hero-sub-divider">/</span>
+            <span className="hero-sub-institution">University of Lucknow</span>
+          </div>
         </div>
-        <button
-          type="button"
-          className="hud-nav-btn"
-          onClick={() => onOpenApp?.('WHOAMI')}
-          title="Open Bio (pages/about.html)"
-        >
-          01 BIO
-        </button>
-        <button
-          type="button"
-          className="hud-nav-btn"
-          onClick={() => onOpenApp?.('MISSIONS')}
-          title="Open Projects (pages/projects.html)"
-        >
-          02 PROJECTS
-        </button>
-        <button
-          type="button"
-          className="hud-nav-btn"
-          onClick={() => onOpenApp?.('LOADOUT')}
-          title="Open Certs (pages/certs.html)"
-        >
-          03 CERTS
-        </button>
-        <button
-          type="button"
-          className="hud-nav-btn"
-          onClick={() => onOpenApp?.('LEARNING')}
-          title="Open Learning (pages/learning.html)"
-        >
-          04 LEARNING
-        </button>
-        <button
-          type="button"
-          className="hud-nav-btn"
-          onClick={() => onOpenApp?.('SIGNAL')}
-          title="Open Contact (pages/contact.html)"
-        >
-          05 CONTACT
-        </button>
-      </nav>
+
+        <nav className="ctos-hud-nav" aria-label="ctOS Dossier Shortcuts">
+          <button
+            type="button"
+            className="hud-nav-btn"
+            onClick={() => onOpenApp?.('WHOAMI')}
+            title="Open Bio (pages/about.html)"
+          >
+            01 BIO
+          </button>
+          <button
+            type="button"
+            className="hud-nav-btn"
+            onClick={() => onOpenApp?.('MISSIONS')}
+            title="Open Projects (pages/projects.html)"
+          >
+            02 PROJECTS
+          </button>
+          <button
+            type="button"
+            className="hud-nav-btn"
+            onClick={() => onOpenApp?.('LOADOUT')}
+            title="Open Certs (pages/certs.html)"
+          >
+            03 CERTS
+          </button>
+          <button
+            type="button"
+            className="hud-nav-btn"
+            onClick={() => onOpenApp?.('LEARNING')}
+            title="Open Learning (pages/learning.html)"
+          >
+            04 LEARNING
+          </button>
+          <button
+            type="button"
+            className="hud-nav-btn"
+            onClick={() => onOpenApp?.('SIGNAL')}
+            title="Open Contact (pages/contact.html)"
+          >
+            05 CONTACT
+          </button>
+        </nav>
+      </header>
 
       <header className={`ctos ${isPhoneSettled ? 'dimmed' : ''}`} aria-label="ctOS network status">
         <div className="logo" aria-label="ctOS">

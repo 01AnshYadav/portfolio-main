@@ -311,48 +311,85 @@ button:focus-visible {
   #tip { transition: none; }
 }
 
-/* ctOS Top-Left HUD Navigation */
-.ctos-hud-nav {
+/* ctOS Top-Left Hero Identity & HUD Navigation */
+.ctos-hero-header {
   position: fixed;
-  top: calc(14px + env(safe-area-inset-top, 0px));
-  left: calc(16px + env(safe-area-inset-left, 0px));
+  top: calc(16px + env(safe-area-inset-top, 0px));
+  left: calc(18px + env(safe-area-inset-left, 0px));
   z-index: 20;
   display: flex;
-  align-items: center;
-  gap: 6px;
-  font-family: var(--mono);
-  font-size: 11px;
-  letter-spacing: 0.06em;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
   transition: opacity 0.4s ease;
+  user-select: none;
 }
 
-.ctos-hud-nav.dimmed {
-  opacity: 0.15;
+.ctos-hero-header.dimmed {
+  opacity: 0.35;
   pointer-events: none;
 }
 
-.hud-nav-badge {
-  background: #000000;
-  border: 1px solid #ffffff;
-  padding: 6px 12px;
+.hero-identity-block {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+}
+
+.hero-identity-name {
+  margin: 0;
+  font-family: 'Antonio', 'Barlow Condensed', sans-serif;
+  font-size: clamp(38px, 5.2vw, 66px);
+  font-weight: 700;
+  line-height: 0.92;
+  letter-spacing: 0.02em;
+  color: #ffffff;
+  text-shadow:
+    0 2px 16px rgba(0, 0, 0, 0.9),
+    0 0 24px rgba(0, 229, 255, 0.2);
+  display: flex;
+  align-items: baseline;
+}
+
+.hero-identity-sub {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 3px;
+}
+
+.hero-sub-text {
+  font-family: 'Antonio', 'Barlow Condensed', sans-serif;
+  font-size: clamp(20px, 2.5vw, 30px);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.03em;
+  color: #00e5ff;
+  text-shadow: 0 0 12px rgba(0, 229, 255, 0.35);
+}
+
+.hero-sub-divider {
+  color: rgba(255, 255, 255, 0.3);
+  font-family: var(--mono);
+  font-size: 14px;
+}
+
+.hero-sub-institution {
+  font-family: var(--mono);
+  font-size: clamp(10px, 1.1vw, 12px);
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: #c0cad4;
+  text-transform: uppercase;
+}
+
+/* ctOS HUD Nav buttons row */
+.ctos-hud-nav {
   display: flex;
   align-items: center;
   gap: 8px;
-  color: #ffffff;
-  font-weight: 700;
-  border-radius: 0;
-}
-
-.hud-nav-led {
-  width: 6px;
-  height: 6px;
-  background: #00e5ff;
-  animation: ledPulse 2s steps(1) infinite;
-}
-
-@keyframes ledPulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.2; }
+  flex-wrap: wrap;
 }
 
 .hud-nav-btn {
@@ -362,11 +399,12 @@ button:focus-visible {
   padding: 6px 14px;
   font-family: var(--mono);
   font-size: 11px;
-  font-weight: 700;
+  font-weight: 800;
   letter-spacing: 0.1em;
   cursor: pointer;
   border-radius: 0;
   transition: all 0.15s ease;
+  box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.4);
 }
 
 .hud-nav-btn:hover {
@@ -374,11 +412,35 @@ button:focus-visible {
   border-color: #00e5ff;
   color: #000000;
   transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0px rgba(0, 0, 0, 0.6);
 }
 
 @media (max-width: 900px) {
-  .ctos-hud-nav {
+  .ctos-hero-header {
+    top: calc(10px + env(safe-area-inset-top, 0px));
+    left: calc(12px + env(safe-area-inset-left, 0px));
+    gap: 6px;
+  }
+  .hero-identity-name {
+    font-size: clamp(28px, 6.5vw, 42px);
+  }
+  .hero-sub-text {
+    font-size: clamp(16px, 3.8vw, 22px);
+  }
+  .hero-sub-institution,
+  .hero-sub-divider {
     display: none;
+  }
+  .ctos-hud-nav {
+    display: flex;
+    gap: 6px;
+    max-width: 92vw;
+    overflow-x: auto;
+  }
+  .hud-nav-btn {
+    padding: 4px 10px;
+    font-size: 10px;
+    white-space: nowrap;
   }
 }
 
