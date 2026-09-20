@@ -16,7 +16,8 @@
   var CONFIG = {
     avatar: "",
     hub: "/",
-    discord: "anshshare"
+    discord: "anshshare",
+    linkedin: "https://www.linkedin.com/in/ansht0"
   };
 
   var $ = function (s) { return document.querySelector(s); };
@@ -156,6 +157,26 @@
           .catch(function () { done("[ HANDLE IS " + CONFIG.discord + " ]"); });
       } else {
         done("[ HANDLE IS " + CONFIG.discord + " ]");
+      }
+    });
+  }
+
+  /* ── linkedin copy ────────────────────────────────────── */
+  var li = $("#li");
+  if (li) {
+    li.addEventListener("click", function () {
+      var go = $("#liGo");
+      var done = function (msg) {
+        go.textContent = msg;
+        setTimeout(function () { go.textContent = "Copy link >"; }, 2200);
+      };
+      var targetUrl = CONFIG.linkedin || "https://www.linkedin.com/in/ansht0";
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(targetUrl)
+          .then(function () { done("[ COPIED ]"); })
+          .catch(function () { done("[ LINK COPIED ]"); });
+      } else {
+        done("[ LINK COPIED ]");
       }
     });
   }
