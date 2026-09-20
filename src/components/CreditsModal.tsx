@@ -177,6 +177,26 @@ export const CreditsModal: React.FC<CreditsModalProps> = ({ isDimmed = false }) 
                           https://www.instagram.com/p/DZXb9eKkW5W/ &gt;
                         </a>
                       </p>
+                      <p style={{ marginTop: '12px' }}>
+                        <a
+                          href="https://www.instagram.com/nirizzhar?stkn=ZDNlZDc0MzIxNw=="
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="credits-link"
+                        >
+                          @[nirizzhar] on Instagram
+                        </a>
+                      </p>
+                      <p>
+                        <a
+                          href="https://www.instagram.com/nirizzhar?stkn=ZDNlZDc0MzIxNw=="
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="credits-link path-link"
+                        >
+                          https://www.instagram.com/nirizzhar &gt;
+                        </a>
+                      </p>
                     </div>
                   </div>
 
