@@ -41,7 +41,7 @@ export const DedSecPhoneOS: React.FC<DedSecPhoneOSProps> = ({
       label: 'BIO',
       subtext: 'Ansh Yadav // B.Tech',
       icon: (
-        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#00ff66" strokeWidth="1.8">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#ffffff" strokeWidth="1.8">
           <circle cx="12" cy="7" r="4" />
           <path d="M5.5 21 C5.5 16 8.5 14 12 14 C15.5 14 18.5 16 18.5 21" />
         </svg>
@@ -68,7 +68,7 @@ export const DedSecPhoneOS: React.FC<DedSecPhoneOSProps> = ({
       label: 'CERTIFICATES',
       subtext: 'Verified Credentials',
       icon: (
-        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#00ff66" strokeWidth="1.8">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#ffffff" strokeWidth="1.8">
           <polygon points="12 2 20 7 20 17 12 22 4 17 4 7" />
           <polyline points="9 12 11 14 15 10" />
         </svg>
@@ -81,7 +81,7 @@ export const DedSecPhoneOS: React.FC<DedSecPhoneOSProps> = ({
       label: 'LEARNING',
       subtext: 'TryHackMe & LeetCode',
       icon: (
-        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#00e5ff" strokeWidth="1.8">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#ffffff" strokeWidth="1.8">
           <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
           <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
         </svg>
@@ -94,7 +94,7 @@ export const DedSecPhoneOS: React.FC<DedSecPhoneOSProps> = ({
       label: 'CONTACT',
       subtext: 'Open Channels // DC',
       icon: (
-        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#00ff66" strokeWidth="1.8">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#ff0055" strokeWidth="1.8">
           <rect x="3" y="5" width="18" height="14" />
           <polyline points="3,7 12,13 21,7" />
         </svg>

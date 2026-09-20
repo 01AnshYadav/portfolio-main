@@ -149,18 +149,24 @@
 }
 
 .ph button {
-  background: none;
-  border: 0;
-  color: var(--dim);
+  background: #ffffff;
+  border: 1px solid #ffffff;
+  color: #000000;
   font: inherit;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
   cursor: pointer;
-  padding: 2px 4px;
-  text-decoration: underline;
-  text-underline-offset: 3px;
+  padding: 3px 10px;
+  border-radius: 0;
+  text-transform: uppercase;
+  transition: all 0.15s ease;
 }
 
 .ph button:hover {
-  color: var(--ink);
+  background: #ff0055;
+  color: #ffffff;
+  border-color: #ff0055;
 }
 
 .list {
@@ -326,20 +332,21 @@ button:focus-visible {
 }
 
 .hud-nav-badge {
-  background: #141820;
-  border: 1px solid #202632;
+  background: #000000;
+  border: 1px solid #ffffff;
   padding: 6px 12px;
   display: flex;
   align-items: center;
   gap: 8px;
-  color: #00ff66;
+  color: #ffffff;
   font-weight: 700;
+  border-radius: 0;
 }
 
 .hud-nav-led {
   width: 6px;
   height: 6px;
-  background: #00ff66;
+  background: #00e5ff;
   animation: ledPulse 2s steps(1) infinite;
 }
 
@@ -349,22 +356,23 @@ button:focus-visible {
 }
 
 .hud-nav-btn {
-  background: #0b0d10;
-  border: 1px solid #202632;
-  color: #00e5ff;
-  padding: 6px 11px;
+  background: #ffffff;
+  border: 1px solid #ffffff;
+  color: #000000;
+  padding: 6px 14px;
   font-family: var(--mono);
   font-size: 11px;
   font-weight: 700;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.1em;
   cursor: pointer;
+  border-radius: 0;
   transition: all 0.15s ease;
 }
 
 .hud-nav-btn:hover {
-  background: #141820;
-  border-color: #00ff66;
-  color: #00ff66;
+  background: #00e5ff;
+  border-color: #00e5ff;
+  color: #000000;
   transform: translate(-1px, -1px);
 }
 

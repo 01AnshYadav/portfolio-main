@@ -82,8 +82,24 @@ img{ max-width:100%; display:block; }
 @keyframes led{ 0%,72%{opacity:1} 73%,100%{opacity:.18} }
 
 /* back to hub, sits in the top bar on content pages */
-.back{ font-size:10.5px; letter-spacing:.18em; color:var(--ac); text-transform:uppercase; }
-.back:hover{ color:var(--white); }
+.back {
+  display: inline-flex;
+  align-items: center;
+  background: #ffffff;
+  color: #000000;
+  border: 1px solid #ffffff;
+  padding: 3px 9px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  transition: all 0.15s ease;
+}
+.back:hover {
+  background: #ff0055;
+  border-color: #ff0055;
+  color: #000000;
+}
 
 /* ══ NAV RAIL (desktop only) ═══════════════════════════════ */
 .rail{
@@ -110,12 +126,18 @@ img{ max-width:100%; display:block; }
   padding:10px 16px;
   color:var(--mut); font-size:12px; letter-spacing:.12em; text-transform:uppercase;
   border-left:2px solid transparent;
+  transition: all 0.15s ease;
 }
 .rail a .ix{ color:var(--dim); font-size:10.5px; }
 .rail a:hover{ color:var(--white); background:var(--panel); }
 .rail a:focus-visible{ outline:1px solid var(--ac); outline-offset:-1px; }
-.rail a.on{ color:var(--ac); border-left-color:var(--ac); background:var(--panel); }
-.rail a.on .ix{ color:var(--ac); }
+.rail a.on{
+  background: #00e5ff;
+  color: #000000;
+  border-left: 3px solid #000000;
+  font-weight: 700;
+}
+.rail a.on .ix{ color:#000000; font-weight: 800; }
 .rail-f{
   margin-top:auto; padding:14px 16px; border-top:1px solid var(--bd);
   font-size:10px; letter-spacing:.14em; color:var(--dim); text-transform:uppercase;
@@ -169,6 +191,19 @@ img{ max-width:100%; display:block; }
   padding:10px 14px; border-bottom:1px solid var(--bd);
   font-size:10.5px; letter-spacing:.2em; color:var(--mut); text-transform:uppercase;
 }
+.panel-h .ac{
+  background: #00e5ff;
+  color: #000000;
+  padding: 2px 6px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+.bar-b .ac{
+  background: #00e5ff;
+  color: #000000;
+  padding: 1px 5px;
+  font-weight: 700;
+}
 .panel-b{ padding:18px; }
 
 .kv{ display:grid; grid-template-columns:130px 1fr; font-size:12.5px; }
@@ -196,9 +231,18 @@ img{ max-width:100%; display:block; }
   font-size:14.5px; font-weight:500; color:var(--white);
   letter-spacing:.1em; text-transform:uppercase;
 }
-.rec-t .go{
-  margin-left:auto; font-size:10.5px; letter-spacing:.18em;
-  color:var(--dim); text-transform:uppercase;
+.rec-t .go {
+  margin-left: auto;
+  background: #ffffff;
+  color: #000000;
+  border: 1px solid #ffffff;
+  padding: 3px 8px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border-radius: 0;
+  transition: all 0.15s ease;
 }
 .rec p,.copy p{ margin-top:10px; font-size:12.5px; max-width:70ch; }
 .path{
@@ -206,11 +250,20 @@ img{ max-width:100%; display:block; }
   letter-spacing:.02em; word-break:break-all;
 }
 .rec:hover,.rec:focus-visible,.copy:hover,.copy:focus-visible{
-  background:var(--panel-2); outline:1px solid var(--ac); outline-offset:-1px;
+  background:var(--panel-2); outline:1px solid #ffffff; outline-offset:-1px;
 }
 .rec:hover h2,.rec:hover h3,.rec:focus-visible h3,
-.copy:hover h3,.copy:focus-visible h3{ color:var(--ac); }
-.rec:hover .go,.rec:focus-visible .go{ color:var(--ac); }
+.copy:hover h3,.copy:focus-visible h3{ color:#ffffff; }
+.rec:hover .go,.rec:focus-visible .go{
+  background: #00e5ff;
+  border-color: #00e5ff;
+  color: #000000;
+}
+.copy:hover #dcGo, .copy:focus-visible #dcGo {
+  background: #ff0055;
+  border-color: #ff0055;
+  color: #000000;
+}
 .rec:hover .path{ color:var(--txt); }
 
 .tags{ margin-top:14px; display:flex; flex-wrap:wrap; gap:6px; }
@@ -239,9 +292,17 @@ img{ max-width:100%; display:block; }
 
 /* ══ HERO + EXECUTE (index.html) ═══════════════════════════ */
 .hero{ padding:12px 0 8px; }
-.hero .tag{
-  font-size:10.5px; letter-spacing:.3em; color:var(--ac);
-  text-transform:uppercase; margin-bottom:18px;
+.hero .tag {
+  display: inline-block;
+  background: #ffffff;
+  color: #000000;
+  padding: 3px 8px;
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-bottom: 18px;
+  border-radius: 0;
 }
 .hero h1{
   font-size:clamp(2.1rem,9vw,4.4rem); font-weight:700; color:var(--white);
@@ -253,17 +314,44 @@ img{ max-width:100%; display:block; }
   border:1px solid var(--bd); padding:5px 10px;
   font-size:10.5px; letter-spacing:.16em; color:var(--mut); text-transform:uppercase;
 }
-.chip b{ color:var(--ac); font-weight:400; }
-
-.exec{
-  margin-top:30px;
-  display:inline-flex; align-items:center; gap:14px;
-  padding:14px 26px; border:1px solid var(--ac); color:var(--ac);
-  font-size:12.5px; font-weight:500; letter-spacing:.3em; text-transform:uppercase;
+.chip b {
+  background: #00e5ff;
+  color: #000000;
+  padding: 1px 6px;
+  font-weight: 700;
 }
-.exec .k{ color:var(--dim); letter-spacing:.1em; font-size:10.5px; }
-.exec:hover,.exec:focus-visible{ background:var(--ac); color:#04070a; }
-.exec:hover .k,.exec:focus-visible .k{ color:#04070a; opacity:.6; }
+
+.exec {
+  margin-top: 30px;
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 28px;
+  background: #ffffff;
+  border: 1px solid #ffffff;
+  color: #000000;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  border-radius: 0;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.exec .k {
+  color: #555555;
+  letter-spacing: 0.1em;
+  font-size: 11px;
+  font-weight: 800;
+}
+.exec:hover, .exec:focus-visible {
+  background: #00e5ff;
+  border-color: #00e5ff;
+  color: #000000;
+}
+.exec:hover .k, .exec:focus-visible .k {
+  color: #000000;
+}
 .exec:focus-visible{ outline:1px solid var(--white); outline-offset:3px; }
 .exec[disabled]{ cursor:progress; }
 

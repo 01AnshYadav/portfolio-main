@@ -31,8 +31,11 @@
 }
 
 .status-left .hub-tag {
-  color: #00ff66;
+  background: #ffffff;
+  color: #000000;
   font-weight: 800;
+  padding: 2px 6px;
+  letter-spacing: 0.08em;
 }
 
 .status-right {
@@ -59,7 +62,7 @@
 
 .sig-bar {
   width: 2px;
-  background: #00ff66;
+  background: #ffffff;
 }
 
 /* 2. TELEMETRY HUD */
@@ -91,12 +94,12 @@
 }
 
 .val-green {
-  color: #00ff66;
+  color: #ffffff;
   font-weight: 700;
 }
 
 .val-alert {
-  color: #00ff66;
+  color: #ff0055;
   font-weight: 700;
   letter-spacing: 0.05em;
 }
@@ -128,7 +131,7 @@
 }
 
 .hub-app-card:hover {
-  border-color: #00ff66;
+  border-color: #ffffff;
   background: #0e1218;
 }
 
@@ -147,7 +150,7 @@
 .card-dot {
   width: 5px;
   height: 5px;
-  background: #00ff66;
+  background: #ffffff;
 }
 
 .app-card-body {
@@ -177,9 +180,13 @@
 
 .app-label-text {
   font-size: 10px;
-  color: #00ff66;
+  color: #ffffff;
   font-weight: 700;
   letter-spacing: 0.04em;
+}
+
+.hub-app-card:hover .app-label-text {
+  color: #00e5ff;
 }
 
 .app-subtext {
@@ -201,8 +208,18 @@
   margin-top: 2px;
 }
 
-.hub-app-card:hover .app-card-footer {
-  color: #00ff66;
+.app-card-footer span:first-child {
+  background: #ffffff;
+  color: #000000;
+  padding: 2px 6px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  transition: all 0.15s ease;
+}
+
+.hub-app-card:hover .app-card-footer span:first-child {
+  background: #00e5ff;
+  color: #000000;
 }
 
 .arrow-glyph {
@@ -217,25 +234,29 @@
 
 .terminal-strip-btn {
   width: 100%;
-  background: #141820;
-  border: 1px solid #202632;
-  color: #e6edf3;
-  padding: 8px 12px;
+  background: #ffffff;
+  border: 1px solid #ffffff;
+  color: #000000;
+  padding: 7px 12px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   font-family: var(--mono);
-  font-size: 11px;
+  font-size: 10.5px;
+  font-weight: 700;
   cursor: pointer;
-  transition: border-color 0.15s ease;
+  border-radius: 0;
+  transition: all 0.15s ease;
 }
 
 .terminal-strip-btn:hover {
+  background: #00e5ff;
   border-color: #00e5ff;
+  color: #000000;
 }
 
 .term-prompt {
-  color: #00ff66;
+  color: #000000;
   font-weight: 800;
   margin-right: 6px;
 }
@@ -247,8 +268,11 @@
 }
 
 .term-status {
-  color: var(--dim);
-  font-size: 10px;
+  background: #000000;
+  color: #ffffff;
+  padding: 1px 4px;
+  font-size: 9.5px;
+  font-weight: 700;
 }
 
 /* 5. BOTTOM BEZEL BAR */
@@ -265,20 +289,23 @@
 }
 
 .hub-close-btn {
-  background: none;
-  border: 1px solid #202632;
-  color: var(--dim);
+  background: #ffffff;
+  border: 1px solid #ffffff;
+  color: #000000;
   font-family: var(--mono);
   font-size: 10px;
   font-weight: 700;
+  letter-spacing: 0.08em;
   padding: 3px 8px;
   cursor: pointer;
+  border-radius: 0;
   transition: all 0.15s ease;
 }
 
 .hub-close-btn:hover {
-  border-color: #ff3838;
-  color: #ff3838;
+  background: #ff0055;
+  border-color: #ff0055;
+  color: #ffffff;
 }
 
 /* MOBILE FALLBACK (Below 768px): Full-Width High-Contrast Grid */
