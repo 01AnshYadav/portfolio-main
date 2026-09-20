@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import type { AppId } from './DedSecPhoneOS';
 import { TerminalApp } from './apps/TerminalApp';
 import './FullScreenAppModal.css';
@@ -60,6 +60,14 @@ export const FullScreenAppModal: React.FC<FullScreenAppModalProps> = ({
   followerCount,
 }) => {
   const [currentApp, setCurrentApp] = useState<AppId | null>(appId);
+  const [theme, setTheme] = useState<'light' | 'dark'>(() => {
+    try {
+      const saved = localStorage.getItem('ctos_theme');
+      if (saved === 'dark' || saved === 'light') return saved;
+    } catch {}
+    return 'light';
+  });
+  const iframeRef = useRef<HTMLIFrameElement | null>(null);
 
   // Sync internal state when opened from outside
   useEffect(() => {
@@ -79,16 +87,31 @@ export const FullScreenAppModal: React.FC<FullScreenAppModalProps> = ({
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [onClose]);
 
-  // Listen for postMessage from embedded page iframe (e.g. clicking [ < HUB ] or 00 Hub)
+  // Listen for postMessage from embedded page iframe (e.g. clicking [ < HUB ] or theme toggle)
   useEffect(() => {
     const handleMessage = (e: MessageEvent) => {
-      if (e.data && e.data.type === 'DEDSEC_CLOSE_MODAL') {
-        onClose();
+      if (e.data) {
+        if (e.data.type === 'DEDSEC_CLOSE_MODAL') {
+          onClose();
+        } else if (e.data.type === 'DEDSEC_THEME_CHANGE') {
+          setTheme(e.data.theme);
+        }
       }
     };
     window.addEventListener('message', handleMessage);
     return () => window.removeEventListener('message', handleMessage);
   }, [onClose]);
+
+  const toggleTheme = () => {
+    const nextTheme = theme === 'dark' ? 'light' : 'dark';
+    setTheme(nextTheme);
+    try {
+      localStorage.setItem('ctos_theme', nextTheme);
+    } catch {}
+    if (iframeRef.current && iframeRef.current.contentWindow) {
+      iframeRef.current.contentWindow.postMessage({ type: 'DEDSEC_SET_THEME', theme: nextTheme }, '*');
+    }
+  };
 
   if (!appId || appId === 'HOME') return null;
 
@@ -97,7 +120,7 @@ export const FullScreenAppModal: React.FC<FullScreenAppModalProps> = ({
 
   return (
     <div
-      className="fullscreen-app-overlay"
+      className={`fullscreen-app-overlay ${theme === 'dark' ? 'dark-theme' : ''}`}
       role="dialog"
       aria-modal="true"
       aria-label={config.title}
@@ -151,6 +174,16 @@ export const FullScreenAppModal: React.FC<FullScreenAppModalProps> = ({
             </span>
           </div>
 
+          {/* Theme Switcher Button */}
+          <button
+            type="button"
+            className="fullscreen-theme-btn"
+            onClick={toggleTheme}
+            title={`Current Theme: ${theme === 'dark' ? 'Pure Black' : 'White'}. Click to toggle.`}
+          >
+            {theme === 'dark' ? '[ ◑ BLACK ]' : '[ ◐ WHITE ]'}
+          </button>
+
           {/* Direct link to standalone HTML page */}
           {config.url && (
             <a
@@ -184,6 +217,7 @@ export const FullScreenAppModal: React.FC<FullScreenAppModalProps> = ({
           </div>
         ) : (
           <iframe
+            ref={iframeRef}
             key={config.url}
             src={config.url}
             title={config.title}

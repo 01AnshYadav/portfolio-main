@@ -24,6 +24,66 @@
   var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   var pad = function (n) { return String(n).padStart(2, "0"); };
 
+  /* ── theme switcher (Pure Black vs White) ──────────────── */
+  function getStoredTheme() {
+    try {
+      var saved = localStorage.getItem('ctos_theme');
+      if (saved === 'dark' || saved === 'light') return saved;
+    } catch (e) {}
+    return 'light';
+  }
+
+  function applyTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    try {
+      localStorage.setItem('ctos_theme', theme);
+    } catch (e) {}
+
+    // Update all theme toggle buttons
+    $$('.theme-toggle').forEach(function (btn) {
+      var isDark = theme === 'dark';
+      btn.innerHTML = isDark
+        ? '<span class="glyph">[ ◑ ]</span><span class="theme-txt">BLACK</span>'
+        : '<span class="glyph">[ ◐ ]</span><span class="theme-txt">WHITE</span>';
+      btn.title = isDark ? 'Current: Pure Black. Click to switch to White' : 'Current: White. Click to switch to Pure Black';
+    });
+  }
+
+  var currentTheme = getStoredTheme();
+  applyTheme(currentTheme);
+
+  // Auto-inject theme toggle into .bar-t right side if missing
+  var barTRight = $('.bar-t > div:last-child');
+  if (barTRight && !$('#themeToggle')) {
+    var toggleBtn = document.createElement('button');
+    toggleBtn.className = 'theme-toggle glx';
+    toggleBtn.id = 'themeToggle';
+    toggleBtn.type = 'button';
+    barTRight.insertBefore(toggleBtn, barTRight.firstChild);
+    applyTheme(currentTheme);
+  }
+
+  // Handle click on any .theme-toggle button
+  document.addEventListener('click', function (e) {
+    var btn = e.target.closest('.theme-toggle');
+    if (btn) {
+      e.preventDefault();
+      var active = document.documentElement.getAttribute('data-theme') || 'light';
+      var next = active === 'dark' ? 'light' : 'dark';
+      applyTheme(next);
+      if (window.self !== window.top) {
+        window.parent.postMessage({ type: 'DEDSEC_THEME_CHANGE', theme: next }, '*');
+      }
+    }
+  });
+
+  // Listen for sync messages from parent window or other frames
+  window.addEventListener('message', function (e) {
+    if (e.data && e.data.type === 'DEDSEC_SET_THEME') {
+      applyTheme(e.data.theme);
+    }
+  });
+
   /* ── clock and uptime ─────────────────────────────────── */
   var clock = $("#clock");
   var uptime = $("#uptime");
